@@ -23,6 +23,7 @@
 		D05DEC012F052C8100D6AEED /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBFF2F052C8100D6AEED /* Route.swift */; };
 		D05DEC022F052C8100D6AEED /* MoneyFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */; };
 		D05DEC042F052CAC00D6AEED /* Assets .xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05DEC032F052CAC00D6AEED /* Assets .xcassets */; };
+		D05DEC082F05570B00D6AEED /* TransactionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEC072F05570B00D6AEED /* TransactionVM.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFlowApp.swift; sourceTree = "<group>"; };
 		D05DEBFF2F052C8100D6AEED /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		D05DEC032F052CAC00D6AEED /* Assets .xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets .xcassets"; sourceTree = "<group>"; };
+		D05DEC072F05570B00D6AEED /* TransactionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionVM.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				D05DEBE82F052C7100D6AEED /* AccountViewModel.swift */,
+				D05DEC072F05570B00D6AEED /* TransactionVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 				D05DEBE72F052C6900D6AEED /* CategoryTransaction.swift in Sources */,
 				D05DEBF62F052C7800D6AEED /* TransactionIncomeView.swift in Sources */,
 				D05DEBF72F052C7800D6AEED /* AccountRow.swift in Sources */,
+				D05DEC082F05570B00D6AEED /* TransactionVM.swift in Sources */,
 				D05DEBF82F052C7800D6AEED /* AccountDetailView.swift in Sources */,
 				D05DEBF92F052C7800D6AEED /* AccountListView.swift in Sources */,
 				D05DEBFA2F052C7800D6AEED /* AccountAddView.swift in Sources */,

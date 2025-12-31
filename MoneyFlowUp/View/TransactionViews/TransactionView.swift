@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct TransactionView: View {
+    
     @State var selectionPicker = 0
+    
     let selectionItems : [String] = [
         "income",
         "cost",
@@ -20,27 +22,20 @@ struct TransactionView: View {
     var body: some View {
         
         ZStack {
-            Color("ColorSet")
-                .ignoresSafeArea()
-            
             
             TabView {
-                Tab("cost", systemImage: "cart.badge.plus") { }
-                Tab("income", systemImage: "dollarsign.ring.dashed") { }
-                Tab("transfer", systemImage: "arrow.triangle.2.circlepath") { }
+                Tab("cost", systemImage: "cart.badge.plus") { TransactionCostView(accountVM: AccountViewModel()) }
+                Tab("income", systemImage: "dollarsign.ring.dashed") { TransactionIncomeView() }
+                Tab("transfer", systemImage: "arrow.triangle.2.circlepath") { TransactionTransferView() }
             }
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 100)
-                
-                
-                
-                VStack(alignment: .center) {
-                    Text("Transaction")
-                        .font(.title)
-                    
-                    
-                    Spacer()
-                }
+            }
+            
+            VStack(alignment: .center) {
+                Text("Transaction")
+                    .font(.title)
+                Spacer()
             }
         }
     }
