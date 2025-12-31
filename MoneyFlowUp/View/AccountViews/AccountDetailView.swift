@@ -22,7 +22,7 @@ struct AccountDetailView: View {
                     }
                 }
             }
-            Section("Description") {
+            Section("Description2") {
                 TextEditor(text: $account.descriptionAccount)
                     .frame(height: 200)
             }
