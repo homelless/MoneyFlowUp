@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct TransactionIncomeView: View {
+    
+    @Bindable var accountVM: AccountViewModel
+    @Bindable var transactionVM: TransactionVM
+    
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
 
-#Preview {
-    TransactionIncomeView()
-}
+
