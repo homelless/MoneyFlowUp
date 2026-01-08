@@ -8,8 +8,6 @@ struct MoneyFlowUpApp: App {
         let schema = Schema([
             Transaction.self,
             Account.self,
-            CategoryTransaction.self,
-            
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -40,7 +38,7 @@ struct RootView: View {
                     Tab("Wallet", systemImage: "wallet.bifold.fill") {
                         AccountListView(viewModel: viewModel, path: $path)
                     }
-                    Tab("Cost", systemImage: "pencil.and.outline") { }
+                    Tab("Transactions", systemImage: "pencil.and.outline") { }
                     Tab("Budget", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
                     Tab("Reports", systemImage: "document.on.document") { }
                 }

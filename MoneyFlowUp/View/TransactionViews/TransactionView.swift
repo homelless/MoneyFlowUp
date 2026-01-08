@@ -27,15 +27,10 @@ struct TransactionView: View {
                 Tab("cost", systemImage: "cart.badge.plus") { TransactionCostView(accountVM: AccountViewModel()) }
                 Tab("income", systemImage: "dollarsign.ring.dashed") { TransactionIncomeView() }
                 Tab("transfer", systemImage: "arrow.triangle.2.circlepath") { TransactionTransferView() }
+                Tab("transactions", systemImage: "list.bullet.rectangle"){ TransactionsListView() }
             }
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 100)
-            }
-            
-            VStack(alignment: .center) {
-                Text("Transaction")
-                    .font(.title)
-                Spacer()
             }
         }
     }

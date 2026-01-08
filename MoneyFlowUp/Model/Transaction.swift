@@ -13,14 +13,14 @@ class Transaction: Identifiable, Hashable {
     
     var id: UUID
     var amount: Double
-    var category: CategoryTransaction?
+ //   var category: CategoryTransaction?
     var date: Date
     var account: Account?
     
-    init(id: UUID, amount: Double, category: CategoryTransaction, date: Date, account: Account? = nil) {
+    init(id: UUID, amount: Double, date: Date, account: Account? = nil) {
         self.id = id
         self.amount = amount
-        self.category = category
+       // self.category = category
         self.date = date
         self.account = account
     }
