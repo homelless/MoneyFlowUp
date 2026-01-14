@@ -10,7 +10,6 @@
 		D05DEBE42F052C6900D6AEED /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE32F052C6900D6AEED /* Currency.swift */; };
 		D05DEBE52F052C6900D6AEED /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE12F052C6900D6AEED /* Account.swift */; };
 		D05DEBE62F052C6900D6AEED /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE02F052C6900D6AEED /* Transaction.swift */; };
-		D05DEBE72F052C6900D6AEED /* CategoryTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE22F052C6900D6AEED /* CategoryTransaction.swift */; };
 		D05DEBEA2F052C7100D6AEED /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE82F052C7100D6AEED /* AccountViewModel.swift */; };
 		D05DEBF62F052C7800D6AEED /* TransactionIncomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBED2F052C7800D6AEED /* TransactionIncomeView.swift */; };
 		D05DEBF72F052C7800D6AEED /* AccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBF02F052C7800D6AEED /* AccountRow.swift */; };
@@ -23,13 +22,20 @@
 		D05DEC012F052C8100D6AEED /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBFF2F052C8100D6AEED /* Route.swift */; };
 		D05DEC022F052C8100D6AEED /* MoneyFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */; };
 		D05DEC042F052CAC00D6AEED /* Assets .xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05DEC032F052CAC00D6AEED /* Assets .xcassets */; };
+		D05DEC082F05570B00D6AEED /* TransactionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEC072F05570B00D6AEED /* TransactionVM.swift */; };
+		D06CD7342F101944002D4A05 /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD7332F101944002D4A05 /* TransactionsListView.swift */; };
+		D06CD7372F101C9D002D4A05 /* TransactionTypeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD7362F101C9D002D4A05 /* TransactionTypeProtocol.swift */; };
+		D06CD7392F101DE4002D4A05 /* TransactionGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD7382F101DE4002D4A05 /* TransactionGroup.swift */; };
+		D06CD73B2F1022B3002D4A05 /* CostCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD73A2F1022B3002D4A05 /* CostCategory.swift */; };
+		D06CD73D2F103C85002D4A05 /* IncomeCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD73C2F103C85002D4A05 /* IncomeCategory.swift */; };
+		D06CD73F2F103D32002D4A05 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD73E2F103D32002D4A05 /* TransferType.swift */; };
+		D06CD7412F103E0A002D4A05 /* TransactionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D05DEBC62F052BFC00D6AEED /* MoneyFlowUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyFlowUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05DEBE02F052C6900D6AEED /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		D05DEBE12F052C6900D6AEED /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
-		D05DEBE22F052C6900D6AEED /* CategoryTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTransaction.swift; sourceTree = "<group>"; };
 		D05DEBE32F052C6900D6AEED /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		D05DEBE82F052C7100D6AEED /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		D05DEBEB2F052C7800D6AEED /* TransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
@@ -43,6 +49,14 @@
 		D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFlowApp.swift; sourceTree = "<group>"; };
 		D05DEBFF2F052C8100D6AEED /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		D05DEC032F052CAC00D6AEED /* Assets .xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets .xcassets"; sourceTree = "<group>"; };
+		D05DEC072F05570B00D6AEED /* TransactionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionVM.swift; sourceTree = "<group>"; };
+		D06CD7332F101944002D4A05 /* TransactionsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsListView.swift; sourceTree = "<group>"; };
+		D06CD7362F101C9D002D4A05 /* TransactionTypeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTypeProtocol.swift; sourceTree = "<group>"; };
+		D06CD7382F101DE4002D4A05 /* TransactionGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionGroup.swift; sourceTree = "<group>"; };
+		D06CD73A2F1022B3002D4A05 /* CostCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostCategory.swift; sourceTree = "<group>"; };
+		D06CD73C2F103C85002D4A05 /* IncomeCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomeCategory.swift; sourceTree = "<group>"; };
+		D06CD73E2F103D32002D4A05 /* TransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferType.swift; sourceTree = "<group>"; };
+		D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +89,7 @@
 		D05DEBDA2F052C2500D6AEED /* MoneyFlowUp */ = {
 			isa = PBXGroup;
 			children = (
+				D06CD7352F101C50002D4A05 /* Protocols and enums */,
 				D05DEC002F052C8100D6AEED /* App */,
 				D05DEBF52F052C7800D6AEED /* View */,
 				D05DEBE92F052C7100D6AEED /* ViewModel */,
@@ -89,8 +104,10 @@
 			children = (
 				D05DEBE02F052C6900D6AEED /* Transaction.swift */,
 				D05DEBE12F052C6900D6AEED /* Account.swift */,
-				D05DEBE22F052C6900D6AEED /* CategoryTransaction.swift */,
 				D05DEBE32F052C6900D6AEED /* Currency.swift */,
+				D06CD73A2F1022B3002D4A05 /* CostCategory.swift */,
+				D06CD73C2F103C85002D4A05 /* IncomeCategory.swift */,
+				D06CD73E2F103D32002D4A05 /* TransferType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -99,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				D05DEBE82F052C7100D6AEED /* AccountViewModel.swift */,
+				D05DEC072F05570B00D6AEED /* TransactionVM.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -107,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				D05DEBEB2F052C7800D6AEED /* TransactionView.swift */,
+				D06CD7332F101944002D4A05 /* TransactionsListView.swift */,
 				D05DEBEC2F052C7800D6AEED /* TransactionCostView.swift */,
 				D05DEBED2F052C7800D6AEED /* TransactionIncomeView.swift */,
 				D05DEBEE2F052C7800D6AEED /* TransactionTransferView.swift */,
@@ -138,9 +157,19 @@
 			isa = PBXGroup;
 			children = (
 				D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */,
-				D05DEBFF2F052C8100D6AEED /* Route.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		D06CD7352F101C50002D4A05 /* Protocols and enums */ = {
+			isa = PBXGroup;
+			children = (
+				D05DEBFF2F052C8100D6AEED /* Route.swift */,
+				D06CD7362F101C9D002D4A05 /* TransactionTypeProtocol.swift */,
+				D06CD7382F101DE4002D4A05 /* TransactionGroup.swift */,
+				D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */,
+			);
+			path = "Protocols and enums";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,20 +244,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D06CD7372F101C9D002D4A05 /* TransactionTypeProtocol.swift in Sources */,
+				D06CD73B2F1022B3002D4A05 /* CostCategory.swift in Sources */,
+				D06CD7412F103E0A002D4A05 /* TransactionCategory.swift in Sources */,
 				D05DEBE42F052C6900D6AEED /* Currency.swift in Sources */,
 				D05DEBE52F052C6900D6AEED /* Account.swift in Sources */,
+				D06CD73F2F103D32002D4A05 /* TransferType.swift in Sources */,
 				D05DEBE62F052C6900D6AEED /* Transaction.swift in Sources */,
+				D06CD7392F101DE4002D4A05 /* TransactionGroup.swift in Sources */,
 				D05DEBEA2F052C7100D6AEED /* AccountViewModel.swift in Sources */,
-				D05DEBE72F052C6900D6AEED /* CategoryTransaction.swift in Sources */,
 				D05DEBF62F052C7800D6AEED /* TransactionIncomeView.swift in Sources */,
 				D05DEBF72F052C7800D6AEED /* AccountRow.swift in Sources */,
+				D05DEC082F05570B00D6AEED /* TransactionVM.swift in Sources */,
 				D05DEBF82F052C7800D6AEED /* AccountDetailView.swift in Sources */,
 				D05DEBF92F052C7800D6AEED /* AccountListView.swift in Sources */,
+				D06CD73D2F103C85002D4A05 /* IncomeCategory.swift in Sources */,
 				D05DEBFA2F052C7800D6AEED /* AccountAddView.swift in Sources */,
 				D05DEBFB2F052C7800D6AEED /* TransactionCostView.swift in Sources */,
 				D05DEBFC2F052C7800D6AEED /* TransactionView.swift in Sources */,
 				D05DEC012F052C8100D6AEED /* Route.swift in Sources */,
 				D05DEC022F052C8100D6AEED /* MoneyFlowApp.swift in Sources */,
+				D06CD7342F101944002D4A05 /* TransactionsListView.swift in Sources */,
 				D05DEBFD2F052C7800D6AEED /* TransactionTransferView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

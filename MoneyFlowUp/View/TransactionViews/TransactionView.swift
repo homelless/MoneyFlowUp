@@ -1,46 +1,33 @@
-//
-//  TransactionView.swift
-//  MoneyFlow
-//
-//  Created by MacBookAir on 30.12.25.
-//
+
 
 import SwiftUI
 
 struct TransactionView: View {
-    @State var selectionPicker = 0
-    let selectionItems : [String] = [
-        "income",
-        "cost",
-        "transfer"
-    ]
     
+    @Bindable private var transactionVM = TransactionVM()
+    @Bindable private var accountVM = AccountViewModel()
+
     
     
     var body: some View {
         
         ZStack {
-            Color("ColorSet")
-                .ignoresSafeArea()
             
-            
-            TabView {
-                Tab("cost", systemImage: "cart.badge.plus") { }
-                Tab("income", systemImage: "dollarsign.ring.dashed") { }
-                Tab("transfer", systemImage: "arrow.triangle.2.circlepath") { }
+            TabView() {
+                Tab("cost", systemImage: "cart.badge.plus") {
+                    TransactionCostView(accountVM: accountVM, transactionVM: transactionVM) }
+                
+                Tab("income", systemImage: "dollarsign.ring.dashed") {
+                    TransactionIncomeView(accountVM: accountVM, transactionVM: transactionVM) }
+                
+                Tab("transfer", systemImage: "arrow.triangle.2.circlepath") {
+                    TransactionTransferView(accountVM: accountVM, transactionVM: transactionVM) }
+                
+                Tab("transactions", systemImage: "list.bullet.rectangle") {
+                    TransactionsListView(transactionVM: transactionVM) }
             }
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 100)
-                
-                
-                
-                VStack(alignment: .center) {
-                    Text("Transaction")
-                        .font(.title)
-                    
-                    
-                    Spacer()
-                }
             }
         }
     }

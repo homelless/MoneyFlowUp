@@ -8,20 +8,28 @@
 import Foundation
 import SwiftData
 
-@Model
-class Transaction: Identifiable, Hashable {
+
+struct Transaction: Identifiable {
+    let id: UUID
+    let amount: Double
+    let category: TransactionCategory
+    let date: Date
+    let note: String?
+    let accountId: UUID
     
-    var id: UUID
-    var amount: Double
-    var category: CategoryTransaction?
-    var date: Date
-    var account: Account?
-    
-    init(id: UUID, amount: Double, category: CategoryTransaction, date: Date, account: Account? = nil) {
-        self.id = id
-        self.amount = amount
-        self.category = category
-        self.date = date
-        self.account = account
+    // Вычисляемые свойства
+    var isExpense: Bool {
+        if case .cost = category { return true }
+        return false
     }
-}
+    
+    var isIncome: Bool {
+        if case .income = category { return true }
+        return false
+    }
+    
+    var isTransfer: Bool {
+         if case .transfer = category { return true }
+         return false
+     }
+ }

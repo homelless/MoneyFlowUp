@@ -1,15 +1,14 @@
 //
-//  TransactionTransferView.swift
-//  MoneyFlow
+//  TransactionsListView.swift
+//  MoneyFlowUp
 //
-//  Created by MacBookAir on 31.12.25.
+//  Created by MacBookAir on 8.01.26.
 //
 
 import SwiftUI
 
-struct TransactionTransferView: View {
+struct TransactionsListView: View {
     
-    @Bindable var accountVM: AccountViewModel
     @Bindable var transactionVM: TransactionVM
     
     
