@@ -1,9 +1,3 @@
-//
-//  Account.swift
-//  MoneyFlow
-//
-//  Created by MacBookAir on 15.12.25.
-//
 
 import Foundation
 import SwiftData
@@ -14,7 +8,7 @@ class Account: Identifiable, Hashable {
     var id: UUID
     var name: String
     var balance: String
-    var transactions: [Transaction]?
+ //   var transactions: [Transaction]?
     var currencyRaw: String
     var currency: Currency {
         get { Currency(rawValue: currencyRaw) ?? .usd }

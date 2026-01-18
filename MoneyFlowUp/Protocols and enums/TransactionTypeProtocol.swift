@@ -12,6 +12,5 @@ protocol TransactionTypeProtocol: Identifiable, Hashable {
     var id: String { get }
     var name: String { get }
     var icon: String { get }
-    var color: Color { get }
     var group: TransactionGroup { get }
 }

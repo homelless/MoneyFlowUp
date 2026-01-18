@@ -37,14 +37,7 @@ enum TransactionCategory: Identifiable, Hashable {
             }
         }
         
-        var color: Color {
-            switch self {
-            case .cost(let category): return category.color
-            case .income(let category): return category.color
-            case .transfer(let type): return type.color
-            }
-        }
-        
+     
     var group: TransactionGroup {
             switch self {
             case .cost: return .cost

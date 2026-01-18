@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D028FA202F1D6D94006A9D1A /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */; };
+		D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA222F1D715A006A9D1A /* FilterChip.swift */; };
+		D028FA252F1D722D006A9D1A /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA242F1D722D006A9D1A /* TransactionRow.swift */; };
 		D05DEBE42F052C6900D6AEED /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE32F052C6900D6AEED /* Currency.swift */; };
 		D05DEBE52F052C6900D6AEED /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE12F052C6900D6AEED /* Account.swift */; };
 		D05DEBE62F052C6900D6AEED /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE02F052C6900D6AEED /* Transaction.swift */; };
@@ -33,6 +36,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
+		D028FA222F1D715A006A9D1A /* FilterChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterChip.swift; sourceTree = "<group>"; };
+		D028FA242F1D722D006A9D1A /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
 		D05DEBC62F052BFC00D6AEED /* MoneyFlowUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyFlowUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05DEBE02F052C6900D6AEED /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		D05DEBE12F052C6900D6AEED /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -70,6 +76,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D028FA212F1D7127006A9D1A /* Helps */ = {
+			isa = PBXGroup;
+			children = (
+				D06CD7382F101DE4002D4A05 /* TransactionGroup.swift */,
+				D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */,
+				D05DEBE32F052C6900D6AEED /* Currency.swift */,
+				D06CD73E2F103D32002D4A05 /* TransferType.swift */,
+				D06CD73A2F1022B3002D4A05 /* CostCategory.swift */,
+				D06CD73C2F103C85002D4A05 /* IncomeCategory.swift */,
+				D028FA222F1D715A006A9D1A /* FilterChip.swift */,
+			);
+			path = Helps;
+			sourceTree = "<group>";
+		};
 		D05DEBBD2F052BFC00D6AEED = {
 			isa = PBXGroup;
 			children = (
@@ -89,6 +109,7 @@
 		D05DEBDA2F052C2500D6AEED /* MoneyFlowUp */ = {
 			isa = PBXGroup;
 			children = (
+				D028FA212F1D7127006A9D1A /* Helps */,
 				D06CD7352F101C50002D4A05 /* Protocols and enums */,
 				D05DEC002F052C8100D6AEED /* App */,
 				D05DEBF52F052C7800D6AEED /* View */,
@@ -104,10 +125,6 @@
 			children = (
 				D05DEBE02F052C6900D6AEED /* Transaction.swift */,
 				D05DEBE12F052C6900D6AEED /* Account.swift */,
-				D05DEBE32F052C6900D6AEED /* Currency.swift */,
-				D06CD73A2F1022B3002D4A05 /* CostCategory.swift */,
-				D06CD73C2F103C85002D4A05 /* IncomeCategory.swift */,
-				D06CD73E2F103D32002D4A05 /* TransferType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -129,6 +146,7 @@
 				D05DEBEC2F052C7800D6AEED /* TransactionCostView.swift */,
 				D05DEBED2F052C7800D6AEED /* TransactionIncomeView.swift */,
 				D05DEBEE2F052C7800D6AEED /* TransactionTransferView.swift */,
+				D028FA242F1D722D006A9D1A /* TransactionRow.swift */,
 			);
 			path = TransactionViews;
 			sourceTree = "<group>";
@@ -149,6 +167,7 @@
 			children = (
 				D05DEBEF2F052C7800D6AEED /* TransactionViews */,
 				D05DEBF42F052C7800D6AEED /* AccountViews */,
+				D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -166,8 +185,6 @@
 			children = (
 				D05DEBFF2F052C8100D6AEED /* Route.swift */,
 				D06CD7362F101C9D002D4A05 /* TransactionTypeProtocol.swift */,
-				D06CD7382F101DE4002D4A05 /* TransactionGroup.swift */,
-				D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */,
 			);
 			path = "Protocols and enums";
 			sourceTree = "<group>";
@@ -256,7 +273,10 @@
 				D05DEBF62F052C7800D6AEED /* TransactionIncomeView.swift in Sources */,
 				D05DEBF72F052C7800D6AEED /* AccountRow.swift in Sources */,
 				D05DEC082F05570B00D6AEED /* TransactionVM.swift in Sources */,
+				D028FA202F1D6D94006A9D1A /* CategoryPickerView.swift in Sources */,
+				D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */,
 				D05DEBF82F052C7800D6AEED /* AccountDetailView.swift in Sources */,
+				D028FA252F1D722D006A9D1A /* TransactionRow.swift in Sources */,
 				D05DEBF92F052C7800D6AEED /* AccountListView.swift in Sources */,
 				D06CD73D2F103C85002D4A05 /* IncomeCategory.swift in Sources */,
 				D05DEBFA2F052C7800D6AEED /* AccountAddView.swift in Sources */,

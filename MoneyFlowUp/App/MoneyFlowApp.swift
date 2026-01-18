@@ -6,7 +6,7 @@ import SwiftData
 struct MoneyFlowUpApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-           // Transaction.self,
+            Transaction.self,
             Account.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
