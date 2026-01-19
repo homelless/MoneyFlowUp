@@ -142,6 +142,8 @@ struct TransactionCostView: View {
                 accountVM.accounts[index].balance = String(currentBalance - amountValue)
             }
         }
+        amount = ""
+        note = ""
         
         transactionVM.addTransaction(transaction)
         dismiss()

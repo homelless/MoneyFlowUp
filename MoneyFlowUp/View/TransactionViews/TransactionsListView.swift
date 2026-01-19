@@ -128,3 +128,5 @@ struct TransactionsListView: View {
         transactionVM.removeTransaction(at: offsets)
     }
 }
+
+

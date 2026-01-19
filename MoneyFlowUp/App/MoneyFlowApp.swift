@@ -39,7 +39,9 @@ struct RootView: View {
                     Tab("Wallet", systemImage: "wallet.bifold.fill") {
                         AccountListView(viewModel: accountVM, path: $path)
                     }
-                    Tab("Transactions", systemImage: "pencil.and.outline") { }
+                    Tab("Transactions", systemImage: "pencil.and.outline") {
+                        TransactionsListView(transactionVM: transactionVM)
+                    }
                     Tab("Budget", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
                     Tab("Reports", systemImage: "document.on.document") { }
                 }

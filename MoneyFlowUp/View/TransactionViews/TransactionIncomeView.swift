@@ -151,3 +151,5 @@ struct TransactionIncomeView: View {
         dismiss()
     }
 }
+
+
