@@ -4,8 +4,8 @@ import SwiftUI
 
 struct TransactionView: View {
     
-    @Bindable private var transactionVM = TransactionVM()
-    @Bindable private var accountVM = AccountViewModel()
+    @Bindable  var transactionVM : TransactionVM
+    @Bindable  var accountVM : AccountViewModel
 
     
     
@@ -34,5 +34,5 @@ struct TransactionView: View {
 }
 
 #Preview {
-    TransactionView()
+    TransactionView(transactionVM: TransactionVM(), accountVM: AccountViewModel())
 }

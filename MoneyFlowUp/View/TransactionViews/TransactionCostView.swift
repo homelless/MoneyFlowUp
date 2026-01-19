@@ -1,9 +1,3 @@
-//
-//  TransactionCostView.swift
-//  MoneyFlow
-//
-//  Created by MacBookAir on 31.12.25.
-//
 
 import SwiftUI
 

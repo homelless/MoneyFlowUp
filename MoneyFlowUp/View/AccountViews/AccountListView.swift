@@ -42,7 +42,7 @@ struct AccountListView: View {
                 List {
                     ForEach(viewModel.accounts, id:\.id) { account in
                         Button {
-                            path.append(.detail(account))
+                            path.append(.detail(account.id))
                         } label: {
                             AccountRow(account: account)
                                 .padding()

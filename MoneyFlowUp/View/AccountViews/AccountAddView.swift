@@ -1,9 +1,4 @@
-//
-//  AccountAddView.swift
-//  MoneyFlow
-//
-//  Created by MacBookAir on 24.12.25.
-//
+
 
 import SwiftUI
 

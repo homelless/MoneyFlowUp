@@ -10,33 +10,34 @@ struct MoneyFlowUpApp: App {
             Account.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
+        
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+    
     var body: some Scene {
-        WindowGroup { RootView(viewModel: AccountViewModel()) }
-         .modelContainer(sharedModelContainer)
+        WindowGroup { RootView(accountVM: AccountViewModel(), transactionVM: TransactionVM()) }
+            .modelContainer(sharedModelContainer)
     }
 }
 
 struct RootView: View {
-    @Bindable var viewModel: AccountViewModel
+    @Bindable var accountVM: AccountViewModel
+    @Bindable var transactionVM: TransactionVM
     @State private var path = [Route]()
     @State var selectedTab : Bool = false
     @State var accounts: [Account] = []
- 
-
+    
+    
     var body: some View {
         NavigationStack(path: $path) {
             ZStack {
                 TabView {
                     Tab("Wallet", systemImage: "wallet.bifold.fill") {
-                        AccountListView(viewModel: viewModel, path: $path)
+                        AccountListView(viewModel: accountVM, path: $path)
                     }
                     Tab("Transactions", systemImage: "pencil.and.outline") { }
                     Tab("Budget", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
@@ -45,7 +46,7 @@ struct RootView: View {
                 .safeAreaInset(edge: .bottom) {
                     Color.clear.frame(height: 100)
                 }
-
+                
                 GeometryReader { geo in
                     VStack {
                         Spacer()
@@ -74,19 +75,23 @@ struct RootView: View {
             }
             // здесь описываем переходы
             .navigationDestination(for: Route.self) { route in
-                                switch route {
-                                case .add:
-                                    AccountAddView(viewModel: viewModel)
-                                case .detail(let account):
-                                    AccountDetailView(account: account)
-                                case .addTransaction:
-                                    TransactionView() 
-                                }
-                            }
+                switch route {
+                case .add:
+                    AccountAddView(viewModel: accountVM)
+                case .detail(let accountID):
+                    if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
+                        AccountDetailView(account: account)
+                    } else {
+                        Text("Account not found")
+                    }
+                case .addTransaction:
+                    TransactionView(transactionVM: transactionVM, accountVM: accountVM)
+                }
+            }
         }
     }
 }
 
 #Preview {
-    RootView(viewModel: AccountViewModel())
+    RootView(accountVM: AccountViewModel(), transactionVM: TransactionVM())
 }

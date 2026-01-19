@@ -79,11 +79,8 @@
 		D028FA212F1D7127006A9D1A /* Helps */ = {
 			isa = PBXGroup;
 			children = (
-				D06CD7382F101DE4002D4A05 /* TransactionGroup.swift */,
-				D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */,
-				D05DEBE32F052C6900D6AEED /* Currency.swift */,
-				D06CD73E2F103D32002D4A05 /* TransferType.swift */,
 				D06CD73A2F1022B3002D4A05 /* CostCategory.swift */,
+				D06CD73E2F103D32002D4A05 /* TransferType.swift */,
 				D06CD73C2F103C85002D4A05 /* IncomeCategory.swift */,
 				D028FA222F1D715A006A9D1A /* FilterChip.swift */,
 			);
@@ -185,6 +182,9 @@
 			children = (
 				D05DEBFF2F052C8100D6AEED /* Route.swift */,
 				D06CD7362F101C9D002D4A05 /* TransactionTypeProtocol.swift */,
+				D05DEBE32F052C6900D6AEED /* Currency.swift */,
+				D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */,
+				D06CD7382F101DE4002D4A05 /* TransactionGroup.swift */,
 			);
 			path = "Protocols and enums";
 			sourceTree = "<group>";
