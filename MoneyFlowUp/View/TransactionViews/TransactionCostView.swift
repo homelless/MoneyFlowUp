@@ -17,7 +17,6 @@ struct TransactionCostView: View {
     
     var body: some View {
         
-        NavigationStack {
             ZStack {
                 Color("ColorSet")
                     .ignoresSafeArea()
@@ -112,7 +111,7 @@ struct TransactionCostView: View {
                 }
             }
         }
-    }
+    
     
     private var isFormValid: Bool {
         guard !amount.isEmpty,

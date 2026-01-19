@@ -29,7 +29,7 @@ struct TransactionsListView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        
             ZStack {
                 Color("ColorSet")
                     .ignoresSafeArea()
@@ -122,7 +122,7 @@ struct TransactionsListView: View {
                 }
             }
         }
-    }
+    
     
     private func deleteTransaction(at offsets: IndexSet) {
         transactionVM.removeTransaction(at: offsets)

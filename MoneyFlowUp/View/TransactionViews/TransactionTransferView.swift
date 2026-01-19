@@ -14,7 +14,7 @@ struct TransactionTransferView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        NavigationStack {
+        
             ZStack {
                 Color("ColorSet")
                     .ignoresSafeArea()
@@ -108,7 +108,6 @@ struct TransactionTransferView: View {
                 }
             }
         }
-    }
     
     private var isFormValid: Bool {
         guard !amount.isEmpty,
