@@ -33,14 +33,14 @@ struct RootView: View {
     
     
     var body: some View {
-        NavigationStack(path: $path) {
+        //NavigationStack(path: $path) {
             ZStack {
                 TabView {
                     Tab("Кошельки", systemImage: "wallet.bifold.fill") {
-                        AccountListView(viewModel: accountVM, path: $path)
+                        AccountListView(accountVM: accountVM , transactionVM: transactionVM)
                     }
                     Tab("Транзакции", systemImage: "pencil.and.outline") {
-                        TransactionsListView(transactionVM: transactionVM)
+                        TransactionsListView(transactionVM: transactionVM, accountVM: accountVM)
                     }
                     Tab("Бюджет", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
                     Tab("Отчеты", systemImage: "document.on.document") { }
@@ -48,51 +48,25 @@ struct RootView: View {
                 .safeAreaInset(edge: .bottom) {
                     Color.clear.frame(height: 100)
                 }
-                
-                GeometryReader { geo in
-                    VStack {
-                        Spacer()
-                        Button(action: {
-                            path.append(.addTransaction)
-                        }) {
-                            Text("добавить транзакцию")
-                                .foregroundColor(.black)
-                                .frame(width: 360, height: 50)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(Color("addColor")).opacity(0.9)
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.black, lineWidth: 1)
-                                )
-                        }
-                        .contentShape(RoundedRectangle(cornerRadius: 20))
-                        .zIndex(1)
-                        .padding(.bottom, geo.safeAreaInsets.bottom + 100)
-                    }
-                    .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
-                }
-                .ignoresSafeArea()
             }
             // здесь описываем переходы
-            .navigationDestination(for: Route.self) { route in
-                switch route {
-                case .addAccount:
-                    AccountAddView(viewModel: accountVM)
-                case .detail(let accountID):
-                    if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
-                        AccountDetailView(account: account)
-                    } else {
-                        Text("Кошелек не найден")
-                    }
-                case .addTransaction:
-                    TransactionView(transactionVM: transactionVM, accountVM: accountVM)
-                }
-            }
+//            .navigationDestination(for: Route.self) { route in
+//                switch route {
+//                case .addAccount:
+//                    AccountAddView(viewModel: accountVM)
+//                case .detail(let accountID):
+//                    if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
+//                        AccountDetailView(account: account)
+//                    } else {
+//                        Text("Кошелек не найден")
+//                    }
+//                case .addTransaction:
+//                    TransactionView(transactionVM: transactionVM, accountVM: accountVM)
+//                }
+//            }
         }
     }
-}
+
 
 #Preview {
     RootView(accountVM: AccountViewModel(), transactionVM: TransactionVM())

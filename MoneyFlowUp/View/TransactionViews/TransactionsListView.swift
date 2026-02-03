@@ -3,8 +3,10 @@ import SwiftUI
 struct TransactionsListView: View {
     
     @Bindable var transactionVM: TransactionVM
+    @Bindable var accountVM: AccountViewModel
     @State private var selectedDate = Date()
     @State private var selectedFilter: TransactionGroup?
+    @State private var path: [Route] = []
     
     var filteredTransactions: [Transaction] {
         let calendar = Calendar.current
@@ -29,13 +31,12 @@ struct TransactionsListView: View {
     }
     
     var body: some View {
-        
+        NavigationStack(path: $path) {
             ZStack {
                 Color("ColorSet")
                     .ignoresSafeArea()
                 
                 VStack {
-                    // Фильтры и дата
                     VStack(spacing: 16) {
                         DatePicker("Выберите дату", selection: $selectedDate, displayedComponents: .date)
                             .datePickerStyle(.compact)
@@ -112,21 +113,57 @@ struct TransactionsListView: View {
                         .listStyle(.plain)
                         .background(Color("ColorSet"))
                     }
+                    
+                    GeometryReader { geo in
+                        VStack {
+                            Spacer()
+                            Button(action: {
+                                path.append(.addTransaction)
+                            }) {
+                                Text("добавить транзакцию")
+                                    .foregroundColor(.black)
+                                    .frame(width: 360, height: 50)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .fill(Color("addColor")).opacity(0.9)
+                                    )
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .stroke(Color.black, lineWidth: 1)
+                                    )
+                            }
+                            .contentShape(RoundedRectangle(cornerRadius: 20))
+                            .zIndex(1)
+                            .padding(.bottom, geo.safeAreaInsets.bottom + 100)
+                        }
+                        .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+                    }
+                    .ignoresSafeArea()
                 }
             }
             .navigationTitle("Транзакции")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .addTransaction:
+                    TransactionView(transactionVM: transactionVM, accountVM: accountVM)
+                     
+                case .detail(let accountID):
+                    if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
+                        AccountDetailView(account: account)
+                            
+                    } else {
+                        Text("Кошелек не найден")
+                    }
+                case .addAccount:
+                    AccountAddView(viewModel: accountVM)
+                        
                 }
             }
         }
-    
+    }
     
     private func deleteTransaction(at offsets: IndexSet) {
         transactionVM.removeTransaction(at: offsets)
     }
 }
-
-

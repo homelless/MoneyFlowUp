@@ -24,7 +24,7 @@ struct TransactionView: View {
                     TransactionTransferView(accountVM: accountVM, transactionVM: transactionVM) }
                 
                 Tab("Транзакции", systemImage: "list.bullet.rectangle") {
-                    TransactionsListView(transactionVM: transactionVM) }
+                    TransactionsListView(transactionVM: transactionVM, accountVM: accountVM) }
             }
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 100)
