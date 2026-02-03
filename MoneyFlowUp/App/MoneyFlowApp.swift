@@ -48,32 +48,6 @@ struct RootView: View {
                 .safeAreaInset(edge: .bottom) {
                     Color.clear.frame(height: 100)
                 }
-                
-                GeometryReader { geo in
-                    VStack {
-                        Spacer()
-                        Button(action: {
-                            path.append(.addTransaction)
-                        }) {
-                            Text("добавить транзакцию")
-                                .foregroundColor(.black)
-                                .frame(width: 360, height: 50)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .fill(Color("addColor")).opacity(0.9)
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.black, lineWidth: 1)
-                                )
-                        }
-                        .contentShape(RoundedRectangle(cornerRadius: 20))
-                        .zIndex(1)
-                        .padding(.bottom, geo.safeAreaInsets.bottom + 100)
-                    }
-                    .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
-                }
-                .ignoresSafeArea()
             }
             // здесь описываем переходы
 //            .navigationDestination(for: Route.self) { route in
