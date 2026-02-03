@@ -26,7 +26,7 @@ struct AccountListView: View {
                         .padding(.leading, 40)
                     
                     Button {
-                        path.append(.add)
+                        path.append(.addAccount)
                     } label: {
                         Image(systemName: "plus")
                     }
@@ -61,9 +61,9 @@ struct AccountListView: View {
                         .tint(.clear)
                         .frame(height: 65)
                         .contentShape(Rectangle())
-                        .listRowBackground(Color.clear)    // ← ПРАВИЛЬНО: применяется к строке списка
-                        .listRowInsets(.none)             // ← ПРАВИЛЬНО: применяется к строке списка
-                        .listRowSeparator(.hidden)        // ← ПРАВИЛЬНО: применяется к строке списка
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(.none)
+                        .listRowSeparator(.hidden)        
                     }
                     .onDelete { indexSet in
                         viewModel.removeAccount(at: indexSet)

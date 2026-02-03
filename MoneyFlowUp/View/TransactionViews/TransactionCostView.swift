@@ -22,8 +22,8 @@ struct TransactionCostView: View {
                     .ignoresSafeArea()
                 
                 Form {
-                    Section("Account") {
-                        Picker("Selected account", selection: $selectedAccount) {
+                    Section("Кошелек") {
+                        Picker("Выберите кошелек", selection: $selectedAccount) {
                             ForEach(accountVM.accounts) { account in
                                 HStack {
                                     Text(account.name)
@@ -36,7 +36,7 @@ struct TransactionCostView: View {
                         }
                         .pickerStyle(.automatic)
                     }
-                    Section("Category") {
+                    Section("Категория") {
                         HStack {
                             Image(systemName: selectedCategory.icon)
                                 .frame(width: 30)
@@ -55,20 +55,20 @@ struct TransactionCostView: View {
                         }
                     }
                     
-                    Section("Amount") {
+                    Section("Сумма") {
                         TextField("", text: $amount)
                             .keyboardType(.decimalPad)
                     }
                     
-                    Section("Date") {
-                        DatePicker("Transaction date",
+                    Section("Дата") {
+                        DatePicker("Дата транзакции",
                                    selection: $transactionDate,
                                    displayedComponents: [.date, .hourAndMinute])
                         .datePickerStyle(.compact)
                     }
                     
-                    Section("Notes") {
-                        TextField("Add note (optional)", text: $note, axis: .vertical)
+                    Section("Описание") {
+                        TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
                             .lineLimit(3...6)
                     }
                     
@@ -76,7 +76,7 @@ struct TransactionCostView: View {
                         Button(action: saveTransaction) {
                             HStack {
                                 Spacer()
-                                Text("Save Transaction")
+                                Text("Сохранить транзакцию")
                                     .bold()
                                 Spacer()
                             }
@@ -87,12 +87,12 @@ struct TransactionCostView: View {
                     }
                 }
                 .scrollContentBackground(.hidden)
-                .navigationTitle("New Expense")
+                .navigationTitle("Новые траты")
                 .navigationBarTitleDisplayMode(.inline)
                 
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
+                        Button("Отмена") {
                             dismiss()
                         }
                     }
@@ -101,7 +101,7 @@ struct TransactionCostView: View {
                     CategoryPickerView(
                         selectedCategory: $selectedCategory,
                         categories: CostCategory.all,
-                        title: "Select Category"
+                        title: "Выберите категорию"
                     )
                 }
             }

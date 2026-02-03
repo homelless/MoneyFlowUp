@@ -37,7 +37,7 @@ struct TransactionsListView: View {
                 VStack {
                     // Фильтры и дата
                     VStack(spacing: 16) {
-                        DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                        DatePicker("Выберите дату", selection: $selectedDate, displayedComponents: .date)
                             .datePickerStyle(.compact)
                             .padding(.horizontal)
                         
@@ -62,7 +62,7 @@ struct TransactionsListView: View {
                         }
                         
                         HStack {
-                            Text("Total:")
+                            Text("Итого:")
                                 .font(.headline)
                             
                             Spacer()
@@ -88,11 +88,11 @@ struct TransactionsListView: View {
                                 .font(.system(size: 60))
                                 .foregroundColor(.gray)
                             
-                            Text("No transactions")
+                            Text("Нет транзакций")
                                 .font(.title3)
                                 .foregroundColor(.secondary)
                             
-                            Text("Transactions for selected date will appear here")
+                            Text("Здесь появятся транзакции на выбранную дату")
                                 .font(.callout)
                                 .foregroundColor(.gray)
                                 .multilineTextAlignment(.center)
@@ -114,7 +114,7 @@ struct TransactionsListView: View {
                     }
                 }
             }
-            .navigationTitle("Transactions")
+            .navigationTitle("Транзакции")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

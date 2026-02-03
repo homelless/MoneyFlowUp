@@ -3,7 +3,7 @@ import Foundation
 
 enum Route: Hashable {
     
-    case add
+    case addAccount
     case detail(Account.ID)
     case addTransaction
 }

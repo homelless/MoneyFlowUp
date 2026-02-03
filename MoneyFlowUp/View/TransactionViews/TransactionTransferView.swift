@@ -20,8 +20,8 @@ struct TransactionTransferView: View {
                     .ignoresSafeArea()
                 
                 Form {
-                    Section("From Account") {
-                        Picker("Select account", selection: $fromAccount) {
+                    Section("С кошелька") {
+                        Picker("Выберите кошелек", selection: $fromAccount) {
                             ForEach(accountVM.accounts) { account in
                                 HStack {
                                     Text(account.name)
@@ -35,8 +35,8 @@ struct TransactionTransferView: View {
                         .pickerStyle(.navigationLink)
                     }
                     
-                    Section("To Account") {
-                        Picker("Select account", selection: $toAccount) {
+                    Section("В кошелек") {
+                        Picker("Выберите кошелек", selection: $toAccount) {
                             ForEach(accountVM.accounts) { account in
                                 HStack {
                                     Text(account.name)
@@ -50,7 +50,7 @@ struct TransactionTransferView: View {
                         .pickerStyle(.navigationLink)
                     }
                     
-                    Section("Amount") {
+                    Section("Сумма") {
                         HStack {
                             Text("$")
                                 .foregroundColor(.secondary)
@@ -62,15 +62,15 @@ struct TransactionTransferView: View {
                         }
                     }
                     
-                    Section("Date") {
-                        DatePicker("Transaction date",
+                    Section("Дата") {
+                        DatePicker("Дата транзакции",
                                    selection: $transactionDate,
                                    displayedComponents: [.date, .hourAndMinute])
                         .datePickerStyle(.compact)
                     }
                     
-                    Section("Notes") {
-                        TextField("Add note (optional)", text: $note, axis: .vertical)
+                    Section("Описание") {
+                        TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
                             .lineLimit(3...6)
                     }
                     
@@ -78,7 +78,7 @@ struct TransactionTransferView: View {
                         Button(action: saveTransaction) {
                             HStack {
                                 Spacer()
-                                Text("Transfer Money")
+                                Text("Перевод денег")
                                     .bold()
                                 Spacer()
                             }
@@ -89,11 +89,11 @@ struct TransactionTransferView: View {
                     }
                 }
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Transfer")
+                .navigationTitle("Перевод")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
+                        Button("Отмена") {
                             dismiss()
                         }
                     }

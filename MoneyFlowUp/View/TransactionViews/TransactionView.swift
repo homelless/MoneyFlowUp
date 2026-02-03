@@ -14,16 +14,16 @@ struct TransactionView: View {
         ZStack {
             
             TabView() {
-                Tab("cost", systemImage: "cart.badge.plus") {
+                Tab("Траты", systemImage: "cart.badge.plus") {
                     TransactionCostView(accountVM: accountVM, transactionVM: transactionVM) }
                 
-                Tab("income", systemImage: "dollarsign.ring.dashed") {
+                Tab("Заработок", systemImage: "dollarsign.ring.dashed") {
                     TransactionIncomeView(accountVM: accountVM, transactionVM: transactionVM) }
                 
-                Tab("transfer", systemImage: "arrow.triangle.2.circlepath") {
+                Tab("Перевод", systemImage: "arrow.triangle.2.circlepath") {
                     TransactionTransferView(accountVM: accountVM, transactionVM: transactionVM) }
                 
-                Tab("transactions", systemImage: "list.bullet.rectangle") {
+                Tab("Транзакции", systemImage: "list.bullet.rectangle") {
                     TransactionsListView(transactionVM: transactionVM) }
             }
             .safeAreaInset(edge: .bottom) {

@@ -36,14 +36,14 @@ struct RootView: View {
         NavigationStack(path: $path) {
             ZStack {
                 TabView {
-                    Tab("Wallet", systemImage: "wallet.bifold.fill") {
+                    Tab("Кошельки", systemImage: "wallet.bifold.fill") {
                         AccountListView(viewModel: accountVM, path: $path)
                     }
-                    Tab("Transactions", systemImage: "pencil.and.outline") {
+                    Tab("Транзакции", systemImage: "pencil.and.outline") {
                         TransactionsListView(transactionVM: transactionVM)
                     }
-                    Tab("Budget", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
-                    Tab("Reports", systemImage: "document.on.document") { }
+                    Tab("Бюджет", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
+                    Tab("Отчеты", systemImage: "document.on.document") { }
                 }
                 .safeAreaInset(edge: .bottom) {
                     Color.clear.frame(height: 100)
@@ -55,7 +55,7 @@ struct RootView: View {
                         Button(action: {
                             path.append(.addTransaction)
                         }) {
-                            Text("add transaction")
+                            Text("добавить транзакцию")
                                 .foregroundColor(.black)
                                 .frame(width: 360, height: 50)
                                 .background(
@@ -78,13 +78,13 @@ struct RootView: View {
             // здесь описываем переходы
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .add:
+                case .addAccount:
                     AccountAddView(viewModel: accountVM)
                 case .detail(let accountID):
                     if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
                         AccountDetailView(account: account)
                     } else {
-                        Text("Account not found")
+                        Text("Кошелек не найден")
                     }
                 case .addTransaction:
                     TransactionView(transactionVM: transactionVM, accountVM: accountVM)

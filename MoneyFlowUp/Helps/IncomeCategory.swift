@@ -12,23 +12,23 @@ struct IncomeCategory: TransactionTypeProtocol {
     var group: TransactionGroup { .income }
     
     static let salary = IncomeCategory(id: "income_salary",
-                                       name: "Salary",
+                                       name: "Зарплата",
                                        icon: "dollarsign.circle",
                                        color: .blue,
        )
     
     static let freelance = IncomeCategory(id: "income_freelance",
-                                           name: "Freelance",
+                                           name: "Фриланс",
                                            icon: "laptopcomputer",
                                            color: .blue)
     
     static let bonus = IncomeCategory(id: "income_bonus",
-                                         name: "Bonus",
+                                         name: "Премии",
                                          icon: "gift",
                                          color: .orange)
        
        static let investment = IncomeCategory(id: "income_investment",
-                                              name: "Investment",
+                                              name: "Инвестиции",
                                               icon: "chart.line.uptrend.xyaxis",
                                               color: .green)
        

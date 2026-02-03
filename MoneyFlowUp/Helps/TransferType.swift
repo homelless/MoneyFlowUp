@@ -13,7 +13,7 @@ struct TransferType: TransactionTypeProtocol {
     
     static let accountTransfer = TransferType(
         id: "transfer_account",
-        name: "Account Transfer",
+        name: "Кошелек",
         icon: "arrow.left.arrow.right",
         color: .blue,
         requiresTargetAccount: true
