@@ -36,7 +36,7 @@ struct CategoryPickerView<CategoryType: TransactionTypeProtocol>: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
+                    Button("Готово") {
                         dismiss()
                     }
                 }

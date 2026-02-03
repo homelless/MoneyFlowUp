@@ -18,8 +18,8 @@ struct TransactionIncomeView: View {
                     .ignoresSafeArea()
                 
                 Form {
-                    Section("Account") {
-                        Picker("Select account", selection: $selectedAccount) {
+                    Section("Кошелек") {
+                        Picker("Выберите кошелек", selection: $selectedAccount) {
                             ForEach(accountVM.accounts) { account in
                                 HStack {
                                     Text(account.name)
@@ -33,7 +33,7 @@ struct TransactionIncomeView: View {
                         .pickerStyle(.navigationLink)
                     }
                     
-                    Section("Category") {
+                    Section("Категории") {
                         HStack {
                             Image(systemName: selectedCategory.icon)
                                 .foregroundColor(selectedCategory.color)
@@ -53,7 +53,7 @@ struct TransactionIncomeView: View {
                         }
                     }
                     
-                    Section("Amount") {
+                    Section("Сумма") {
                         HStack {
                             Text("$")
                                 .foregroundColor(.secondary)
@@ -65,15 +65,15 @@ struct TransactionIncomeView: View {
                         }
                     }
                     
-                    Section("Date") {
-                        DatePicker("Transaction date",
+                    Section("Дата") {
+                        DatePicker("Дата транзакции",
                                    selection: $transactionDate,
                                    displayedComponents: [.date, .hourAndMinute])
                         .datePickerStyle(.compact)
                     }
                     
-                    Section("Notes") {
-                        TextField("Add note (optional)", text: $note, axis: .vertical)
+                    Section("Описание") {
+                        TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
                             .lineLimit(3...6)
                     }
                     
@@ -81,7 +81,7 @@ struct TransactionIncomeView: View {
                         Button(action: saveTransaction) {
                             HStack {
                                 Spacer()
-                                Text("Save Income")
+                                Text("Сохранить заработок")
                                     .bold()
                                 Spacer()
                             }
@@ -92,11 +92,11 @@ struct TransactionIncomeView: View {
                     }
                 }
                 .scrollContentBackground(.hidden)
-                .navigationTitle("New Income")
+                .navigationTitle("Новый заработок")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
+                        Button("Отмена") {
                             dismiss()
                         }
                     }
@@ -105,7 +105,7 @@ struct TransactionIncomeView: View {
                     CategoryPickerView(
                         selectedCategory: $selectedCategory,
                         categories: IncomeCategory.all,
-                        title: "Select Category"
+                        title: "Выберите категорию"
                     )
                 }
             }

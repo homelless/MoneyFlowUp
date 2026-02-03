@@ -5,9 +5,9 @@ import SwiftUI
 
 enum TransactionGroup: String, CaseIterable {
     
-    case cost = "Cost"
-    case income = "Income"
-    case transfer = "Transfer"
+    case cost = "Трата"
+    case income = "Заработок"
+    case transfer = "Перевод"
     
     var icon: String {
         switch self {
