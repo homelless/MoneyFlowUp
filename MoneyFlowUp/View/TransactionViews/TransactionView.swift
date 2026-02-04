@@ -6,7 +6,7 @@ struct TransactionView: View {
     
     @Bindable  var transactionVM : TransactionVM
     @Bindable  var accountVM : AccountViewModel
-
+    @Binding var path: [Route]
     
     
     var body: some View {
@@ -24,7 +24,7 @@ struct TransactionView: View {
                     TransactionTransferView(accountVM: accountVM, transactionVM: transactionVM) }
                 
                 Tab("Транзакции", systemImage: "list.bullet.rectangle") {
-                    TransactionsListView(transactionVM: transactionVM, accountVM: accountVM) }
+                    TransactionsListView(transactionVM: transactionVM, accountVM: accountVM, path: $path) }
             }
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 100)
@@ -33,6 +33,3 @@ struct TransactionView: View {
     }
 }
 
-#Preview {
-    TransactionView(transactionVM: TransactionVM(), accountVM: AccountViewModel())
-}

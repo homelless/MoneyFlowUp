@@ -4,117 +4,124 @@ struct AccountListView: View {
     
     @Bindable var accountVM: AccountViewModel
     @Bindable var transactionVM: TransactionVM
-    @State private var path: [Route] = []
-    
+    @Binding var path: [Route]
+
     var body: some View {
-        NavigationStack(path: $path) {
-            ZStack {
-                Color("ColorSet")
-                    .ignoresSafeArea()
+        ZStack {
+            Color("ColorSet")
+                .ignoresSafeArea()
+            
+            VStack {
+                HStack(alignment: .top) {
+                    Text(.now, format: .dateTime.day().month(.wide))
+                        .font(.title)
+                        .italic()
+                        .frame(maxWidth: 260, alignment: .center)
+                        .padding(.leading, 40)
+                    
+                    Button {
+                        path.append(.addAccount)
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    .font(.largeTitle)
+                    .tint(.black)
+                    .padding(.leading, 10)
+                }
                 
-                VStack {
-                    HStack(alignment: .top) {
-                        Text(.now, format: .dateTime.day().month(.wide))
-                            .font(.title)
-                            .italic()
-                            .frame(maxWidth: 260, alignment: .center)
-                            .padding(.leading, 40)
-                        
+                Rectangle()
+                    .fill(Color.black)
+                    .frame(height: 0.5)
+                
+                List {
+                    ForEach(accountVM.accounts, id:\.id) { account in
                         Button {
-                            path.append(.addAccount)
+                            path.append(.detail(account.id))
                         } label: {
-                            Image(systemName: "plus")
+                            AccountRow(account: account)
+                                .padding()
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .fill(Color("ColorSet").opacity(0.9))
+                                        .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.black, lineWidth: 1)
+                                )
                         }
-                        .font(.largeTitle)
-                        .tint(.black)
-                        .padding(.leading, 10)
+                        .buttonStyle(.plain)
+                        .tint(.clear)
+                        .frame(height: 65)
+                        .contentShape(Rectangle())
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(.none)
+                        .listRowSeparator(.hidden)
                     }
-                    
-                    Rectangle()
-                        .fill(Color.black)
-                        .frame(height: 0.5)
-                    
-                    List {
-                        ForEach(accountVM.accounts, id:\.id) { account in
-                            Button {
-                                path.append(.detail(account.id))
-                            } label: {
-                                AccountRow(account: account)
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .fill(Color("ColorSet").opacity(0.9))
-                                            .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
-                                    )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 12)
-                                            .stroke(Color.black, lineWidth: 1)
-                                    )
-                            }
-                            .buttonStyle(.plain)
-                            .tint(.clear)
-                            .frame(height: 65)
-                            .contentShape(Rectangle())
-                            .listRowBackground(Color.clear)
-                            .listRowInsets(.none)
-                            .listRowSeparator(.hidden)
-                        }
-                        .onDelete { indexSet in
-                            accountVM.removeAccount(at: indexSet)
-                        }
-                        .onMove { indices, newOffset in
-                            accountVM.moveAccount(from: indices, to: newOffset)
-                        }
+                    .onDelete { indexSet in
+                        accountVM.removeAccount(at: indexSet)
                     }
-                    .scrollContentBackground(.hidden)
-                    .background(Color.clear)
-                    .listStyle(.plain)
-                    
-                    GeometryReader { geo in
-                        VStack {
-                            Spacer()
-                            Button(action: {
-                                path.append(.addTransaction)
-                            }) {
-                                Text("добавить транзакцию")
-                                    .foregroundColor(.black)
-                                    .frame(width: 360, height: 50)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .fill(Color("addColor")).opacity(0.9)
-                                    )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 20)
-                                            .stroke(Color.black, lineWidth: 1)
-                                    )
-                            }
-                            .contentShape(RoundedRectangle(cornerRadius: 20))
-                            .zIndex(1)
-                            .padding(.bottom, geo.safeAreaInsets.bottom + 100)
-                        }
-                        .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+                    .onMove { indices, newOffset in
+                        accountVM.moveAccount(from: indices, to: newOffset)
                     }
-                    .ignoresSafeArea()
                 }
+                .scrollContentBackground(.hidden)
+                .background(Color.clear)
+                .listStyle(.plain)
             }
-            .navigationDestination(for: Route.self) { route in
-                switch route {
-                case .addTransaction:
-                    TransactionView(transactionVM: transactionVM, accountVM: accountVM)
+        }
         
-                case .detail(let accountID):
-                    if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
-                        AccountDetailView(account: account)
-                    
-                    } else {
-                        Text("Кошелек не найден")
+        .safeAreaInset(edge: .bottom) {
+            GeometryReader { proxy in
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        path.append(.addTransaction)
+                    }) {
+                        Text("добавить транзакцию")
+                            .foregroundColor(.black)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.9)
+                            .frame(width: proxy.size.width * 0.85, height: 50) // 90% ширины, фиксированная высота
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .fill(Color("addColor")).opacity(0.9)
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .stroke(Color.black, lineWidth: 1)
+                            )
                     }
-                case .addAccount:
-                    AccountAddView(viewModel: accountVM)
-                        
+                    .contentShape(RoundedRectangle(cornerRadius: 20))
+                    Spacer()
                 }
+                .frame(maxWidth: .infinity)
+                .padding(.top, 8)
+                .padding(.bottom, 16)
+            }
+            .frame(height: 50 + 8 + 16) // высота inset под кнопку и отступы
+        }
+        .navigationDestination(for: Route.self) { route in
+            switch route {
+            case .addTransaction:
+                TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
+    
+            case .detail(let accountID):
+                if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
+                    AccountDetailView(account: account)
+                
+                } else {
+                    Text("Кошелек не найден")
+                }
+            case .addAccount:
+                AccountAddView(viewModel: accountVM)
+                    
             }
         }
     }
+}
+
+#Preview {
+    AccountListView(accountVM: AccountViewModel(), transactionVM: TransactionVM(), path: .constant([]))
 }

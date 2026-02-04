@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct TransactionTransferView: View {
+    
     @Bindable var accountVM: AccountViewModel
     @Bindable var transactionVM: TransactionVM
     

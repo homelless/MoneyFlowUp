@@ -33,14 +33,14 @@ struct RootView: View {
     
     
     var body: some View {
-        //NavigationStack(path: $path) {
+        NavigationStack(path: $path) {
             ZStack {
                 TabView {
                     Tab("Кошельки", systemImage: "wallet.bifold.fill") {
-                        AccountListView(accountVM: accountVM , transactionVM: transactionVM)
+                        AccountListView(accountVM: accountVM , transactionVM: transactionVM, path: $path)
                     }
                     Tab("Транзакции", systemImage: "pencil.and.outline") {
-                        TransactionsListView(transactionVM: transactionVM, accountVM: accountVM)
+                        TransactionsListView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
                     }
                     Tab("Бюджет", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
                     Tab("Отчеты", systemImage: "document.on.document") { }
@@ -49,24 +49,23 @@ struct RootView: View {
                     Color.clear.frame(height: 100)
                 }
             }
-            // здесь описываем переходы
-//            .navigationDestination(for: Route.self) { route in
-//                switch route {
-//                case .addAccount:
-//                    AccountAddView(viewModel: accountVM)
-//                case .detail(let accountID):
-//                    if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
-//                        AccountDetailView(account: account)
-//                    } else {
-//                        Text("Кошелек не найден")
-//                    }
-//                case .addTransaction:
-//                    TransactionView(transactionVM: transactionVM, accountVM: accountVM)
-//                }
-//            }
+                .navigationDestination(for: Route.self) { route in
+                    switch route {
+                    case .addAccount:
+                        AccountAddView(viewModel: accountVM)
+                    case .detail(let accountID):
+                        if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
+                            AccountDetailView(account: account)
+                        } else {
+                            Text("Кошелек не найден")
+                        }
+                    case .addTransaction:
+                        TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
+                    }
+                }
         }
     }
-
+}
 
 #Preview {
     RootView(accountVM: AccountViewModel(), transactionVM: TransactionVM())
