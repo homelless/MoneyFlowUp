@@ -22,7 +22,7 @@ struct TransactionTransferView: View {
                 
                 Form {
                     Section("С кошелька") {
-                        Picker("Выберите кошелек", selection: $fromAccount) {
+                        Picker("", selection: $fromAccount) {
                             ForEach(accountVM.accounts) { account in
                                 HStack {
                                     Text(account.name)
@@ -37,7 +37,7 @@ struct TransactionTransferView: View {
                     }
                     
                     Section("В кошелек") {
-                        Picker("Выберите кошелек", selection: $toAccount) {
+                        Picker("", selection: $toAccount) {
                             ForEach(accountVM.accounts) { account in
                                 HStack {
                                     Text(account.name)
@@ -51,29 +51,28 @@ struct TransactionTransferView: View {
                         .pickerStyle(.navigationLink)
                     }
                     
+                    
                     Section("Сумма") {
-                        HStack {
-                            Text("$")
-                                .foregroundColor(.secondary)
-                            
-                            TextField("0.00", text: $amount)
-                                .keyboardType(.decimalPad)
-                                .font(.title2)
-                                .bold()
-                        }
+                        TextField("0", text: $amount)
+                            .keyboardType(.decimalPad)
                     }
                     
-                    Section("Дата") {
-                        DatePicker("Дата транзакции",
+                    Section("") {
+                        DatePicker("Дата",
                                    selection: $transactionDate,
                                    displayedComponents: [.date, .hourAndMinute])
                         .datePickerStyle(.compact)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .environment(\.locale, Locale(identifier: "ru_RU"))
+                        
                     }
+                   
                     
                     Section("Описание") {
                         TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
-                            .lineLimit(3...6)
+                            .lineLimit(2...4)
                     }
+                    
                     
                     Section {
                         Button(action: saveTransaction) {

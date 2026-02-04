@@ -19,7 +19,7 @@ struct TransactionIncomeView: View {
                 
                 Form {
                     Section("Кошелек") {
-                        Picker("Выберите кошелек", selection: $selectedAccount) {
+                        Picker("", selection: $selectedAccount) {
                             ForEach(accountVM.accounts) { account in
                                 HStack {
                                     Text(account.name)
@@ -55,26 +55,24 @@ struct TransactionIncomeView: View {
                     
                     Section("Сумма") {
                         HStack {
-                            Text("$")
-                                .foregroundColor(.secondary)
-                            
-                            TextField("0.00", text: $amount)
+                            TextField("0", text: $amount)
                                 .keyboardType(.decimalPad)
-                                .font(.title2)
-                                .bold()
                         }
                     }
                     
-                    Section("Дата") {
-                        DatePicker("Дата транзакции",
+                    Section("") {
+                        DatePicker("Дата",
                                    selection: $transactionDate,
                                    displayedComponents: [.date, .hourAndMinute])
                         .datePickerStyle(.compact)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .environment(\.locale, Locale(identifier: "ru_RU"))
+                        
                     }
                     
                     Section("Описание") {
                         TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
-                            .lineLimit(3...6)
+                            .lineLimit(2...4)
                     }
                     
                     Section {
