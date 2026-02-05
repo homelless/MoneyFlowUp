@@ -126,7 +126,8 @@ struct TransactionsListView: View {
                 }
             case .addAccount:
                 AccountAddView(viewModel: accountVM)
-                
+            case .calendar(let date):
+                TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM)
             }
         }
         

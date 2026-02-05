@@ -1,4 +1,3 @@
-
 import Foundation
 
 enum Route: Hashable {
@@ -6,4 +5,6 @@ enum Route: Hashable {
     case addAccount
     case detail(Account.ID)
     case addTransaction
+    case calendar(Date)
 }
+

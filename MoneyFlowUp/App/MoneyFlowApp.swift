@@ -1,4 +1,3 @@
-
 import SwiftUI
 import SwiftData
 
@@ -61,6 +60,8 @@ struct RootView: View {
                         }
                     case .addTransaction:
                         TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
+                    case .calendar(let date):
+                        TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM)
                     }
                 }
         }
@@ -70,3 +71,4 @@ struct RootView: View {
 #Preview {
     RootView(accountVM: AccountViewModel(), transactionVM: TransactionVM())
 }
+

@@ -13,11 +13,16 @@ struct AccountListView: View {
             
             VStack {
                 HStack(alignment: .top) {
-                    Text(.now, format: .dateTime.day().month(.wide))
-                        .font(.title)
-                        .italic()
-                        .frame(maxWidth: 260, alignment: .center)
-                        .padding(.leading, 40)
+                    Button {
+                        path.append(.calendar(Date()))
+                    } label: {
+                        Text(.now, format: .dateTime.day().month(.wide))
+                            .font(.title)
+                            .italic()
+                            .frame(maxWidth: 260, alignment: .center)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.leading, 40)
                     
                     Button {
                         path.append(.addAccount)
@@ -115,7 +120,8 @@ struct AccountListView: View {
                 }
             case .addAccount:
                 AccountAddView(viewModel: accountVM)
-                    
+            case .calendar(let date):
+                TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM)
             }
         }
     }
@@ -124,3 +130,4 @@ struct AccountListView: View {
 #Preview {
     AccountListView(accountVM: AccountViewModel(), transactionVM: TransactionVM(), path: .constant([]))
 }
+

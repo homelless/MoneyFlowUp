@@ -15,6 +15,13 @@ struct TransactionsCalendarView: View {
     @Bindable var transactionVM: TransactionVM
     @Bindable var accountVM: AccountViewModel
     
+    // Новый инициализатор, чтобы открыть экран сразу на нужной дате
+    init(selectedDate: Date = Date(), transactionVM: TransactionVM, accountVM: AccountViewModel) {
+        self._selectedDate = State(initialValue: selectedDate)
+        self.transactionVM = transactionVM
+        self.accountVM = accountVM
+    }
+    
     var filteredTransactions: [Transaction] {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: selectedDate)
@@ -115,3 +122,4 @@ struct TransactionsCalendarView: View {
     let accountVM = AccountViewModel()
     return TransactionsCalendarView(transactionVM: transactionVM, accountVM: accountVM)
 }
+
