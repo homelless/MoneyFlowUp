@@ -38,4 +38,13 @@ final class AccountViewModel: Identifiable {
             account.sortOrder = index
         }
     }
+    
+    func updateAccount(id: UUID, name: String, balance: String, currencyRaw: String, descriptionAccount: String) {
+        guard let index = accounts.firstIndex(where: { $0.id == id }) else { return }
+        accounts[index].name = name
+        accounts[index].balance = balance
+        accounts[index].currencyRaw = currencyRaw
+        accounts[index].descriptionAccount = descriptionAccount
+       
+    }
 }

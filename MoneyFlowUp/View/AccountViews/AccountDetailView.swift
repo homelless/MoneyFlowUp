@@ -2,37 +2,67 @@
 import SwiftUI
 
 struct AccountDetailView: View {
+    let account: Account
+    @Bindable var accountVM: AccountViewModel
     
     
-    @Bindable var account: Account
+    @Environment(\.dismiss) private var dismiss
+    
+    @State var name: String
+    @State var balance: String
+    @State var currencyRaw: String
+    @State var descriptionAccount: String
+    
+    init(account: Account, accountVM: AccountViewModel) {
+        self.account = account
+        self._name = State(initialValue: account.name)
+        self._balance = State(initialValue: account.balance)
+        self._currencyRaw = State(initialValue: account.currencyRaw)
+        self._descriptionAccount = State(initialValue: account.descriptionAccount)
+        self.accountVM = accountVM
+    }
     
     var body: some View {
+        
         Form {
             Section("Name wallet") {
-                TextField("name", text: $account.name)
+                TextField("name", text: $name)
                 
             }
             Section("Balance") {
-                TextField("0", text: $account.balance)
+                TextField("0", text: $balance)
             }
             Section("Currency") {
-                Picker("Currency", selection: $account.currencyRaw) {
+                Picker("Currency", selection: $currencyRaw) {
                     ForEach(Currency.allCases){ currency in
                         Text(currency.rawValue).tag(currency)
                     }
                 }
             }
             Section("Description") {
-                TextEditor(text: $account.descriptionAccount)
+                TextEditor(text: $descriptionAccount)
                     .frame(height: 200)
             }
+            Section {
+                Button(action: {
+                    accountVM.updateAccount(id: account.id,
+                                            name: name,
+                                            balance: balance,
+                                            currencyRaw: currencyRaw,
+                                            descriptionAccount: descriptionAccount)
+                    dismiss()
+                }) {
+                    HStack {
+                        Spacer()
+                        Text("Сохранить")
+                        Spacer()
+                    }
+                }
+                .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
         }
-        
-        
-        
+        .navigationTitle("Редактировать кошелек")
     }
 }
 
-#Preview {
-    AccountDetailView(account: Account(id: .init(), name: "card", balance: "900", currencyRaw: "USD", descriptionAccount: ""))
-}
+

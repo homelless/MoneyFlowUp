@@ -119,7 +119,7 @@ struct TransactionsListView: View {
                 
             case .detail(let accountID):
                 if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
-                    AccountDetailView(account: account)
+                    AccountDetailView(account: account, accountVM: accountVM)
                     
                 } else {
                     Text("Кошелек не найден")
