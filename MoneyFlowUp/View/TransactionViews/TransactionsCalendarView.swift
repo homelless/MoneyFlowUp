@@ -1,9 +1,4 @@
-//
-//  TransactionsCalendarView.swift
-//  MoneyFlowUp
-//
-//  Created by MacBookAir on 5.02.26.
-//
+
 
 import SwiftUI
 
@@ -49,9 +44,8 @@ struct TransactionsCalendarView: View {
             VStack {
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
                     .datePickerStyle(.graphical)
-                
-                
-                
+                    .environment(\.locale, Locale(identifier: "ru_RU"))
+
                 VStack {
                     Rectangle()
                         .fill(Color.black)
@@ -70,7 +64,7 @@ struct TransactionsCalendarView: View {
                                 }
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.horizontal, 25)
                     }
                     
                     if filteredTransactions.isEmpty {

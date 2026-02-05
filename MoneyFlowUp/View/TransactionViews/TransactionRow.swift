@@ -6,11 +6,11 @@ struct TransactionRow: View {
     let transaction: Transaction
     
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 5) {
             // Иконка категории
             Image(systemName: transaction.category.icon)
                 .font(.title3)
-                .foregroundColor(.white)
+                .foregroundColor(.black)
                 .frame(width: 50, height: 50)
                 .clipShape(Circle())
             
@@ -38,11 +38,24 @@ struct TransactionRow: View {
                 }
             }
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 16)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(color: .gray.opacity(0.1), radius: 2, x: 0, y: 1)
-        .padding(.horizontal)
+        //.padding(.vertical, 8)
+        //.padding(.horizontal, 16)
+//        .background(Color(.gray))
+//        .cornerRadius(12)
+//        .shadow(color: .gray.opacity(0.1), radius: 2, x: 0, y: 1)
+        //.padding(.horizontal)
     }
+}
+
+#Preview{
+    TransactionRow(
+        transaction: Transaction(
+            id: UUID(),
+            amount: 12.34,
+            category: .cost(.food),
+            date: Date(),
+            note: "Обед",
+            accountId: UUID()
+        )
+    )
 }

@@ -146,6 +146,8 @@ struct TransactionIncomeView: View {
         }
         
         transactionVM.addTransaction(transaction)
+        amount = ""
+        note = ""
         dismiss()
     }
 }

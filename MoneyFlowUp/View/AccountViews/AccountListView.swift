@@ -20,6 +20,8 @@ struct AccountListView: View {
                             .font(.title)
                             .italic()
                             .frame(maxWidth: 260, alignment: .center)
+                            .environment(\.locale, Locale(identifier: "ru_RU"))
+
                     }
                     .buttonStyle(.plain)
                     .padding(.leading, 40)

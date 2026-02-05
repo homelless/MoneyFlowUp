@@ -11,23 +11,55 @@ import Combine
 @MainActor
 final class TransactionVM: Identifiable {
     var transactions: [Transaction] = [
-//        // Пример транзакций для тестирования
-//        Transaction(
-//            id: UUID(),
-//            amount: 45.99,
-//            category: .cost(.food),
-//            date: Date().addingTimeInterval(-3600),
-//            note: "Обед в ресторнае",
-//            accountId: UUID()
-//        ),
-//        Transaction(
-//            id: UUID(),
-//            amount: 1200.00,
-//            category: .income(.salary),
-//            date: Date().addingTimeInterval(-86400),
-//            note: "Monthly salary",
-//            accountId: UUID()
-//        )
+        // Пример транзакций для тестирования
+        Transaction(
+            id: UUID(),
+            amount: 45.99,
+            category: .cost(.food),
+            date: Date(),
+            note: "Обед в ресторнае",
+            accountId: UUID()
+        ),
+        Transaction(
+            id: UUID(),
+            amount: 45.99,
+            category: .cost(.food),
+            date: Date(),
+            note: "Обед в ресторнае",
+            accountId: UUID()
+        ),
+        Transaction(
+            id: UUID(),
+            amount: 45.99,
+            category: .cost(.food),
+            date: Date(),
+            note: "Обед в ресторнае",
+            accountId: UUID()
+        ),
+        Transaction(
+            id: UUID(),
+            amount: 1200.00,
+            category: .income(.salary),
+            date: Date(),
+            note: "Monthly salary",
+            accountId: UUID()
+        ),
+        Transaction(
+            id: UUID(),
+            amount: 1200.00,
+            category: .income(.salary),
+            date: Date(),
+            note: "Monthly salary",
+            accountId: UUID()
+        ),
+        Transaction(
+            id: UUID(),
+            amount: 1200.00,
+            category: .income(.salary),
+            date: Date(),
+            note: "Monthly salary",
+            accountId: UUID()
+        )
     ]
     
     func addTransaction(_ transaction: Transaction) {

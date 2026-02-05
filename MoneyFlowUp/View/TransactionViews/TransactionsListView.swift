@@ -5,7 +5,7 @@ struct TransactionsListView: View {
     @Bindable var accountVM: AccountViewModel
     @Binding var path: [Route]
     @State private var selectedDate = Date()
-    @State private var selectedFilter: TransactionGroup?
+    @State private var selectedFilter: TransactionGroup = .cost
     
     var filteredTransactions: [Transaction] {
         let calendar = Calendar.current
@@ -16,10 +16,8 @@ struct TransactionsListView: View {
             transaction.date >= startOfDay && transaction.date < endOfDay
         }
 
-        if let filter = selectedFilter {
-            filtered = filtered.filter { transaction in
-                transaction.category.group == filter
-            }
+        filtered = filtered.filter { transaction in
+            transaction.category.group == selectedFilter
         }
 
         return filtered.sorted { $0.date > $1.date }
@@ -40,6 +38,8 @@ struct TransactionsListView: View {
                     DatePicker("Выберите дату", selection: $selectedDate, displayedComponents: .date)
                         .datePickerStyle(.compact)
                         .padding(.horizontal)
+                        .environment(\.locale, Locale(identifier: "ru_RU"))
+
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
@@ -63,10 +63,11 @@ struct TransactionsListView: View {
                         
                         Spacer()
                         
-                        Text("$\(totalAmount, specifier: "%.2f")")
+                        Text("\(totalAmount, specifier: "%.2f")$")
                             .font(.title2)
                             .bold()
-                            .foregroundColor(totalAmount >= 0 ? .green : .red)
+                            //.foregroundColor(totalAmount >= 0 ? .green : .red)
+                            .foregroundColor(selectedFilter == .cost ? .red : .green)
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 8)
@@ -101,7 +102,8 @@ struct TransactionsListView: View {
                         ForEach(filteredTransactions) { transaction in
                             TransactionRow(transaction: transaction)
                                 .listRowBackground(Color.clear)
-                                .listRowSeparator(.hidden)
+                                //.listRowSeparator(.hidden)
+                                
                         }
                         .onDelete(perform: deleteTransaction)
                     }
@@ -166,4 +168,8 @@ struct TransactionsListView: View {
     private func deleteTransaction(at offsets: IndexSet) {
         transactionVM.removeTransaction(at: offsets)
     }
+}
+
+#Preview {
+    TransactionsListView(transactionVM: TransactionVM(), accountVM: AccountViewModel(), path: .constant([Route]()))
 }

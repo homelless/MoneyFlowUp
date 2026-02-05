@@ -159,6 +159,8 @@ struct TransactionTransferView: View {
         
         transactionVM.addTransaction(fromTransaction)
         transactionVM.addTransaction(toTransaction)
+        amount = ""
+        note = ""
         dismiss()
     }
 }
