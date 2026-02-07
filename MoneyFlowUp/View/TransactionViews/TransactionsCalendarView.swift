@@ -9,8 +9,8 @@ struct TransactionsCalendarView: View {
     
     @Bindable var transactionVM: TransactionVM
     @Bindable var accountVM: AccountViewModel
+    @Environment(\.modelContext) private var modelContext
     
-    // Новый инициализатор, чтобы открыть экран сразу на нужной дате
     init(selectedDate: Date = Date(), transactionVM: TransactionVM, accountVM: AccountViewModel) {
         self._selectedDate = State(initialValue: selectedDate)
         self.transactionVM = transactionVM
@@ -105,15 +105,14 @@ struct TransactionsCalendarView: View {
             .navigationTitle("Календарь")
         }
     }
-    private func deleteTransaction(at offsets: IndexSet) {
-        transactionVM.removeTransaction(at: offsets)
+    private func deleteTransaction(_ offsets: IndexSet) {
+        for index in offsets {
+            let transaction = filteredTransactions[index]
+            transactionVM.removeTransaction(transaction)
+        }
     }
     
 }
 
-#Preview {
-    let transactionVM = TransactionVM()
-    let accountVM = AccountViewModel()
-    return TransactionsCalendarView(transactionVM: transactionVM, accountVM: accountVM)
-}
+
 

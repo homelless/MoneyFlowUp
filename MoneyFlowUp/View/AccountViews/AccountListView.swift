@@ -5,6 +5,7 @@ struct AccountListView: View {
     @Bindable var accountVM: AccountViewModel
     @Bindable var transactionVM: TransactionVM
     @Binding var path: [Route]
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         ZStack {
@@ -66,8 +67,8 @@ struct AccountListView: View {
                         .listRowInsets(.none)
                         .listRowSeparator(.hidden)
                     }
-                    .onDelete { indexSet in
-                        accountVM.removeAccount(at: indexSet)
+                    .onDelete { offsets in
+                        accountVM.removeAccounts(at: offsets)
                     }
                     .onMove { indices, newOffset in
                         accountVM.moveAccount(from: indices, to: newOffset)
@@ -90,7 +91,7 @@ struct AccountListView: View {
                             .foregroundColor(.black)
                             .lineLimit(1)
                             .minimumScaleFactor(0.9)
-                            .frame(width: proxy.size.width * 0.85, height: 50) // 90% ширины, фиксированная высота
+                            .frame(width: proxy.size.width * 0.85, height: 50)
                             .background(
                                 RoundedRectangle(cornerRadius: 20)
                                     .fill(Color("addColor")).opacity(0.9)
@@ -107,7 +108,7 @@ struct AccountListView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 16)
             }
-            .frame(height: 50 + 8 + 16) // высота inset под кнопку и отступы
+            .frame(height: 50 + 8 + 16)
         }
         .navigationDestination(for: Route.self) { route in
             switch route {
@@ -129,7 +130,4 @@ struct AccountListView: View {
     }
 }
 
-#Preview {
-    AccountListView(accountVM: AccountViewModel(), transactionVM: TransactionVM(), path: .constant([]))
-}
 

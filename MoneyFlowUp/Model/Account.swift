@@ -8,7 +8,6 @@ class Account: Identifiable, Hashable {
     var id: UUID
     var name: String
     var balance: String
- //   var transactions: [Transaction]?
     var currencyRaw: String
     var currency: Currency {
         get { Currency(rawValue: currencyRaw) ?? .usd }
@@ -25,7 +24,6 @@ class Account: Identifiable, Hashable {
         self.sortOrder = sortOrder  
     }
     
-    // Для Hashable
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }

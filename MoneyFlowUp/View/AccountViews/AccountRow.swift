@@ -1,9 +1,4 @@
-//
-//  CatogotyRow.swift
-//  MoneyFlow
-//
-//  Created by MacBookAir on 15.12.25.
-//
+
 
 import SwiftUI
 import SwiftData

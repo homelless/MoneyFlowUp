@@ -13,6 +13,7 @@ struct TransactionCostView: View {
     @State private var selectedAccount: Account?
     @State private var showCategoryPicker = false
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     
     
     var body: some View {
@@ -140,7 +141,7 @@ struct TransactionCostView: View {
             accountId: account.id
         )
         
-        // Обновляем баланс счета
+       
         if let index = accountVM.accounts.firstIndex(where: { $0.id == account.id }) {
             if let currentBalance = Double(account.balance) {
                 accountVM.accounts[index].balance = String(currentBalance - amountValue)
@@ -155,6 +156,3 @@ struct TransactionCostView: View {
     }
 }
 
-#Preview {
-    TransactionCostView(accountVM: AccountViewModel(), transactionVM: TransactionVM())
-}

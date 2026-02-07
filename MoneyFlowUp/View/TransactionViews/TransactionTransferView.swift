@@ -13,6 +13,7 @@ struct TransactionTransferView: View {
     @State private var toAccount: Account?
     @State private var showCategoryPicker = false
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         
@@ -126,7 +127,7 @@ struct TransactionTransferView: View {
               let fromAcc = fromAccount,
               let toAcc = toAccount else { return }
         
-        // Создаем две транзакции (исходящую и входящую)
+        
         let fromTransaction = Transaction(
             id: UUID(),
             amount: amountValue,
@@ -145,7 +146,7 @@ struct TransactionTransferView: View {
             accountId: toAcc.id
         )
         
-        // Обновляем балансы счетов
+
         if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromAcc.id }),
            let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toAcc.id }) {
             

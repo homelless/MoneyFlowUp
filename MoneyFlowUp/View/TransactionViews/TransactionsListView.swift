@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct TransactionsListView: View {
     @Bindable var transactionVM: TransactionVM
@@ -6,6 +7,9 @@ struct TransactionsListView: View {
     @Binding var path: [Route]
     @State private var selectedDate = Date()
     @State private var selectedFilter: TransactionGroup = .cost
+    @Environment(\.modelContext) private var modelContext
+    
+    @Query(sort:\Transaction.date, order: .reverse) var transactions: [Transaction]
     
     var filteredTransactions: [Transaction] {
         let calendar = Calendar.current
@@ -105,7 +109,7 @@ struct TransactionsListView: View {
                                 //.listRowSeparator(.hidden)
                                 
                         }
-                        .onDelete(perform: deleteTransaction)
+                        .onDelete(perform: deleteTransactions)
                     }
                     .listStyle(.plain)
                     .background(Color("ColorSet"))
@@ -161,15 +165,19 @@ struct TransactionsListView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 16)
             }
-            .frame(height: 50 + 8 + 16) // высота inset под кнопку и отступы
+            .frame(height: 50 + 8 + 16) 
         }
     }
 
-    private func deleteTransaction(at offsets: IndexSet) {
-        transactionVM.removeTransaction(at: offsets)
+
+    private func deleteTransactions(at offsets: IndexSet) {
+      
+        let items = filteredTransactions
+        for index in offsets {
+            let tx = items[index]
+            transactionVM.removeTransaction(tx)
+        }
     }
 }
 
-#Preview {
-    TransactionsListView(transactionVM: TransactionVM(), accountVM: AccountViewModel(), path: .constant([Route]()))
-}
+

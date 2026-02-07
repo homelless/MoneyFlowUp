@@ -38,12 +38,6 @@ struct TransactionRow: View {
                 }
             }
         }
-        //.padding(.vertical, 8)
-        //.padding(.horizontal, 16)
-//        .background(Color(.gray))
-//        .cornerRadius(12)
-//        .shadow(color: .gray.opacity(0.1), radius: 2, x: 0, y: 1)
-        //.padding(.horizontal)
     }
 }
 

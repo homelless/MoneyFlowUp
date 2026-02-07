@@ -7,6 +7,7 @@ struct AccountDetailView: View {
     
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     
     @State var name: String
     @State var balance: String

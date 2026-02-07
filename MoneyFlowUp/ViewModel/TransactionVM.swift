@@ -4,74 +4,34 @@ import Observation
 import SwiftUI
 import Combine
 
-
-
-
 @Observable
 @MainActor
 final class TransactionVM: Identifiable {
-    var transactions: [Transaction] = [
-        // Пример транзакций для тестирования
-        Transaction(
-            id: UUID(),
-            amount: 45.99,
-            category: .cost(.food),
-            date: Date(),
-            note: "Обед в ресторнае",
-            accountId: UUID()
-        ),
-        Transaction(
-            id: UUID(),
-            amount: 45.99,
-            category: .cost(.food),
-            date: Date(),
-            note: "Обед в ресторнае",
-            accountId: UUID()
-        ),
-        Transaction(
-            id: UUID(),
-            amount: 45.99,
-            category: .cost(.food),
-            date: Date(),
-            note: "Обед в ресторнае",
-            accountId: UUID()
-        ),
-        Transaction(
-            id: UUID(),
-            amount: 1200.00,
-            category: .income(.salary),
-            date: Date(),
-            note: "Monthly salary",
-            accountId: UUID()
-        ),
-        Transaction(
-            id: UUID(),
-            amount: 1200.00,
-            category: .income(.salary),
-            date: Date(),
-            note: "Monthly salary",
-            accountId: UUID()
-        ),
-        Transaction(
-            id: UUID(),
-            amount: 1200.00,
-            category: .income(.salary),
-            date: Date(),
-            note: "Monthly salary",
-            accountId: UUID()
-        )
-    ]
+
+    private let modelContext: ModelContext
+    var transactions: [Transaction] = []
+    
+    init(context: ModelContext) {
+        self.modelContext = context
+        fetchAll()
+    }
+    
+    func fetchAll() {
+        let descriptor = FetchDescriptor<Transaction>(sortBy: [SortDescriptor(\.date, order: .reverse)])
+        transactions = (try? modelContext.fetch(descriptor)) ?? []
+    }
     
     func addTransaction(_ transaction: Transaction) {
-        transactions.append(transaction)
+        modelContext.insert(transaction)
+        try? modelContext.save()
+        fetchAll()
     }
     
-    func removeTransaction(at offsets: IndexSet) {
-        transactions.remove(atOffsets: offsets)
+    func removeTransaction(_ transaction: Transaction) {
+        modelContext.delete(transaction)
+        try? modelContext.save()
+        fetchAll()
     }
     
-    func transactions(for date: Date) -> [Transaction] {
-        let calendar = Calendar.current
-        return transactions.filter { calendar.isDate($0.date, inSameDayAs: date) }
-    }
+
 }

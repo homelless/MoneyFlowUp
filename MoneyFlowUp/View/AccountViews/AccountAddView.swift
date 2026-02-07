@@ -7,6 +7,7 @@ struct AccountAddView: View {
     @Bindable var viewModel: AccountViewModel
     @State var account = Account(id: .init(), name: "", balance: "0", currencyRaw: "", descriptionAccount: "")
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         Form {
@@ -45,6 +46,4 @@ struct AccountAddView: View {
 
 
 
-#Preview {
-    AccountAddView(viewModel: AccountViewModel(), account: Account(id: .init(), name: "1", balance: "2", currencyRaw: "$", descriptionAccount: ""))
-}
+

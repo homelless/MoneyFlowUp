@@ -21,13 +21,13 @@ class Transaction: Identifiable {
         self.accountId = accountId
     }
     
-    // Вычисляемое свойство для получения category
+   
     var category: TransactionCategory {
         get {
             if let json = categoryJSON, let decoded = Self.decodeCategory(json) {
                 return decoded
             }
-            // Возвращаем значение по умолчанию, если не удалось декодировать
+    
             return .cost(.food)
         }
         set {
@@ -35,7 +35,7 @@ class Transaction: Identifiable {
         }
     }
     
-    // Вычисляемые свойства
+
     var isExpense: Bool {
         if case .cost = category { return true }
         return false
@@ -51,7 +51,7 @@ class Transaction: Identifiable {
         return false
     }
     
-    // Вспомогательные методы для кодирования/декодирования
+
     private static func encodeCategory(_ category: TransactionCategory) -> String {
         switch category {
         case .cost(let costCategory):
