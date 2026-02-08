@@ -127,7 +127,7 @@ struct TransactionTransferView: View {
               let fromAcc = fromAccount,
               let toAcc = toAccount else { return }
         
-        
+        // Транзакция для списания
         let fromTransaction = Transaction(
             id: UUID(),
             amount: amountValue,
@@ -137,6 +137,7 @@ struct TransactionTransferView: View {
             accountId: fromAcc.id
         )
         
+        // Транзакция для зачисления
         let toTransaction = Transaction(
             id: UUID(),
             amount: amountValue,
@@ -146,7 +147,7 @@ struct TransactionTransferView: View {
             accountId: toAcc.id
         )
         
-
+        // Обновление балансов обоих аккаунтов
         if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromAcc.id }),
            let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toAcc.id }) {
             
@@ -158,6 +159,7 @@ struct TransactionTransferView: View {
             }
         }
         
+        // Сохраняем обе транзакции и сбрасываем форму
         transactionVM.addTransaction(fromTransaction)
         transactionVM.addTransaction(toTransaction)
         amount = ""

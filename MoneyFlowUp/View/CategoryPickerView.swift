@@ -1,11 +1,15 @@
-
 import SwiftUI
 import Foundation
 
-
+// Универсальный экран выбора категории (generic).
+// Работает с любым типом, соответствующим TransactionTypeProtocol.
+// Отображает список категорий, позволяет выбрать одну и закрыть экран.
 struct CategoryPickerView<CategoryType: TransactionTypeProtocol>: View {
+    // Текущая выбранная категория (двусторонняя привязка)
     @Binding var selectedCategory: CategoryType
+    // Список доступных категорий
     let categories: [CategoryType]
+    // Заголовок экрана
     let title: String
     @Environment(\.dismiss) private var dismiss
     
@@ -13,6 +17,7 @@ struct CategoryPickerView<CategoryType: TransactionTypeProtocol>: View {
         NavigationStack {
             List(categories) { category in
                 Button(action: {
+                    // Устанавливаем выбранную категорию и закрываем экран
                     selectedCategory = category
                     dismiss()
                 }) {
@@ -25,6 +30,7 @@ struct CategoryPickerView<CategoryType: TransactionTypeProtocol>: View {
                         
                         Spacer()
                         
+                        // Галочка у выбранной категории
                         if category.id == selectedCategory.id {
                             Image(systemName: "checkmark")
                                 .foregroundColor(.blue)
@@ -35,6 +41,7 @@ struct CategoryPickerView<CategoryType: TransactionTypeProtocol>: View {
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // Альтернативная кнопка закрытия
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Готово") {
                         dismiss()
@@ -44,5 +51,4 @@ struct CategoryPickerView<CategoryType: TransactionTypeProtocol>: View {
         }
     }
 }
-
 

@@ -1,5 +1,7 @@
 import SwiftUI
 
+// Экран списка кошельков с возможностью перейти к деталям, добавить кошелек,
+// перейти в календарь и быстро перейти к добавлению транзакции.
 struct AccountListView: View {
     
     @Bindable var accountVM: AccountViewModel
@@ -9,10 +11,12 @@ struct AccountListView: View {
 
     var body: some View {
         ZStack {
+            // Фоновый цвет из Assets
             Color("ColorSet")
                 .ignoresSafeArea()
             
             VStack {
+                // Верхняя панель с датой (кнопка в календарь) и кнопкой добавления кошелька
                 HStack(alignment: .top) {
                     Button {
                         path.append(.calendar(Date()))
@@ -22,7 +26,6 @@ struct AccountListView: View {
                             .italic()
                             .frame(maxWidth: 260, alignment: .center)
                             .environment(\.locale, Locale(identifier: "ru_RU"))
-
                     }
                     .buttonStyle(.plain)
                     .padding(.leading, 40)
@@ -37,10 +40,12 @@ struct AccountListView: View {
                     .padding(.leading, 10)
                 }
                 
+                // Разделительная линия
                 Rectangle()
                     .fill(Color.black)
                     .frame(height: 0.5)
                 
+                // Список аккаунтов
                 List {
                     ForEach(accountVM.accounts, id:\.id) { account in
                         Button {
@@ -67,8 +72,10 @@ struct AccountListView: View {
                         .listRowInsets(.none)
                         .listRowSeparator(.hidden)
                     }
+                    // Удаление и перемещение аккаунтов
                     .onDelete { offsets in
                         accountVM.removeAccounts(at: offsets)
+                        transactionVM.fetchAll()
                     }
                     .onMove { indices, newOffset in
                         accountVM.moveAccount(from: indices, to: newOffset)
@@ -79,7 +86,7 @@ struct AccountListView: View {
                 .listStyle(.plain)
             }
         }
-        
+        // Кнопка снизу для добавления транзакции
         .safeAreaInset(edge: .bottom) {
             GeometryReader { proxy in
                 HStack {
@@ -110,6 +117,7 @@ struct AccountListView: View {
             }
             .frame(height: 50 + 8 + 16)
         }
+        // Навигация по маршрутам
         .navigationDestination(for: Route.self) { route in
             switch route {
             case .addTransaction:
@@ -129,5 +137,4 @@ struct AccountListView: View {
         }
     }
 }
-
 

@@ -1,12 +1,11 @@
-
-
 import SwiftUI
 import SwiftData
 
+// Строка списка кошельков для отображения в списке.
+// Показывает иконку, название, баланс и валюту.
 struct AccountRow: View {
     let account: Account
    
-    
     var body: some View {
         HStack {
             Image(systemName: "wallet.bifold")
@@ -33,3 +32,4 @@ struct AccountRow: View {
 #Preview {
     AccountRow(account: Account(id: .init(), name: "test", balance: "1000", currencyRaw: "$", descriptionAccount: ""))
 }
+

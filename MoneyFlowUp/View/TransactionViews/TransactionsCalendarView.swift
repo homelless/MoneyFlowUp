@@ -1,7 +1,7 @@
-
-
 import SwiftUI
 
+// Экран календаря: выбор даты и просмотр транзакций за день.
+// Можно фильтровать по группе транзакций, удалять элементы.
 struct TransactionsCalendarView: View {
     
     @State private var selectedDate = Date()
@@ -11,12 +11,14 @@ struct TransactionsCalendarView: View {
     @Bindable var accountVM: AccountViewModel
     @Environment(\.modelContext) private var modelContext
     
+    // Кастомный init для установки начальной даты извне
     init(selectedDate: Date = Date(), transactionVM: TransactionVM, accountVM: AccountViewModel) {
         self._selectedDate = State(initialValue: selectedDate)
         self.transactionVM = transactionVM
         self.accountVM = accountVM
     }
     
+    // Отфильтрованные транзакции за выбранный день с учетом опционального фильтра по группе
     var filteredTransactions: [Transaction] {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: selectedDate)
@@ -35,22 +37,24 @@ struct TransactionsCalendarView: View {
         return filtered.sorted { $0.date > $1.date }
     }
     
-    
     var body: some View {
         ZStack {
             Color("ColorSet")
                 .ignoresSafeArea()
             
             VStack {
+                // Графический дата-пикер
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
                     .datePickerStyle(.graphical)
                     .environment(\.locale, Locale(identifier: "ru_RU"))
 
                 VStack {
+                    // Разделитель
                     Rectangle()
                         .fill(Color.black)
                         .frame(height: 0.5)
                     
+                    // Фильтры по группе транзакций
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(TransactionGroup.allCases, id: \.self) { group in
@@ -67,8 +71,8 @@ struct TransactionsCalendarView: View {
                         .padding(.horizontal, 25)
                     }
                     
+                    // Пустое состояние или список транзакций
                     if filteredTransactions.isEmpty {
-                        
                         VStack(spacing: 16) {
                             Image(systemName: "list.bullet.rectangle")
                                 .font(.system(size: 60))
@@ -93,6 +97,7 @@ struct TransactionsCalendarView: View {
                                     .listRowBackground(Color.clear)
                                     .listRowSeparator(.hidden)
                             }
+                            // Удаление транзакции из календарного списка
                             .onDelete(perform: deleteTransaction)
                         }
                         .listStyle(.plain)
@@ -105,14 +110,12 @@ struct TransactionsCalendarView: View {
             .navigationTitle("Календарь")
         }
     }
+    // Удаление транзакции и откат баланса через VM
     private func deleteTransaction(_ offsets: IndexSet) {
         for index in offsets {
             let transaction = filteredTransactions[index]
-            transactionVM.removeTransaction(transaction)
+            transactionVM.removeTransaction(transaction, accountVM: accountVM)
         }
     }
-    
 }
-
-
 

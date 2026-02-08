@@ -1,15 +1,21 @@
-
 import Foundation
 import SwiftData
 
-
+// Модель транзакции для хранения в SwiftData.
+// Содержит сумму, дату, заметку, привязку к аккаунту и категорию (сериализованную в categoryJSON).
 @Model
 class Transaction: Identifiable {
+    // Уникальный идентификатор транзакции
     var id: UUID
+    // Сумма транзакции
     var amount: Double
+    // Сериализованное представление категории (для хранения в SwiftData)
     var categoryJSON: String?
+    // Дата и время транзакции
     var date: Date
+    // Опциональная заметка пользователя
     var note: String?
+    // Идентификатор аккаунта, к которому относится транзакция
     var accountId: UUID
     
     init(id: UUID, amount: Double, category: TransactionCategory, date: Date, note: String? = nil, accountId: UUID) {
@@ -21,13 +27,13 @@ class Transaction: Identifiable {
         self.accountId = accountId
     }
     
-   
+    // Доменное свойство: категория транзакции, оборачивает categoryJSON с кодированием/декодированием
     var category: TransactionCategory {
         get {
             if let json = categoryJSON, let decoded = Self.decodeCategory(json) {
                 return decoded
             }
-    
+            // Значение по умолчанию, если декодирование не удалось
             return .cost(.food)
         }
         set {
@@ -35,7 +41,7 @@ class Transaction: Identifiable {
         }
     }
     
-
+    // Удобные флаги для UI: определение типа транзакции
     var isExpense: Bool {
         if case .cost = category { return true }
         return false
@@ -51,7 +57,7 @@ class Transaction: Identifiable {
         return false
     }
     
-
+    // Примитивное кодирование категории в строку "type:id" для хранения
     private static func encodeCategory(_ category: TransactionCategory) -> String {
         switch category {
         case .cost(let costCategory):
@@ -63,6 +69,7 @@ class Transaction: Identifiable {
         }
     }
     
+    // Обратное преобразование строки "type:id" в TransactionCategory
     private static func decodeCategory(_ json: String) -> TransactionCategory? {
         let parts = json.split(separator: ":")
         guard parts.count == 2 else { return nil }
@@ -82,3 +89,4 @@ class Transaction: Identifiable {
         }
     }
 }
+

@@ -1,8 +1,12 @@
 import SwiftUI
 import SwiftData
 
+// Точка входа приложения.
+// Инициализирует SwiftData ModelContainer со схемой (Transaction, Account) и
+// поднимает RootView с внедренным контейнером.
 @main
 struct MoneyFlowUpApp: App {
+    // Общий контейнер моделей SwiftData
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Transaction.self,
@@ -22,6 +26,8 @@ struct MoneyFlowUpApp: App {
     }
 }
 
+// Корневой экран приложения.
+// Создает и хранит ViewModel'ы (AccountViewModel и TransactionVM), затем строит TabView с навигацией.
 struct RootView: View {
     
     @Environment(\.modelContext) private var modelContext
@@ -44,10 +50,12 @@ struct RootView: View {
                             Tab("Бюджет", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
                             Tab("Отчеты", systemImage: "document.on.document") { }
                         }
+                        // Дополнительный отступ снизу, чтобы контент не перекрывался кнопками
                         .safeAreaInset(edge: .bottom) {
                             Color.clear.frame(height: 100)
                         }
                     }
+                    // Переходы по маршрутам
                     .navigationDestination(for: Route.self) { route in
                         switch route {
                         case .addAccount:
@@ -66,6 +74,7 @@ struct RootView: View {
                     }
                 }
             } else {
+                // Инициализация VM при первом появлении
                 ProgressView()
                     .onAppear {
                         accountVM = AccountViewModel(context: modelContext)
@@ -77,3 +86,4 @@ struct RootView: View {
 }
 
 #Preview { RootView() }
+

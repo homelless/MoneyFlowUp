@@ -4,11 +4,15 @@ import SwiftUI
 import Combine
 import Observation
 
+// ViewModel для управления списком счетов (кошельков).
+// Работает на главном акторе, хранит и синхронизирует состояние с хранилищем SwiftData.
 @Observable
 @MainActor
 final class AccountViewModel: Identifiable {
   
-    private let modelContext: ModelContext
+    // Контекст SwiftData для операций CRUD
+    let modelContext: ModelContext
+    // Текущее состояние: список аккаунтов, отсортированных по sortOrder
     var accounts: [Account] = []
     
     init(context: ModelContext) {
@@ -16,37 +20,61 @@ final class AccountViewModel: Identifiable {
         fetchAll()
     }
     
+    // Загрузка всех аккаунтов из хранилища
     func fetchAll() {
         let descriptor = FetchDescriptor<Account>(sortBy: [SortDescriptor(\.sortOrder)])
         accounts = (try? modelContext.fetch(descriptor)) ?? []
     }
     
+    // Добавление нового аккаунта и обновление списка
     func addAccount(_ account: Account) {
         modelContext.insert(account)
         try? modelContext.save()
         fetchAll()
     }
     
+    /// Удаление одного аккаунта с удалением всех его транзакций
     func removeAccount(_ account: Account) {
+        // Снимем UUID отдельно, чтобы в предикате сравнивать с конкретным значением
+        let accountUUID = account.id
+        // Находим и удаляем все связанные транзакции
+        let txDescriptor = FetchDescriptor<Transaction>(
+            predicate: #Predicate<Transaction> { $0.accountId == accountUUID }
+        )
+        let transactions = (try? modelContext.fetch(txDescriptor)) ?? []
+        for tx in transactions {
+            modelContext.delete(tx)
+        }
+        // Удаляем сам аккаунт
         modelContext.delete(account)
         try? modelContext.save()
         fetchAll()
     }
     
-
+    // Массовое удаление аккаунтов по индексам (включая их транзакции)
     func removeAccounts(at offsets: IndexSet) {
         for index in offsets {
             let account = accounts[index]
+            let accountUUID = account.id
+            
+            // Удаляем все транзакции, связанные с этим аккаунтом
+            let txDescriptor = FetchDescriptor<Transaction>(
+                predicate: #Predicate<Transaction> { $0.accountId == accountUUID }
+            )
+            let transactions = (try? modelContext.fetch(txDescriptor)) ?? []
+            for tx in transactions {
+                modelContext.delete(tx)
+            }
             modelContext.delete(account)
         }
         try? modelContext.save()
         fetchAll()
     }
     
+    // Перемещение аккаунтов в списке и обновление их sortOrder
     func moveAccount(from source: IndexSet, to destination: Int) {
         accounts.move(fromOffsets: source, toOffset: destination)
         
-
         for (index, account) in accounts.enumerated() {
             account.sortOrder = index
         }
@@ -55,7 +83,7 @@ final class AccountViewModel: Identifiable {
         fetchAll()
     }
     
-
+    // Обновление полей аккаунта по его идентификатору
     func updateAccount(id: UUID, name: String, balance: String, currencyRaw: String, descriptionAccount: String) {
         guard let index = accounts.firstIndex(where: { $0.id == id }) else { return }
         accounts[index].name = name
@@ -65,3 +93,4 @@ final class AccountViewModel: Identifiable {
         try? modelContext.save()
     }
 }
+
