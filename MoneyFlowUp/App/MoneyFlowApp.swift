@@ -4,6 +4,7 @@ import SwiftData
 // Точка входа приложения.
 // Инициализирует SwiftData ModelContainer со схемой (Transaction, Account) и
 // поднимает RootView с внедренным контейнером.
+
 @main
 struct MoneyFlowUpApp: App {
     // Общий контейнер моделей SwiftData
@@ -47,8 +48,11 @@ struct RootView: View {
                             Tab("Транзакции", systemImage: "pencil.and.outline") {
                                 TransactionsListView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
                             }
-                            Tab("Бюджет", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") { }
-                            Tab("Отчеты", systemImage: "document.on.document") { }
+                            Tab("Бюджет", systemImage: "dollarsign.arrow.trianglehead.counterclockwise.rotate.90") {
+                                ReportsView(transactionVM: transactionVM)
+                            }
+                            Tab("Настройки", systemImage: "gear") {
+                            }
                         }
                         // Дополнительный отступ снизу, чтобы контент не перекрывался кнопками
                         .safeAreaInset(edge: .bottom) {

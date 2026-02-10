@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 import Observation
 import SwiftUI
-import Combine
+
 
 // ViewModel для управления транзакциями.
 // Обеспечивает загрузку, добавление, удаление и синхронизацию с SwiftData.

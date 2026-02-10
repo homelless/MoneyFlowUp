@@ -1,7 +1,6 @@
 import Foundation
 import SwiftData
 import SwiftUI
-import Combine
 import Observation
 
 // ViewModel для управления списком счетов (кошельков).

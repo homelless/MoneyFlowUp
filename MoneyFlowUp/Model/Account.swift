@@ -4,6 +4,7 @@ import SwiftUI
 
 // Модель счета/кошелька для хранения в SwiftData.
 // Содержит идентификатор, имя, баланс, валюту, описание и порядок сортировки.
+
 @Model
 class Account: Identifiable, Hashable {
     var id: UUID                 // Уникальный идентификатор
