@@ -23,7 +23,7 @@ struct AccountListView: View {
                     } label: {
                         Text(.now, format: .dateTime.day().month(.wide))
                             .font(.title)
-                            .italic()
+                        
                             .frame(maxWidth: 260, alignment: .center)
                             .environment(\.locale, Locale(identifier: "ru_RU"))
                     }

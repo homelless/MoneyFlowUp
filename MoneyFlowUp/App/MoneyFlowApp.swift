@@ -52,6 +52,7 @@ struct RootView: View {
                                 ReportsView(transactionVM: transactionVM)
                             }
                             Tab("Настройки", systemImage: "gear") {
+                                
                             }
                         }
                         // Дополнительный отступ снизу, чтобы контент не перекрывался кнопками
