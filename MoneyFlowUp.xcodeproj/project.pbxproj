@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D00EF20B2F3CEA5800C94583 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00EF20A2F3CEA5800C94583 /* SettingView.swift */; };
+		D00EF20E2F3CF32500C94583 /* AboutAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00EF20D2F3CF32500C94583 /* AboutAppView.swift */; };
+		D00EF2102F3D1DC000C94583 /* SettingCostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00EF20F2F3D1DC000C94583 /* SettingCostView.swift */; };
 		D028FA202F1D6D94006A9D1A /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */; };
 		D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA222F1D715A006A9D1A /* FilterChip.swift */; };
 		D028FA252F1D722D006A9D1A /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA242F1D722D006A9D1A /* TransactionRow.swift */; };
@@ -40,6 +43,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D00EF20A2F3CEA5800C94583 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
+		D00EF20D2F3CF32500C94583 /* AboutAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppView.swift; sourceTree = "<group>"; };
+		D00EF20F2F3D1DC000C94583 /* SettingCostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCostView.swift; sourceTree = "<group>"; };
 		D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
 		D028FA222F1D715A006A9D1A /* FilterChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterChip.swift; sourceTree = "<group>"; };
 		D028FA242F1D722D006A9D1A /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
@@ -84,6 +90,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D00EF20C2F3CF24300C94583 /* SettingViews */ = {
+			isa = PBXGroup;
+			children = (
+				D00EF20A2F3CEA5800C94583 /* SettingView.swift */,
+				D00EF20D2F3CF32500C94583 /* AboutAppView.swift */,
+			);
+			path = SettingViews;
+			sourceTree = "<group>";
+		};
 		D028FA212F1D7127006A9D1A /* Helps */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +189,7 @@
 		D05DEBF52F052C7800D6AEED /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D00EF20C2F3CF24300C94583 /* SettingViews */,
 				D05F64C02F3CADF4000B4B9D /* OtherViews */,
 				D05DEBEF2F052C7800D6AEED /* TransactionViews */,
 				D05DEBF42F052C7800D6AEED /* AccountViews */,
@@ -213,6 +229,7 @@
 		D0A72F882F38A97D0042B987 /* тестовые файлы */ = {
 			isa = PBXGroup;
 			children = (
+				D00EF20F2F3D1DC000C94583 /* SettingCostView.swift */,
 			);
 			name = "тестовые файлы";
 			path = "тестовые файлы";
@@ -317,7 +334,10 @@
 				D05DEBFC2F052C7800D6AEED /* TransactionView.swift in Sources */,
 				D05DEC012F052C8100D6AEED /* Route.swift in Sources */,
 				D05DEC022F052C8100D6AEED /* MoneyFlowApp.swift in Sources */,
+				D00EF2102F3D1DC000C94583 /* SettingCostView.swift in Sources */,
+				D00EF20E2F3CF32500C94583 /* AboutAppView.swift in Sources */,
 				D06CD7342F101944002D4A05 /* TransactionsListView.swift in Sources */,
+				D00EF20B2F3CEA5800C94583 /* SettingView.swift in Sources */,
 				D05DEBFD2F052C7800D6AEED /* TransactionTransferView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
