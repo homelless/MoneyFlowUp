@@ -174,10 +174,9 @@
 		D05DEBF52F052C7800D6AEED /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D05F64C02F3CADF4000B4B9D /* OtherViews */,
 				D05DEBEF2F052C7800D6AEED /* TransactionViews */,
 				D05DEBF42F052C7800D6AEED /* AccountViews */,
-				D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */,
-				D0A72F862F38A7230042B987 /* ReportsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -188,6 +187,15 @@
 				D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		D05F64C02F3CADF4000B4B9D /* OtherViews */ = {
+			isa = PBXGroup;
+			children = (
+				D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */,
+				D0A72F862F38A7230042B987 /* ReportsView.swift */,
+			);
+			path = OtherViews;
 			sourceTree = "<group>";
 		};
 		D06CD7352F101C50002D4A05 /* Protocols and enums */ = {
