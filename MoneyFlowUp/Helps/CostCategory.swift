@@ -14,32 +14,34 @@ struct CostCategory: TransactionTypeProtocol {
     // Имя системной SF Symbol иконки для визуального представления
     let icon: String
     
+    let color: Color
+    
     // Группа транзакций: фиксировано .cost (траты)
     var group: TransactionGroup { .cost }
     
     // Предустановленные категории трат (для быстрого выбора пользователем)
     static let food = CostCategory(id: "cost_food",
                                    name: "Еда",
-                                   icon: "fork.knife")
+                                   icon: "fork.knife", color: .green)
     
     static let transport = CostCategory(id: "cost_transport",
                                         name: "Транспорт",
-                                        icon: "car",)
+                                        icon: "car", color: .blue)
     static let entertainment = CostCategory(id: "cost_entertainment",
                                             name: "Развлечения",
-                                            icon: "film")
+                                            icon: "film", color: .orange)
     
     static let bills = CostCategory(id: "cost_bills",
                                     name: "Счета",
-                                    icon: "doc.text")
+                                    icon: "doc.text", color: .purple)
     
     static let shopping = CostCategory(id: "cost_shopping",
                                        name: "Шопинг",
-                                       icon: "bag")
+                                       icon: "bag", color: .pink)
     
     static let healthcare = CostCategory(id: "cost_healthcare",
                                          name: "Медицина",
-                                         icon: "heart")
+                                         icon: "heart", color: .mint)
     
     // Полный список всех предустановленных категорий трат
     static let all: [CostCategory] = [.food, .transport, .entertainment, .bills, .shopping, .healthcare]

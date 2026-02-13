@@ -12,6 +12,9 @@ struct MoneyFlowUpApp: App {
         let schema = Schema([
             Transaction.self,
             Account.self,
+            CustomCostCategory.self,
+            CustomIncomeCategory.self,
+            HiddenCategory.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         do {
@@ -35,10 +38,13 @@ struct RootView: View {
     @State private var accountVM: AccountViewModel?
     @State private var transactionVM: TransactionVM?
     @State private var path = [Route]()
+    // Сторы теперь требуют контекст — создадим их после появления modelContext
+    @State private var costCategoriesStore: CategoriesStore<CostCategory>?
+    @State private var incomeCategoriesStore: CategoriesStore<IncomeCategory>?
 
     var body: some View {
         Group {
-            if let accountVM, let transactionVM {
+            if let accountVM, let transactionVM, let costCategoriesStore, let incomeCategoriesStore {
                 NavigationStack(path: $path) {
                     ZStack {
                         TabView {
@@ -55,12 +61,10 @@ struct RootView: View {
                                 SettingView(transactionVM: transactionVM)
                             }
                         }
-                        // Дополнительный отступ снизу, чтобы контент не перекрывался кнопками
                         .safeAreaInset(edge: .bottom) {
                             Color.clear.frame(height: 100)
                         }
                     }
-                    // Переходы по маршрутам
                     .navigationDestination(for: Route.self) { route in
                         switch route {
                         case .addAccount:
@@ -78,12 +82,30 @@ struct RootView: View {
                         }
                     }
                 }
+                // Кладем сторы в окружение
+                .environment(costCategoriesStore)
+                .environment(incomeCategoriesStore)
             } else {
-                // Инициализация VM при первом появлении
+                // Инициализация VM и Store при первом появлении
                 ProgressView()
                     .onAppear {
                         accountVM = AccountViewModel(context: modelContext)
                         transactionVM = TransactionVM(context: modelContext)
+                        // Инициализируем сторы из SwiftData
+                        costCategoriesStore = CategoriesStore<CostCategory>(
+                            context: modelContext,
+                            presets: CostCategory.all,
+                            makeItem: { name, icon in
+                                CostCategory(id: "cost_custom_\(UUID().uuidString)", name: name, icon: icon, color: .black)
+                            }
+                        )
+                        incomeCategoriesStore = CategoriesStore<IncomeCategory>(
+                            context: modelContext,
+                            presets: IncomeCategory.all,
+                            makeItem: { name, icon in
+                                IncomeCategory(id: "income_custom_\(UUID().uuidString)", name: name, icon: icon, color: .black)
+                            }
+                        )
                     }
             }
         }
@@ -91,4 +113,3 @@ struct RootView: View {
 }
 
 #Preview { RootView() }
-

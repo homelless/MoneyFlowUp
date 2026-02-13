@@ -11,13 +11,16 @@ struct TransactionIncomeView: View {
     
     // Локальное состояние формы
     @State private var amount: String = ""                           // Сумма дохода (строкой для ввода)
-    @State private var selectedCategory: IncomeCategory = .salary     // Выбранная категория дохода
+    @State private var selectedCategory: IncomeCategory?    // Выбранная категория дохода
     @State private var transactionDate: Date = Date()                 // Дата и время транзакции
     @State private var note: String = ""                              // Описание (опционально)
     @State private var selectedAccount: Account?                      // Выбранный кошелек
     @State private var showCategoryPicker = false                     // Флаг показа выбора категории
     @Environment(\.dismiss) private var dismiss                       // Закрытие экрана
     @Environment(\.modelContext) private var modelContext             // Контекст SwiftData (если понадобится)
+
+    // ЧИТАЕМ стор доходов из окружения
+    @Environment(CategoriesStore<IncomeCategory>.self) private var incomeCategoriesStore
     
     var body: some View {
             ZStack {
@@ -43,24 +46,33 @@ struct TransactionIncomeView: View {
                         .pickerStyle(.navigationLink)
                     }
                     
-                    // Блок выбора категории дохода
-                    Section("Категории") {
-                        HStack {
-                            Image(systemName: selectedCategory.icon)
-                                .foregroundColor(selectedCategory.color)
-                                .frame(width: 30)
-                            
-                            Text(selectedCategory.name)
-                                .foregroundColor(.primary)
-                            
-                            Spacer()
-                            
-                            // Кнопка открытия модального выбора категории
-                            Button(action: {
-                                showCategoryPicker.toggle()
-                            }) {
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.gray)
+                    // Отображение и выбор категории расхода
+                    Section("Категория") {
+                        if let selectedCategory {
+                            HStack {
+                                Image(systemName: selectedCategory.icon)
+                                    .frame(width: 30)
+                                
+                                Text(selectedCategory.name)
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    showCategoryPicker.toggle()
+                                }) {
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.gray)
+                                }
+                            }
+                        } else {
+                            // Нет доступных категорий
+                            HStack {
+                                Image(systemName: "questionmark.circle")
+                                    .frame(width: 30)
+                                Text("Нет доступных категорий")
+                                    .foregroundColor(.secondary)
+                                Spacer()
                             }
                         }
                     }
@@ -120,11 +132,17 @@ struct TransactionIncomeView: View {
                 }
                 // Модальный экран выбора категории дохода
                 .sheet(isPresented: $showCategoryPicker) {
-                    CategoryPickerView(
-                        selectedCategory: $selectedCategory,
-                        categories: IncomeCategory.all,
-                        title: "Выберите категорию"
-                    )
+                    if let binding = Binding($selectedCategory) {
+                        CategoryPickerView(
+                            selectedCategory: binding,
+                            categories: incomeCategoriesStore.categories,
+                            title: "Выберите категорию"
+                        )
+                    } else {
+                        // Если категорий нет — показывать нечего
+                        Text("Нет доступных категорий")
+                            .padding()
+                    }
                 }
             }
             .onAppear {
@@ -132,7 +150,12 @@ struct TransactionIncomeView: View {
                 if selectedAccount == nil, let firstAccount = accountVM.accounts.first {
                     selectedAccount = firstAccount
                 }
+                ensureValidCategory()
             }
+        // Следим за изменениями списка категорий и переустанавливаем выбранную при удалении
+        .onChange(of: incomeCategoriesStore.categories) { _ in
+            ensureValidCategory()
+        }
         }
     
     // Валидация формы: сумма > 0 и выбран кошелек
@@ -140,16 +163,29 @@ struct TransactionIncomeView: View {
         guard !amount.isEmpty,
               Double(amount) != nil,
               Double(amount)! > 0,
-              selectedAccount != nil else {
+              selectedAccount != nil,
+              selectedCategory != nil else {
             return false
         }
         return true
+    }
+    // Поддерживаем целостность selectedCategory относительно стора
+    private func ensureValidCategory() {
+        let available = incomeCategoriesStore.categories
+        if let current = selectedCategory,
+           available.contains(where: { $0.id == current.id }) {
+            // все ок, выбранная существует
+            return
+        }
+        // Если текущая не выбрана или удалена — выбрать первую доступную
+        selectedCategory = available.first
     }
     
     // Сохранение транзакции дохода и обновление баланса кошелька
     private func saveTransaction() {
         guard let amountValue = Double(amount),
-              let account = selectedAccount else { return }
+              let account = selectedAccount,
+              let selectedCategory else { return }
         
         // Формирование модели транзакции (тип: доход)
         let transaction = Transaction(

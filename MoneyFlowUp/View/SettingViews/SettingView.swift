@@ -11,14 +11,14 @@ struct SettingView: View {
             Color("ColorSet")
                 .ignoresSafeArea()
             
-            // пока с заглушками для теста
+        
             VStack {
                 List {
             
                     Section("Настройки"){
                         NavigationLink("О программе", destination: AboutAppView())
-                        NavigationLink("Категории трат", destination: ReportsView(transactionVM: transactionVM ))
-                        NavigationLink("Категории доходов", destination: ReportsView(transactionVM: transactionVM ))
+                        NavigationLink("Категории трат", destination: SettingCostCategoriesView())
+                        NavigationLink("Категории доходов", destination: SettingIncomeCategoriesView())
                         
                     }
                     .listRowBackground(Color("addColor"))

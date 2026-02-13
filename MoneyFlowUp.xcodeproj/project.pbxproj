@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		D00EF20B2F3CEA5800C94583 /* SettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00EF20A2F3CEA5800C94583 /* SettingView.swift */; };
 		D00EF20E2F3CF32500C94583 /* AboutAppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00EF20D2F3CF32500C94583 /* AboutAppView.swift */; };
-		D00EF2102F3D1DC000C94583 /* SettingCostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00EF20F2F3D1DC000C94583 /* SettingCostView.swift */; };
 		D028FA202F1D6D94006A9D1A /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */; };
 		D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA222F1D715A006A9D1A /* FilterChip.swift */; };
 		D028FA252F1D722D006A9D1A /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA242F1D722D006A9D1A /* TransactionRow.swift */; };
@@ -40,12 +39,17 @@
 		D094D46A2F34E9A900BB072D /* TransactionsCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D094D4692F34E9A900BB072D /* TransactionsCalendarView.swift */; };
 		D0A72F852F38A7180042B987 /* ReportsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A72F842F38A7180042B987 /* ReportsViewModel.swift */; };
 		D0A72F872F38A7230042B987 /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A72F862F38A7230042B987 /* ReportsView.swift */; };
+		D0D922BB2F3FA14B00461C14 /* CategoriesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922BA2F3FA14B00461C14 /* CategoriesStore.swift */; };
+		D0D922BD2F3FA53700461C14 /* SettingCostCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922BC2F3FA53600461C14 /* SettingCostCategoriesView.swift */; };
+		D0D922C12F3FA95100461C14 /* SettingIncomeCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922C02F3FA95100461C14 /* SettingIncomeCategoriesView.swift */; };
+		D0D922C32F3FB07000461C14 /* CustomCostCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922C22F3FB07000461C14 /* CustomCostCategory.swift */; };
+		D0D922C52F3FB08E00461C14 /* CustomIncomeCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922C42F3FB08E00461C14 /* CustomIncomeCategory.swift */; };
+		D0D922C72F3FB43200461C14 /* HiddenCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922C62F3FB43200461C14 /* HiddenCategory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D00EF20A2F3CEA5800C94583 /* SettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingView.swift; sourceTree = "<group>"; };
 		D00EF20D2F3CF32500C94583 /* AboutAppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppView.swift; sourceTree = "<group>"; };
-		D00EF20F2F3D1DC000C94583 /* SettingCostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCostView.swift; sourceTree = "<group>"; };
 		D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
 		D028FA222F1D715A006A9D1A /* FilterChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterChip.swift; sourceTree = "<group>"; };
 		D028FA242F1D722D006A9D1A /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
@@ -77,6 +81,12 @@
 		D094D4692F34E9A900BB072D /* TransactionsCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsCalendarView.swift; sourceTree = "<group>"; };
 		D0A72F842F38A7180042B987 /* ReportsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewModel.swift; sourceTree = "<group>"; };
 		D0A72F862F38A7230042B987 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsView.swift; sourceTree = "<group>"; };
+		D0D922BA2F3FA14B00461C14 /* CategoriesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesStore.swift; sourceTree = "<group>"; };
+		D0D922BC2F3FA53600461C14 /* SettingCostCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCostCategoriesView.swift; sourceTree = "<group>"; };
+		D0D922C02F3FA95100461C14 /* SettingIncomeCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingIncomeCategoriesView.swift; sourceTree = "<group>"; };
+		D0D922C22F3FB07000461C14 /* CustomCostCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCostCategory.swift; sourceTree = "<group>"; };
+		D0D922C42F3FB08E00461C14 /* CustomIncomeCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIncomeCategory.swift; sourceTree = "<group>"; };
+		D0D922C62F3FB43200461C14 /* HiddenCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenCategory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +105,9 @@
 			children = (
 				D00EF20A2F3CEA5800C94583 /* SettingView.swift */,
 				D00EF20D2F3CF32500C94583 /* AboutAppView.swift */,
+				D0D922BC2F3FA53600461C14 /* SettingCostCategoriesView.swift */,
+				D0D922C02F3FA95100461C14 /* SettingIncomeCategoriesView.swift */,
+				D0D922C62F3FB43200461C14 /* HiddenCategory.swift */,
 			);
 			path = SettingViews;
 			sourceTree = "<group>";
@@ -229,7 +242,9 @@
 		D0A72F882F38A97D0042B987 /* тестовые файлы */ = {
 			isa = PBXGroup;
 			children = (
-				D00EF20F2F3D1DC000C94583 /* SettingCostView.swift */,
+				D0D922BA2F3FA14B00461C14 /* CategoriesStore.swift */,
+				D0D922C22F3FB07000461C14 /* CustomCostCategory.swift */,
+				D0D922C42F3FB08E00461C14 /* CustomIncomeCategory.swift */,
 			);
 			name = "тестовые файлы";
 			path = "тестовые файлы";
@@ -308,14 +323,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D0D922BB2F3FA14B00461C14 /* CategoriesStore.swift in Sources */,
 				D06CD7372F101C9D002D4A05 /* TransactionTypeProtocol.swift in Sources */,
 				D094D46A2F34E9A900BB072D /* TransactionsCalendarView.swift in Sources */,
+				D0D922BD2F3FA53700461C14 /* SettingCostCategoriesView.swift in Sources */,
 				D06CD73B2F1022B3002D4A05 /* CostCategory.swift in Sources */,
 				D06CD7412F103E0A002D4A05 /* TransactionCategory.swift in Sources */,
 				D05DEBE42F052C6900D6AEED /* Currency.swift in Sources */,
 				D05DEBE52F052C6900D6AEED /* Account.swift in Sources */,
 				D06CD73F2F103D32002D4A05 /* TransferType.swift in Sources */,
 				D05DEBE62F052C6900D6AEED /* Transaction.swift in Sources */,
+				D0D922C52F3FB08E00461C14 /* CustomIncomeCategory.swift in Sources */,
 				D06CD7392F101DE4002D4A05 /* TransactionGroup.swift in Sources */,
 				D05DEBEA2F052C7100D6AEED /* AccountViewModel.swift in Sources */,
 				D0A72F872F38A7230042B987 /* ReportsView.swift in Sources */,
@@ -324,17 +342,19 @@
 				D05DEC082F05570B00D6AEED /* TransactionVM.swift in Sources */,
 				D028FA202F1D6D94006A9D1A /* CategoryPickerView.swift in Sources */,
 				D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */,
+				D0D922C12F3FA95100461C14 /* SettingIncomeCategoriesView.swift in Sources */,
 				D05DEBF82F052C7800D6AEED /* AccountDetailView.swift in Sources */,
 				D028FA252F1D722D006A9D1A /* TransactionRow.swift in Sources */,
+				D0D922C32F3FB07000461C14 /* CustomCostCategory.swift in Sources */,
 				D05DEBF92F052C7800D6AEED /* AccountListView.swift in Sources */,
 				D0A72F852F38A7180042B987 /* ReportsViewModel.swift in Sources */,
+				D0D922C72F3FB43200461C14 /* HiddenCategory.swift in Sources */,
 				D06CD73D2F103C85002D4A05 /* IncomeCategory.swift in Sources */,
 				D05DEBFA2F052C7800D6AEED /* AccountAddView.swift in Sources */,
 				D05DEBFB2F052C7800D6AEED /* TransactionCostView.swift in Sources */,
 				D05DEBFC2F052C7800D6AEED /* TransactionView.swift in Sources */,
 				D05DEC012F052C8100D6AEED /* Route.swift in Sources */,
 				D05DEC022F052C8100D6AEED /* MoneyFlowApp.swift in Sources */,
-				D00EF2102F3D1DC000C94583 /* SettingCostView.swift in Sources */,
 				D00EF20E2F3CF32500C94583 /* AboutAppView.swift in Sources */,
 				D06CD7342F101944002D4A05 /* TransactionsListView.swift in Sources */,
 				D00EF20B2F3CEA5800C94583 /* SettingView.swift in Sources */,
