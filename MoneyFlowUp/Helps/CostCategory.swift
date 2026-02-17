@@ -42,6 +42,9 @@ struct CostCategory: TransactionTypeProtocol {
     static let healthcare = CostCategory(id: "cost_healthcare",
                                          name: "Медицина",
                                          icon: "heart", color: .mint)
+    static let sort = CostCategory(id: "cost_sort",
+                                   name: "Сортировка",
+                                   icon: "trash", color: .green)
     
     // Полный список всех предустановленных категорий трат
     static let all: [CostCategory] = [.food, .transport, .entertainment, .bills, .shopping, .healthcare]

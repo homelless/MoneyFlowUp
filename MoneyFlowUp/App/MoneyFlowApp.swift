@@ -106,6 +106,10 @@ struct RootView: View {
                                 IncomeCategory(id: "income_custom_\(UUID().uuidString)", name: name, icon: icon, color: .black)
                             }
                         )
+                    
+                        // Регистрируем общедоступные ссылки на сторы
+                        CategoriesStores.sharedCost = costCategoriesStore
+                        CategoriesStores.sharedIncome = incomeCategoriesStore
                     }
             }
         }
@@ -113,3 +117,4 @@ struct RootView: View {
 }
 
 #Preview { RootView() }
+

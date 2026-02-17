@@ -34,7 +34,7 @@ class Transaction: Identifiable {
                 return decoded
             }
             // Значение по умолчанию, если декодирование не удалось
-            return .cost(.food)
+            return .cost(.sort)
         }
         set {
             categoryJSON = Self.encodeCategory(newValue)
@@ -79,9 +79,12 @@ class Transaction: Identifiable {
         
         switch type {
         case "cost":
-            return CostCategory.all.first { $0.id == id }.map { .cost($0) }
+            // --- НОВОЕ: расширяем поиск на все категории (включая пользовательские) ---
+            let allCategories = CategoriesStores.sharedCost?.categories ?? CostCategory.all
+            return allCategories.first { $0.id == id }.map { .cost($0) }
         case "income":
-            return IncomeCategory.all.first { $0.id == id }.map { .income($0) }
+            let allCategories = CategoriesStores.sharedIncome?.categories ?? IncomeCategory.all
+            return allCategories.first { $0.id == id }.map { .income($0) }
         case "transfer":
             return TransferType.all.first { $0.id == id }.map { .transfer($0) }
         default:

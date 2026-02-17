@@ -119,6 +119,8 @@
 				D06CD73E2F103D32002D4A05 /* TransferType.swift */,
 				D06CD73C2F103C85002D4A05 /* IncomeCategory.swift */,
 				D028FA222F1D715A006A9D1A /* FilterChip.swift */,
+				D0D922C22F3FB07000461C14 /* CustomCostCategory.swift */,
+				D0D922C42F3FB08E00461C14 /* CustomIncomeCategory.swift */,
 			);
 			path = Helps;
 			sourceTree = "<group>";
@@ -170,6 +172,7 @@
 				D05DEBE82F052C7100D6AEED /* AccountViewModel.swift */,
 				D05DEC072F05570B00D6AEED /* TransactionVM.swift */,
 				D0A72F842F38A7180042B987 /* ReportsViewModel.swift */,
+				D0D922BA2F3FA14B00461C14 /* CategoriesStore.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -242,9 +245,6 @@
 		D0A72F882F38A97D0042B987 /* тестовые файлы */ = {
 			isa = PBXGroup;
 			children = (
-				D0D922BA2F3FA14B00461C14 /* CategoriesStore.swift */,
-				D0D922C22F3FB07000461C14 /* CustomCostCategory.swift */,
-				D0D922C42F3FB08E00461C14 /* CustomIncomeCategory.swift */,
 			);
 			name = "тестовые файлы";
 			path = "тестовые файлы";

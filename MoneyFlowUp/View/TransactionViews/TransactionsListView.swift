@@ -1,4 +1,3 @@
-
 import SwiftUI
 import SwiftData
 
@@ -8,33 +7,97 @@ struct TransactionsListView: View {
     @Bindable var accountVM: AccountViewModel
     // Навигационный путь для NavigationStack
     @Binding var path: [Route]
-    // Выбранная дата для фильтрации
+    // Выбранная дата-«якорь» для периодов (день/неделя/месяц/год)
     @State private var selectedDate = Date()
+    // Кастомный период (если выбран .custom)
+    @State private var customStartDate = Calendar.current.startOfDay(for: Date())
+    @State private var customEndDate = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date())) ?? Date()
     // Выбранный фильтр по группе транзакций (например, расход/доход)
     @State private var selectedFilter: TransactionGroup = .cost
+    // Выбранный период
+    @State private var selectedPeriod: Period = .day
     // Контекст модели SwiftData (для операций с данными при необходимости)
     @Environment(\.modelContext) private var modelContext
     
     // Пример запроса SwiftData (в этом экране используем transactionVM.transactions, но запрос оставлен)
     @Query(sort:\Transaction.date, order: .reverse) var transactions: [Transaction]
     
-    // Вычисляемый список транзакций, отфильтрованный по дате и группе
-    var filteredTransactions: [Transaction] {
+    enum Period: String, CaseIterable, Identifiable {
+        case day = "День"
+        case week = "Неделя"
+        case month = "Месяц"
+        case year = "Год"
+        case custom = "Период"
+        
+        var id: String { rawValue }
+    }
+    
+    // Вычисление начала и конца интервала по выбранному периоду
+    private var currentInterval: DateInterval {
         let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: selectedDate)
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-
-        // Фильтрация по выбранной дате (в рамках суток)
-        var filtered = transactionVM.transactions.filter { transaction in
-            transaction.date >= startOfDay && transaction.date < endOfDay
+        switch selectedPeriod {
+        case .day:
+            let start = calendar.startOfDay(for: selectedDate)
+            let end = calendar.date(byAdding: .day, value: 1, to: start)!
+            return DateInterval(start: start, end: end)
+        case .week:
+            let start = calendar.dateInterval(of: .weekOfYear, for: selectedDate)?.start ?? calendar.startOfDay(for: selectedDate)
+            let end = calendar.date(byAdding: .weekOfYear, value: 1, to: start)!
+            return DateInterval(start: start, end: end)
+        case .month:
+            let start = calendar.dateInterval(of: .month, for: selectedDate)?.start ?? calendar.startOfDay(for: selectedDate)
+            let end = calendar.date(byAdding: .month, value: 1, to: start)!
+            return DateInterval(start: start, end: end)
+        case .year:
+            let start = calendar.dateInterval(of: .year, for: selectedDate)?.start ?? calendar.startOfDay(for: selectedDate)
+            let end = calendar.date(byAdding: .year, value: 1, to: start)!
+            return DateInterval(start: start, end: end)
+        case .custom:
+            // Гарантируем, что start <= end
+            let start = min(customStartDate, customEndDate)
+            let end = max(customStartDate, customEndDate)
+            // Если одинаковые — расширим на 1 день, чтобы не получить пустой интервал
+            if start == end {
+                let endPlus = calendar.date(byAdding: .day, value: 1, to: start) ?? start
+                return DateInterval(start: start, end: endPlus)
+            }
+            // Конец делаем «исключительным», добавив 1 секунду
+            let endExclusive = calendar.date(byAdding: .second, value: 1, to: end) ?? end
+            return DateInterval(start: start, end: endExclusive)
         }
-
-        // Фильтрация по выбранной группе (расход/доход и т.п.)
+    }
+    
+    // Сдвиг текущего периода влево/вправо
+    private func shiftPeriod(by value: Int) {
+        let calendar = Calendar.current
+        switch selectedPeriod {
+        case .day:
+            selectedDate = calendar.date(byAdding: .day, value: value, to: selectedDate) ?? selectedDate
+        case .week:
+            selectedDate = calendar.date(byAdding: .weekOfYear, value: value, to: selectedDate) ?? selectedDate
+        case .month:
+            selectedDate = calendar.date(byAdding: .month, value: value, to: selectedDate) ?? selectedDate
+        case .year:
+            selectedDate = calendar.date(byAdding: .year, value: value, to: selectedDate) ?? selectedDate
+        case .custom:
+            // Для кастомного периода смещаем обе границы
+            if let newStart = calendar.date(byAdding: .day, value: value, to: customStartDate),
+               let newEnd = calendar.date(byAdding: .day, value: value, to: customEndDate) {
+                customStartDate = newStart
+                customEndDate = newEnd
+            }
+        }
+    }
+    
+    // Вычисляемый список транзакций, отфильтрованный по периоду и группе
+    var filteredTransactions: [Transaction] {
+        let interval = currentInterval
+        var filtered = transactionVM.transactions.filter { tx in
+            tx.date >= interval.start && tx.date < interval.end
+        }
         filtered = filtered.filter { transaction in
             transaction.category.group == selectedFilter
         }
-
-        // Сортировка по дате по убыванию
         return filtered.sorted { $0.date > $1.date }
     }
 
@@ -43,7 +106,6 @@ struct TransactionsListView: View {
         filteredTransactions.reduce(0) { $0 + $1.amount }
     }
 
-    
     var body: some View {
         ZStack {
             // Фоновый цвет экрана
@@ -51,14 +113,53 @@ struct TransactionsListView: View {
                 .ignoresSafeArea()
             
             VStack {
-                // Верхняя панель с выбором даты, фильтрами и блоком "Итого"
+                // Верхняя панель с выбором дат/интервала (выше), затем выбор периода, затем фильтры и блок "Итого"
                 VStack(spacing: 16) {
-                    // Выбор даты (только дата, без времени)
-                    DatePicker("Выберите дату", selection: $selectedDate, displayedComponents: .date)
-                        .datePickerStyle(.compact)
-                        .padding(.horizontal)
-                        .environment(\.locale, Locale(identifier: "ru_RU"))
-
+                    
+                    // Управление датой/интервалом (поднято выше)
+                    Group {
+                        switch selectedPeriod {
+                        case .custom:
+                            VStack(spacing: 8) {
+                                DatePicker("Начало", selection: $customStartDate, displayedComponents: .date)
+                                    .datePickerStyle(.compact)
+                                DatePicker("Конец", selection: $customEndDate, displayedComponents: .date)
+                                    .datePickerStyle(.compact)
+                            }
+                            .padding(.horizontal)
+                            .environment(\.locale, Locale(identifier: "ru_RU"))
+                        default:
+                            HStack {
+                                Button {
+                                    shiftPeriod(by: -1)
+                                } label: {
+                                    Image(systemName: "chevron.left")
+                                }
+                                Spacer()
+                                // Якорная дата
+                                DatePicker("Дата", selection: $selectedDate, displayedComponents: .date)
+                                    .labelsHidden()
+                                    .datePickerStyle(.compact)
+                                    .environment(\.locale, Locale(identifier: "ru_RU"))
+                                Spacer()
+                                Button {
+                                    shiftPeriod(by: 1)
+                                } label: {
+                                    Image(systemName: "chevron.right")
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    
+                    // Выбор периода (опущен ниже)
+                    Picker("Период", selection: $selectedPeriod) {
+                        ForEach(Period.allCases) { period in
+                            Text(period.rawValue).tag(period)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal)
                     
                     // Горизонтальный список чипов-фильтров по группам транзакций
                     ScrollView(.horizontal, showsIndicators: false) {
@@ -77,7 +178,7 @@ struct TransactionsListView: View {
                         .padding(.horizontal)
                     }
                     
-                    // Блок отображения итоговой суммы за выбранную дату и группу
+                    // Блок отображения итоговой суммы за выбранный период и группу
                     HStack {
                         Text("Итого:")
                             .font(.headline)
@@ -87,7 +188,6 @@ struct TransactionsListView: View {
                         Text("\(totalAmount, specifier: "%.2f")$")
                             .font(.title2)
                             .bold()
-                            // Цвет суммы зависит от типа: расход — красный, доход — зеленый
                             .foregroundColor(selectedFilter == .cost ? .red : .green)
                     }
                     .padding(.horizontal)
@@ -101,8 +201,6 @@ struct TransactionsListView: View {
                 // Состояние пустого списка или отображение списка транзакций
                 if filteredTransactions.isEmpty {
                     Spacer()
-                    
-                    // Заглушка при отсутствии транзакций на выбранную дату/фильтр
                     VStack(spacing: 16) {
                         Image(systemName: "list.bullet.rectangle")
                             .font(.system(size: 60))
@@ -112,13 +210,12 @@ struct TransactionsListView: View {
                             .font(.title3)
                             .foregroundColor(.secondary)
                         
-                        Text("Здесь появятся транзакции на выбранную дату")
+                        Text("Здесь появятся транзакции за выбранный период")
                             .font(.callout)
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
                     }
-                    
                     Spacer()
                 } else {
                     // Список транзакций с возможностью удаления
@@ -163,14 +260,13 @@ struct TransactionsListView: View {
                 HStack {
                     Spacer()
                     Button(action: {
-                        // Переход к экрану добавления транзакции
                         path.append(.addTransaction)
                     }) {
                         Text("добавить транзакцию")
                             .foregroundColor(.black)
                             .lineLimit(1)
                             .minimumScaleFactor(0.9)
-                            .frame(width: proxy.size.width * 0.85, height: 50) // 90% ширины, фиксированная высота
+                            .frame(width: proxy.size.width * 0.85, height: 50)
                             .background(
                                 RoundedRectangle(cornerRadius: 20)
                                     .fill(Color("addColor")).opacity(0.9)
@@ -187,10 +283,9 @@ struct TransactionsListView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 16)
             }
-            .frame(height: 50 + 8 + 16) 
+            .frame(height: 50 + 8 + 16)
         }
     }
-
 
     // Удаление транзакций из отфильтрованного списка и обновление данных через ViewModel
     private func deleteTransactions(at offsets: IndexSet) {
@@ -201,6 +296,3 @@ struct TransactionsListView: View {
         }
     }
 }
-
-
-
