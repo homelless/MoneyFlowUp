@@ -15,16 +15,19 @@ class Transaction: Identifiable {
     var date: Date
     // Опциональная заметка пользователя
     var note: String?
-    // Идентификатор аккаунта, к которому относится транзакция
+    // Идентификатор аккаунта, к которому относится транзакция (для перевода — аккаунт-источник)
     var accountId: UUID
-    
-    init(id: UUID, amount: Double, category: TransactionCategory, date: Date, note: String? = nil, accountId: UUID) {
+    // Для перевода: целевой аккаунт (если это перевод)
+    var toAccountId: UUID?
+
+    init(id: UUID, amount: Double, category: TransactionCategory, date: Date, note: String? = nil, accountId: UUID, toAccountId: UUID? = nil) {
         self.id = id
         self.amount = amount
         self.categoryJSON = Self.encodeCategory(category)
         self.date = date
         self.note = note
         self.accountId = accountId
+        self.toAccountId = toAccountId
     }
     
     // Доменное свойство: категория транзакции, оборачивает categoryJSON с кодированием/декодированием
@@ -79,7 +82,6 @@ class Transaction: Identifiable {
         
         switch type {
         case "cost":
-            // --- НОВОЕ: расширяем поиск на все категории (включая пользовательские) ---
             let allCategories = CategoriesStores.sharedCost?.categories ?? CostCategory.all
             return allCategories.first { $0.id == id }.map { .cost($0) }
         case "income":
@@ -92,4 +94,3 @@ class Transaction: Identifiable {
         }
     }
 }
-

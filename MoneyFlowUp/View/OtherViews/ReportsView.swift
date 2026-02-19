@@ -48,7 +48,7 @@ struct ReportsView: View {
         }
     }
     
-    // MARK: - Переключатели периода и потоков
+    //Переключатели периода и потоков
     
     private var headerControls: some View {
         VStack(spacing: 8) { // Контейнер для двух рядов контролов
@@ -88,7 +88,7 @@ struct ReportsView: View {
         }
     }
     
-    // MARK: - Карточки с суммами
+    //Карточки с суммами
     
     private var kpiView: some View {
         HStack(spacing: 12) { // Три карточки в ряд
@@ -120,7 +120,7 @@ struct ReportsView: View {
         )
     }
     
-    // MARK: - Круговая диаграмма
+    //Круговая диаграмма
     
     private var expenseDonut: some View {
         VStack(alignment: .leading, spacing: 8) {

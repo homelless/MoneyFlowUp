@@ -8,10 +8,29 @@ struct SettingIncomeCategoriesView: View {
     @State private var isPresentingAdd = false
     @State private var newName = ""
     @State private var newIcon = ""
+    let incomeCategoryIcons = [
+        "dollarsign.circle",    // основная работа
+        "creditcard",           // карта, выплаты
+        "building.columns",     // зарплата, компания
+        "gift",                 // подарок
+        "briefcase",            // бизнес
+        "star",                 // премия
+        "graduationcap",        // стипендия
+        "sparkles",             // подработка
+        "arrow.up.right.circle",// проценты, инвестиции
+        "banknote",             // наличные
+        "person.2.wave.2",      // перевод
+        "cart",                 // продажа
+        "leaf",                 // кэшбэк, эко-бонусы
+        "chart.line.uptrend.xyaxis", // рост, ценные бумаги
+        "plus.circle",          // другое поступление
+        "app.badge",            // IT, цифровой доход
+        "music.mic",            // творчество
+    ]
     
     var body: some View {
         List {
-            Section("Категории доходов") {
+            Section("") {
                 ForEach(store.categories) { category in
                     HStack(spacing: 12) {
                         Image(systemName: category.icon)
@@ -41,7 +60,14 @@ struct SettingIncomeCategoriesView: View {
                 Form {
                     Section("Новая категория дохода") {
                         TextField("Название", text: $newName)
-                        TextField("Иконка (SF Symbol)", text: $newIcon)
+                        Picker("Иконка", selection: $newIcon) {
+                            ForEach(incomeCategoryIcons, id: \.self) { icon in
+                                VStack {
+                                    Image(systemName: icon)
+                                }
+                                .tag(icon)
+                            }
+                        }
                     }
                 }
                 .navigationTitle("Добавить")
@@ -67,7 +93,7 @@ struct SettingIncomeCategoriesView: View {
         for index in offsets {
             guard items.indices.contains(index) else { continue }
             let item = items[index]
-            store.deleteByID(item.id) // теперь удаляем пресеты (скрытие) и кастомные (физически)
+            store.deleteByID(item.id) 
         }
     }
 }

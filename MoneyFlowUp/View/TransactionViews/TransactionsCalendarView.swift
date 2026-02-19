@@ -1,64 +1,93 @@
-import SwiftUI
+import SwiftUI 
 
-// Экран календаря: выбор даты и просмотр транзакций за день.
-// Можно фильтровать по группе транзакций, удалять элементы.
+// Экран с календарем и списком транзакций за выбранную дату
 struct TransactionsCalendarView: View {
     
+    // Локальное состояние выбранной даты (по умолчанию — сегодня)
     @State private var selectedDate = Date()
+    // Локальное состояние выбранного фильтра по группе транзакций (опционально)
     @State private var selectedFilter: TransactionGroup?
     
+    // Вью-модель транзакций, помечена @Bindable для двусторонней синхронизации с @Observable
     @Bindable var transactionVM: TransactionVM
+    // Вью-модель аккаунтов, также @Bindable
     @Bindable var accountVM: AccountViewModel
+    // Контекст модели из окружения SwiftData (если понадобится для операций)
     @Environment(\.modelContext) private var modelContext
     
-    // Кастомный init для установки начальной даты извне
+    // Кастомный инициализатор позволяет передать начальную дату и вью-модели
     init(selectedDate: Date = Date(), transactionVM: TransactionVM, accountVM: AccountViewModel) {
+        // Инициализируем @State через обертку State(initialValue:)
         self._selectedDate = State(initialValue: selectedDate)
+        // Присваиваем переданные вью-модели
         self.transactionVM = transactionVM
         self.accountVM = accountVM
     }
     
-    // Отфильтрованные транзакции за выбранный день с учетом опционального фильтра по группе
+    // Вычисляемое свойство: список транзакций, отфильтрованных по выбранной дате и опциональному фильтру группы
     var filteredTransactions: [Transaction] {
+        // Берем текущий календарь
         let calendar = Calendar.current
+        // Начало суток выбранной даты
         let startOfDay = calendar.startOfDay(for: selectedDate)
+        // Конец суток — начало следующих суток
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-
-        var filtered = transactionVM.transactions.filter { transaction in
+        
+        // Копируем массив транзакций из вью-модели (в массив для удобства фильтрации/сортировки)
+        var items: [Transaction] = Array(transactionVM.transactions)
+        
+        // Фильтруем по дате: транзакции, попадающие в выбранные сутки
+        items = items.filter { (transaction: Transaction) -> Bool in
             transaction.date >= startOfDay && transaction.date < endOfDay
         }
-
+        
+        // Если выбран фильтр по группе — применяем его
         if let filter = selectedFilter {
-            filtered = filtered.filter { transaction in
-                transaction.category.group == filter
+            if filter == .transfer {
+                // Для перевода — используем флаг isTransfer у транзакции
+                items = items.filter { (tx: Transaction) -> Bool in
+                    tx.isTransfer
+                }
+            } else {
+                // Для доходов/расходов — сравниваем группу в доменной категории транзакции
+                items = items.filter { (transaction: Transaction) -> Bool in
+                    transaction.category.group == filter
+                }
             }
         }
-
-        return filtered.sorted { $0.date > $1.date }
+        // Сортируем по дате по убыванию (сначала более поздние)
+        return items.sorted { (a: Transaction, b: Transaction) -> Bool in
+            a.date > b.date
+        }
     }
     
+    // Основное тело вью
     var body: some View {
         ZStack {
+            // Фоновый цвет из ассетов
             Color("ColorSet")
-                .ignoresSafeArea()
+                .ignoresSafeArea() // Растягиваем фон на всю область
             
             VStack {
-                // Графический дата-пикер
+                // Графический календарь для выбора даты
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
                     .datePickerStyle(.graphical)
-                    .environment(\.locale, Locale(identifier: "ru_RU"))
-
+                    .environment(\.locale, Locale(identifier: "ru_RU")) // Русская локаль (названия месяцев/дней)
+                
                 VStack {
-                    // Разделитель
+                    // Тонкая разделительная линия
                     Rectangle()
                         .fill(Color.black)
                         .frame(height: 0.5)
                     
-                    // Фильтры по группе транзакций
+                    // Горизонтальная прокрутка с чипами фильтров по группам транзакций
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
+                            // Перебираем все группы (например, доход, расход, перевод)
                             ForEach(TransactionGroup.allCases, id: \.self) { group in
+                                // Кнопка выбора фильтра
                                 Button(action: { selectedFilter = group }) {
+                                    // Кастомный чип с иконкой, цветом и состоянием выбранности
                                     FilterChip(
                                         title: group.rawValue,
                                         icon: group.icon,
@@ -68,10 +97,10 @@ struct TransactionsCalendarView: View {
                                 }
                             }
                         }
-                        .padding(.horizontal, 25)
+                        .padding(.horizontal, 25) // Отступы слева/справа для содержимого скролла
                     }
                     
-                    // Пустое состояние или список транзакций
+                    // Если после фильтрации транзакций нет — показываем пустое состояние
                     if filteredTransactions.isEmpty {
                         VStack(spacing: 16) {
                             Image(systemName: "list.bullet.rectangle")
@@ -91,31 +120,39 @@ struct TransactionsCalendarView: View {
                         }
                         
                     } else {
+                        // Иначе — список транзакций за выбранную дату с учетом фильтра
                         List {
+                            // Перебираем отфильтрованные транзакции
                             ForEach(filteredTransactions) { transaction in
-                                TransactionRow(transaction: transaction)
-                                    .listRowBackground(Color.clear)
-                                    .listRowSeparator(.hidden)
+                                // Находим имя аккаунта по идентификатору транзакции
+                                let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
+                                // Отображаем строку транзакции
+                                TransactionRow(transaction: transaction, accountName: accountName)
+                                    .listRowBackground(Color.clear) // Прозрачный фон строки
+                                    .listRowSeparator(.hidden) // Прячем разделители
                             }
-                            // Удаление транзакции из календарного списка
+                            // Встроенное удаление свайпом слева направо
                             .onDelete(perform: deleteTransaction)
                         }
-                        .listStyle(.plain)
-                        .background(Color("ColorSet"))
+                        .listStyle(.plain) // Плоский стиль списка
+                        .background(Color("ColorSet")) // Подкладываем фон под List
                     }
-                    Spacer()
+                    Spacer() // Заполняем оставшееся пространство
                 }
                 
             }
-            .navigationTitle("Календарь")
+            .navigationTitle("Календарь") // Заголовок навигации
         }
     }
-    // Удаление транзакции и откат баланса через VM
+    
+    // Обработчик удаления транзакций из списка
     private func deleteTransaction(_ offsets: IndexSet) {
+        // Проходим по каждому индексу, который пользователь удалил
         for index in offsets {
+            // Берем транзакцию из текущего отфильтрованного списка
             let transaction = filteredTransactions[index]
+            // Удаляем транзакцию через вью-модель, которая также откатит баланс(ы) кошельков
             transactionVM.removeTransaction(transaction, accountVM: accountVM)
         }
     }
 }
-

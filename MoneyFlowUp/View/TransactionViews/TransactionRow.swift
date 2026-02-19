@@ -5,6 +5,7 @@ import SwiftUI
 // Показывает иконку категории, название, сумму (с цветом по типу), время и опциональную заметку.
 struct TransactionRow: View {
     let transaction: Transaction
+    let accountName: String
     
     var body: some View {
         HStack(spacing: 5) {
@@ -33,7 +34,6 @@ struct TransactionRow: View {
                 Text(transaction.date, style: .time)
                     .font(.caption)
                     .foregroundColor(.secondary)
-                
                 // Короткая заметка, если есть
                 if let note = transaction.note, !note.isEmpty {
                     Text(note)
@@ -41,6 +41,10 @@ struct TransactionRow: View {
                         .foregroundColor(.secondary)
                         .lineLimit(1)
                 }
+                Text(accountName)
+                    .font(.caption2)
+                    .foregroundStyle(.colorMoney)
+                    .lineLimit(1)
             }
         }
     }
@@ -55,7 +59,7 @@ struct TransactionRow: View {
             date: Date(),
             note: "Обед",
             accountId: UUID()
-        )
+        ), accountName: ""
     )
 }
 

@@ -36,6 +36,7 @@
 		D06CD73F2F103D32002D4A05 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD73E2F103D32002D4A05 /* TransferType.swift */; };
 		D06CD7412F103E0A002D4A05 /* TransactionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */; };
 		D07104442F3264DE0071ABC0 /* Задачи.md in Resources */ = {isa = PBXBuildFile; fileRef = D07104432F3264DE0071ABC0 /* Задачи.md */; };
+		D090D5BD2F47781D005CEFB6 /* TransferRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090D5BC2F47781D005CEFB6 /* TransferRow.swift */; };
 		D094D46A2F34E9A900BB072D /* TransactionsCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D094D4692F34E9A900BB072D /* TransactionsCalendarView.swift */; };
 		D0A72F852F38A7180042B987 /* ReportsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A72F842F38A7180042B987 /* ReportsViewModel.swift */; };
 		D0A72F872F38A7230042B987 /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A72F862F38A7230042B987 /* ReportsView.swift */; };
@@ -78,6 +79,7 @@
 		D06CD73E2F103D32002D4A05 /* TransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferType.swift; sourceTree = "<group>"; };
 		D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategory.swift; sourceTree = "<group>"; };
 		D07104432F3264DE0071ABC0 /* Задачи.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Задачи.md"; sourceTree = "<group>"; };
+		D090D5BC2F47781D005CEFB6 /* TransferRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferRow.swift; sourceTree = "<group>"; };
 		D094D4692F34E9A900BB072D /* TransactionsCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsCalendarView.swift; sourceTree = "<group>"; };
 		D0A72F842F38A7180042B987 /* ReportsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewModel.swift; sourceTree = "<group>"; };
 		D0A72F862F38A7230042B987 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsView.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				D05DEBEE2F052C7800D6AEED /* TransactionTransferView.swift */,
 				D028FA242F1D722D006A9D1A /* TransactionRow.swift */,
 				D094D4692F34E9A900BB072D /* TransactionsCalendarView.swift */,
+				D090D5BC2F47781D005CEFB6 /* TransferRow.swift */,
 			);
 			path = TransactionViews;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				D028FA202F1D6D94006A9D1A /* CategoryPickerView.swift in Sources */,
 				D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */,
 				D0D922C12F3FA95100461C14 /* SettingIncomeCategoriesView.swift in Sources */,
+				D090D5BD2F47781D005CEFB6 /* TransferRow.swift in Sources */,
 				D05DEBF82F052C7800D6AEED /* AccountDetailView.swift in Sources */,
 				D028FA252F1D722D006A9D1A /* TransactionRow.swift in Sources */,
 				D0D922C32F3FB07000461C14 /* CustomCostCategory.swift in Sources */,

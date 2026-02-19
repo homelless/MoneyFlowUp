@@ -187,7 +187,6 @@ final class ReportsViewModel {
         }
     }
     
-    // MARK: - Helpers
     
     private func makeDailyBins(start: Date, endExclusive: Date) -> [Date] {
         var bins: [Date] = []

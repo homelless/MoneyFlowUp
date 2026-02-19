@@ -8,6 +8,10 @@ struct AccountListView: View {
     @Bindable var transactionVM: TransactionVM
     @Binding var path: [Route]
     @Environment(\.modelContext) private var modelContext
+    
+    // Состояния для диалога подтверждения удаления
+    @State private var pendingDeleteAccountID: UUID?
+    @State private var showDeleteDialog = false
 
     var body: some View {
         ZStack {
@@ -71,12 +75,17 @@ struct AccountListView: View {
                         .listRowBackground(Color.clear)
                         .listRowInsets(.none)
                         .listRowSeparator(.hidden)
+                        // Контекстное меню на долгом нажатии
+                        .contextMenu {
+                            Button(role: .destructive) {
+                                pendingDeleteAccountID = account.id
+                                showDeleteDialog = true
+                            } label: {
+                                Label("Удалить", systemImage: "trash")
+                            }
+                        }
                     }
-                    // Удаление и перемещение аккаунтов
-                    .onDelete { offsets in
-                        accountVM.removeAccounts(at: offsets)
-                        transactionVM.fetchAll()
-                    }
+                    // Удаление свайпом отключаем — .onDelete отсутствует
                     .onMove { indices, newOffset in
                         accountVM.moveAccount(from: indices, to: newOffset)
                     }
@@ -85,6 +94,25 @@ struct AccountListView: View {
                 .background(Color.clear)
                 .listStyle(.plain)
             }
+        }
+        // Диалог подтверждения удаления
+        .confirmationDialog(
+            "Удалить кошелек?",
+            isPresented: $showDeleteDialog,
+            titleVisibility: .visible
+        ) {
+            Button("Удалить", role: .destructive) {
+                if let id = pendingDeleteAccountID {
+                    accountVM.removeAccount(id: id)
+                    transactionVM.fetchAll()
+                }
+                pendingDeleteAccountID = nil
+            }
+            Button("Отмена", role: .cancel) {
+                pendingDeleteAccountID = nil
+            }
+        } message: {
+            Text("Все связанные транзакции этого кошелька будут удалены.")
         }
         // Кнопка снизу для добавления транзакции
         .safeAreaInset(edge: .bottom) {
@@ -137,4 +165,3 @@ struct AccountListView: View {
         }
     }
 }
-

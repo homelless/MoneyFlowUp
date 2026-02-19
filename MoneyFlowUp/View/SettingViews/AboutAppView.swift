@@ -24,7 +24,7 @@ struct AboutAppView: View {
                     Group {
                         Text("Приватность и данные")
                             .font(.title3.bold())
-                        Text("Все ваши данные хранятся локально на устройстве с использованием SwiftData. Приложение не передает финансовую информацию на внешние серверы.")
+                        Text("Все ваши данные хранятся локально на устройстве с использованием базы данных. Приложение не передает финансовую информацию на внешние серверы.")
                             .font(.body)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -40,7 +40,7 @@ struct AboutAppView: View {
                     Group {
                         Text("Автор")
                             .font(.title3.bold())
-                        Text("Саркулов Владислав.")
+                        Text("Саркулов Владислав.\nтелеграмм: @homeless_ss \nинстаграмм: @homeless_ss")
                             .font(.body)
                             .italic()
                     }

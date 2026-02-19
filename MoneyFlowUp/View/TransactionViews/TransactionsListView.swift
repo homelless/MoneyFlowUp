@@ -1,27 +1,38 @@
 import SwiftUI
 import SwiftData
 
+// Экран списка транзакций с возможностью:
+// - выбрать период (день/неделя/месяц/год/произвольный диапазон),
+// - фильтровать по группе (траты/заработок/перевод),
+// - посмотреть сумму за период,
+// - удалить транзакции,
+// - перейти к добавлению транзакции и к другим экранам по маршрутам.
+
 struct TransactionsListView: View {
-    // ViewModel-ы, проброшенные извне, для работы с транзакциями и счетами
+    // Вью-модель транзакций (Observable), помечена @Bindable для двусторонней связи
     @Bindable var transactionVM: TransactionVM
+    // Вью-модель аккаунтов
     @Bindable var accountVM: AccountViewModel
-    // Навигационный путь для NavigationStack
+    // Путь навигации (NavigationStack)
     @Binding var path: [Route]
-    // Выбранная дата-«якорь» для периодов (день/неделя/месяц/год)
+    
+    // Выбранная дата (базовая точка для day/week/month/year)
     @State private var selectedDate = Date()
-    // Кастомный период (если выбран .custom)
+    // Начало и конец кастомного диапазона (для "Период")
     @State private var customStartDate = Calendar.current.startOfDay(for: Date())
     @State private var customEndDate = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date())) ?? Date()
-    // Выбранный фильтр по группе транзакций (например, расход/доход)
+    // Текущий фильтр группы транзакций (по умолчанию — траты)
     @State private var selectedFilter: TransactionGroup = .cost
-    // Выбранный период
+    // Текущий выбранный период
     @State private var selectedPeriod: Period = .day
-    // Контекст модели SwiftData (для операций с данными при необходимости)
-    @Environment(\.modelContext) private var modelContext
     
-    // Пример запроса SwiftData (в этом экране используем transactionVM.transactions, но запрос оставлен)
+    // Контекст SwiftData из окружения (если понадобится для операций)
+    @Environment(\.modelContext) private var modelContext
+
+    // Пример запроса SwiftData (здесь не используется напрямую, так как работаем через transactionVM)
     @Query(sort:\Transaction.date, order: .reverse) var transactions: [Transaction]
     
+    // Перечисление периодов для фильтрации
     enum Period: String, CaseIterable, Identifiable {
         case day = "День"
         case week = "Неделя"
@@ -32,42 +43,46 @@ struct TransactionsListView: View {
         var id: String { rawValue }
     }
     
-    // Вычисление начала и конца интервала по выбранному периоду
+    // Текущий интервал дат на основе выбранного периода/даты/кастомного диапазона
     private var currentInterval: DateInterval {
         let calendar = Calendar.current
         switch selectedPeriod {
         case .day:
+            // [startOfDay, startOfNextDay)
             let start = calendar.startOfDay(for: selectedDate)
             let end = calendar.date(byAdding: .day, value: 1, to: start)!
             return DateInterval(start: start, end: end)
         case .week:
+            // [startOfWeek, startOfNextWeek)
             let start = calendar.dateInterval(of: .weekOfYear, for: selectedDate)?.start ?? calendar.startOfDay(for: selectedDate)
             let end = calendar.date(byAdding: .weekOfYear, value: 1, to: start)!
             return DateInterval(start: start, end: end)
         case .month:
+            // [startOfMonth, startOfNextMonth)
             let start = calendar.dateInterval(of: .month, for: selectedDate)?.start ?? calendar.startOfDay(for: selectedDate)
             let end = calendar.date(byAdding: .month, value: 1, to: start)!
             return DateInterval(start: start, end: end)
         case .year:
+            // [startOfYear, startOfNextYear)
             let start = calendar.dateInterval(of: .year, for: selectedDate)?.start ?? calendar.startOfDay(for: selectedDate)
             let end = calendar.date(byAdding: .year, value: 1, to: start)!
             return DateInterval(start: start, end: end)
         case .custom:
-            // Гарантируем, что start <= end
+            // Кастомный диапазон: гарантируем start < end,
+            // если равны — расширяем на 1 день,
+            // конец делаем эксклюзивным (плюс 1 секунда для надежности).
             let start = min(customStartDate, customEndDate)
             let end = max(customStartDate, customEndDate)
-            // Если одинаковые — расширим на 1 день, чтобы не получить пустой интервал
             if start == end {
                 let endPlus = calendar.date(byAdding: .day, value: 1, to: start) ?? start
                 return DateInterval(start: start, end: endPlus)
             }
-            // Конец делаем «исключительным», добавив 1 секунду
             let endExclusive = calendar.date(byAdding: .second, value: 1, to: end) ?? end
             return DateInterval(start: start, end: endExclusive)
         }
     }
     
-    // Сдвиг текущего периода влево/вправо
+    // Сдвиг текущего периода (стрелки влево/вправо) относительно выбранной даты/диапазона
     private func shiftPeriod(by value: Int) {
         let calendar = Calendar.current
         switch selectedPeriod {
@@ -80,7 +95,7 @@ struct TransactionsListView: View {
         case .year:
             selectedDate = calendar.date(byAdding: .year, value: value, to: selectedDate) ?? selectedDate
         case .custom:
-            // Для кастомного периода смещаем обе границы
+            // Для кастомного диапазона сдвигаем обе границы на одинаковое число дней
             if let newStart = calendar.date(byAdding: .day, value: value, to: customStartDate),
                let newEnd = calendar.date(byAdding: .day, value: value, to: customEndDate) {
                 customStartDate = newStart
@@ -89,37 +104,49 @@ struct TransactionsListView: View {
         }
     }
     
-    // Вычисляемый список транзакций, отфильтрованный по периоду и группе
+    // Отфильтрованные транзакции по текущему интервалу и группе
     var filteredTransactions: [Transaction] {
         let interval = currentInterval
-        var filtered = transactionVM.transactions.filter { tx in
+        
+        // Берем транзакции из VM и фильтруем по интервалу
+        var filtered: [Transaction] = Array(transactionVM.transactions).filter { tx in
             tx.date >= interval.start && tx.date < interval.end
         }
-        filtered = filtered.filter { transaction in
-            transaction.category.group == selectedFilter
+        
+        // Дополнительная фильтрация по группе:
+        // - для .transfer — по флагу isTransfer,
+        // - для остальных — по группе доменной категории.
+        if selectedFilter == .transfer {
+            filtered = filtered.filter { tx in
+                tx.isTransfer
+            }
+        } else {
+            filtered = filtered.filter { tx in
+                tx.category.group == selectedFilter
+            }
         }
+        // Сортировка по дате убыванию
         return filtered.sorted { $0.date > $1.date }
     }
 
-    // Итоговая сумма по отфильтрованным транзакциям
+    // Сумма по отфильтрованным транзакциям (знак суммы зависит от сохраненных значений amount)
     var totalAmount: Double {
         filteredTransactions.reduce(0) { $0 + $1.amount }
     }
 
     var body: some View {
         ZStack {
-            // Фоновый цвет экрана
+            // Фоновый цвет из ассетов
             Color("ColorSet")
                 .ignoresSafeArea()
             
             VStack {
-                // Верхняя панель с выбором дат/интервала (выше), затем выбор периода, затем фильтры и блок "Итого"
+                // Верхняя панель: выбор даты/диапазона, периодов, чипы фильтров и итоговая сумма
                 VStack(spacing: 16) {
-                    
-                    // Управление датой/интервалом (поднято выше)
                     Group {
                         switch selectedPeriod {
                         case .custom:
+                            // Для кастомного периода показываем два DatePicker'а: начало и конец
                             VStack(spacing: 8) {
                                 DatePicker("Начало", selection: $customStartDate, displayedComponents: .date)
                                     .datePickerStyle(.compact)
@@ -129,6 +156,7 @@ struct TransactionsListView: View {
                             .padding(.horizontal)
                             .environment(\.locale, Locale(identifier: "ru_RU"))
                         default:
+                            // Для остальных периодов — центральный DatePicker и стрелки сдвига
                             HStack {
                                 Button {
                                     shiftPeriod(by: -1)
@@ -136,7 +164,6 @@ struct TransactionsListView: View {
                                     Image(systemName: "chevron.left")
                                 }
                                 Spacer()
-                                // Якорная дата
                                 DatePicker("Дата", selection: $selectedDate, displayedComponents: .date)
                                     .labelsHidden()
                                     .datePickerStyle(.compact)
@@ -152,7 +179,7 @@ struct TransactionsListView: View {
                         }
                     }
                     
-                    // Выбор периода (опущен ниже)
+                    // Переключатель периода (День/Неделя/Месяц/Год/Период)
                     Picker("Период", selection: $selectedPeriod) {
                         ForEach(Period.allCases) { period in
                             Text(period.rawValue).tag(period)
@@ -161,7 +188,7 @@ struct TransactionsListView: View {
                     .pickerStyle(.segmented)
                     .padding(.horizontal)
                     
-                    // Горизонтальный список чипов-фильтров по группам транзакций
+                    // Горизонтальная полоса чипов фильтра по группе транзакций
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(TransactionGroup.allCases, id: \.self) { group in
@@ -178,7 +205,7 @@ struct TransactionsListView: View {
                         .padding(.horizontal)
                     }
                     
-                    // Блок отображения итоговой суммы за выбранный период и группу
+                    // Панель "Итого" с суммой и цветовой индикацией по типу
                     HStack {
                         Text("Итого:")
                             .font(.headline)
@@ -188,7 +215,10 @@ struct TransactionsListView: View {
                         Text("\(totalAmount, specifier: "%.2f")$")
                             .font(.title2)
                             .bold()
-                            .foregroundColor(selectedFilter == .cost ? .red : .green)
+                            .foregroundColor(
+                                selectedFilter == .cost ? .red :
+                                (selectedFilter == .income ? .green : .blue)
+                            )
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 8)
@@ -198,7 +228,7 @@ struct TransactionsListView: View {
                 }
                 .padding(.vertical)
                 
-                // Состояние пустого списка или отображение списка транзакций
+                // Пустое состояние, если транзакций нет
                 if filteredTransactions.isEmpty {
                     Spacer()
                     VStack(spacing: 16) {
@@ -218,12 +248,32 @@ struct TransactionsListView: View {
                     }
                     Spacer()
                 } else {
-                    // Список транзакций с возможностью удаления
+                    // Список транзакций
                     List {
                         ForEach(filteredTransactions) { transaction in
-                            TransactionRow(transaction: transaction)
-                                .listRowBackground(Color.clear)
+                            if selectedFilter == .transfer {
+                                // Для перевода пробуем отрисовать специализированную строку с обоими аккаунтами
+                                if
+                                    let from = accountVM.accounts.first(where: { $0.id == transaction.accountId }),
+                                    let toId = transaction.toAccountId,
+                                    let to = accountVM.accounts.first(where: { $0.id == toId })
+                                {
+                                    TransferRow(from: from, to: to, transaction: transaction)
+                                        .listRowBackground(Color.clear)
+                                } else {
+                                    // Если не удалось найти оба аккаунта — fallback к обычной строке
+                                    let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
+                                    TransactionRow(transaction: transaction, accountName: accountName)
+                                        .listRowBackground(Color.clear)
+                                }
+                            } else {
+                                // Для трат/доходов — обычная строка транзакции
+                                let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
+                                TransactionRow(transaction: transaction, accountName: accountName)
+                                    .listRowBackground(Color.clear)
+                            }
                         }
+                        // Удаление свайпом
                         .onDelete(perform: deleteTransactions)
                     }
                     .listStyle(.plain)
@@ -231,19 +281,16 @@ struct TransactionsListView: View {
                 }
             }
         }
-        // Заголовок и стиль навигации
         .navigationTitle("Транзакции")
         .navigationBarTitleDisplayMode(.inline)
-        // Маршрутизация к различным экранам приложения
+        // Навигация по маршрутам
         .navigationDestination(for: Route.self) { route in
             switch route {
             case .addTransaction:
                 TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
-                
             case .detail(let accountID):
                 if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
                     AccountDetailView(account: account, accountVM: accountVM)
-                    
                 } else {
                     Text("Кошелек не найден")
                 }
@@ -253,8 +300,7 @@ struct TransactionsListView: View {
                 TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM)
             }
         }
-        
-        // Кнопка добавления транзакции, закрепленная внизу экрана
+        // Кнопка «добавить транзакцию» внизу (safe area inset)
         .safeAreaInset(edge: .bottom) {
             GeometryReader { proxy in
                 HStack {
@@ -287,7 +333,7 @@ struct TransactionsListView: View {
         }
     }
 
-    // Удаление транзакций из отфильтрованного списка и обновление данных через ViewModel
+    // Удаление выбранных транзакций из списка (проксирует в VM, которая корректирует балансы)
     private func deleteTransactions(at offsets: IndexSet) {
         let items = filteredTransactions
         for index in offsets {

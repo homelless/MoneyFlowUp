@@ -7,31 +7,31 @@ struct AccountAddView: View {
     // ViewModel для работы с кошельками
     @Bindable var viewModel: AccountViewModel
     // Локальное состояние создаваемого аккаунта
-    @State var account = Account(id: .init(), name: "", balance: "0", currencyRaw: "", descriptionAccount: "")
+    @State var account = Account(id: .init(), name: "", balance: "", currencyRaw: "", descriptionAccount: "")
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         Form {
             // Имя кошелька
-            Section("Name wallet") {
-                TextField("name", text: $account.name)
+            Section("Название") {
+                TextField("", text: $account.name)
             }
             // Начальный баланс
-            Section("Balance") {
+            Section("Баланс") {
                 TextField("0", text: $account.balance)
                     .keyboardType(.decimalPad)
             }
             // Выбор валюты
-            Section("Currency") {
-                Picker("Currency", selection: $account.currencyRaw) {
+            Section("Валюта") {
+                Picker("", selection: $account.currencyRaw) {
                     ForEach(Currency.allCases){ currency in
                         Text(currency.rawValue).tag(currency)
                     }
                 }
             }
             // Описание
-            Section("Description") {
+            Section("Описание") {
                 TextEditor(text: $account.descriptionAccount)
                     .frame(height: 200)
             }
@@ -45,8 +45,10 @@ struct AccountAddView: View {
                 .tint(.colorSet)
                 // Блокируем кнопку, если имя пустое/из пробелов
                 .disabled(account.name.trimmingCharacters(in: .whitespaces).isEmpty)
+                .disabled(account.balance.trimmingCharacters(in: .whitespaces).isEmpty)
             }
         }
+        .navigationTitle(Text("Создание кошелька"))
     }
 }
 

@@ -8,10 +8,41 @@ struct SettingCostCategoriesView: View {
     @State private var isPresentingAdd = false
     @State private var newName = ""
     @State private var newIcon = ""
+    let costCategoryIcons = [
+        "fork.knife",           // еда
+        "cart",                 // покупки
+        "car",                  // транспорт
+        "tram",                 // городской транспорт
+        "bicycle",              // велосипед
+        "fuelpump",             // топливо
+        "house",                // жильё, аренда
+        "wrench.and.screwdriver", // ремонт
+        "bolt",                 // коммуналка, электроэнергия
+        "doc.text",             // счета
+        "film",                 // развлечения
+        "gamecontroller",       // игры
+        "music.note",           // музыка
+        "pawprint",             // питомцы
+        "gift",                 // подарки
+        "bed.double",           // отели, ночёвка
+        "tshirt",               // одежда
+        "scissors",             // парикмахерская
+        "leaf",                 // экология, растения
+        "heart",                // здоровье
+        "stethoscope",          // медицина
+        "airplane",             // путешествия
+        "graduationcap",        // образование
+        "hammer",               // услуги, работа
+        "creditcard",           // финансы, кредиты
+        "shippingbox",          // посылки, доставка
+        "trash",                // мусор, сортировка
+        "cart.badge.plus",      // крупные покупки
+        "cup.and.saucer",       // кафе, кофе
+    ]
     
     var body: some View {
         List {
-            Section("Категории трат") {
+            Section("") {
                 ForEach(store.categories) { category in
                     HStack(spacing: 12) {
                         Image(systemName: category.icon)
@@ -41,7 +72,14 @@ struct SettingCostCategoriesView: View {
                 Form {
                     Section("Новая категория траты") {
                         TextField("Название", text: $newName)
-                        TextField("Иконка (SF Symbol)", text: $newIcon)
+                        Picker("Иконка", selection: $newIcon) {
+                            ForEach(costCategoryIcons, id: \.self) { icon in
+                                VStack {
+                                    Image(systemName: icon)
+                                }
+                                .tag(icon)
+                            }
+                        }
                     }
                 }
                 .navigationTitle("Добавить")
@@ -67,7 +105,7 @@ struct SettingCostCategoriesView: View {
         for index in offsets {
             guard items.indices.contains(index) else { continue }
             let item = items[index]
-            store.deleteByID(item.id) // теперь удаляем пресеты (скрытие) и кастомные (физически)
+            store.deleteByID(item.id)
         }
     }
 }

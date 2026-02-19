@@ -32,20 +32,24 @@ final class AccountViewModel: Identifiable {
         fetchAll()
     }
     
-    /// Удаление одного аккаунта с удалением всех его транзакций
-    func removeAccount(_ account: Account) {
-        // Снимем UUID отдельно, чтобы в предикате сравнивать с конкретным значением
-        let accountUUID = account.id
-        // Находим и удаляем все связанные транзакции
+    // Удаление одного аккаунта по его идентификатору (включая связанные транзакции)
+    func removeAccount(id: UUID) {
+        // Находим аккаунт в текущем массиве
+        guard let account = accounts.first(where: { $0.id == id }) else { return }
+        
+        // Удаляем все транзакции, связанные с этим аккаунтом
         let txDescriptor = FetchDescriptor<Transaction>(
-            predicate: #Predicate<Transaction> { $0.accountId == accountUUID }
+            predicate: #Predicate<Transaction> { $0.accountId == id }
         )
         let transactions = (try? modelContext.fetch(txDescriptor)) ?? []
         for tx in transactions {
             modelContext.delete(tx)
         }
+        
         // Удаляем сам аккаунт
         modelContext.delete(account)
+        
+        // Сохраняем изменения и обновляем список
         try? modelContext.save()
         fetchAll()
     }

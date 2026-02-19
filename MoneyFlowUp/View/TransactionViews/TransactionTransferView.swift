@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct TransactionTransferView: View {
     
@@ -122,48 +123,52 @@ struct TransactionTransferView: View {
         return true
     }
     
-    private func saveTransaction() {
-        guard let amountValue = Double(amount),
-              let fromAcc = fromAccount,
-              let toAcc = toAccount else { return }
+    private func saveTransaction() { // Функция сохранения перевода
+        // Безопасно извлекаем сумму и выбранные кошельки
+        guard let amountValue = Double(amount), // Преобразуем строку суммы в Double
+              let fromAcc = fromAccount, // Достаём исходный кошелек
+              let toAcc = toAccount else { return } // Достаём целевой кошелек; если что-то не так — выходим
         
-        // Транзакция для списания
-        let fromTransaction = Transaction(
-            id: UUID(),
-            amount: amountValue,
-            category: .transfer(selectedCategory),
-            date: transactionDate,
-            note: note.isEmpty ? nil : "Transfer to \(toAcc.name)",
-            accountId: fromAcc.id
+        // Создаем одну транзакцию перевода:
+        // accountId = исходный кошелек, toAccountId = целевой кошелек.
+        // Категория — .transfer с выбранным типом (сейчас .accountTransfer).
+        let transferTx = Transaction( // Инициализируем модель транзакции
+            id: UUID(), // Генерируем уникальный идентификатор транзакции
+            amount: amountValue, // Устанавливаем сумму перевода
+            category: .transfer(selectedCategory), // Указываем категорию — перевод с указанным типом
+            date: transactionDate, // Дата и время перевода
+            note: note.isEmpty ? nil : note, // Если заметка пустая — пишем nil, иначе значение
+            accountId: fromAcc.id, // Идентификатор исходного кошелька (откуда списываем)
+            toAccountId: toAcc.id // Идентификатор целевого кошелька (куда зачисляем)
         )
         
-        // Транзакция для зачисления
-        let toTransaction = Transaction(
-            id: UUID(),
-            amount: amountValue,
-            category: .transfer(selectedCategory),
-            date: transactionDate,
-            note: note.isEmpty ? nil : "Transfer from \(fromAcc.name)",
-            accountId: toAcc.id
-        )
-        
-        // Обновление балансов обоих аккаунтов
-        if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromAcc.id }),
-           let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toAcc.id }) {
+        // Обновляем балансы обоих аккаунтов:
+        // Ищем индексы исходного и целевого кошельков в массиве VM
+        if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromAcc.id }), // Находим индекс исходного кошелька
+           let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toAcc.id }) { // Находим индекс целевого кошелька
             
-            if let fromBalance = Double(fromAcc.balance),
-               let toBalance = Double(toAcc.balance) {
+            // Балансы в модели Account хранятся строкой, поэтому переводим в Double
+            if let fromBalance = Double(accountVM.accounts[fromIndex].balance), // Преобразуем баланс исходного в Double
+               let toBalance = Double(accountVM.accounts[toIndex].balance) { // Преобразуем баланс целевого в Double
                 
-                accountVM.accounts[fromIndex].balance = String(fromBalance - amountValue)
-                accountVM.accounts[toIndex].balance = String(toBalance + amountValue)
+                // Списание с исходного
+                accountVM.accounts[fromIndex].balance = String(fromBalance - amountValue) // Вычитаем сумму и сохраняем как строку
+                // Зачисление на целевой
+                accountVM.accounts[toIndex].balance = String(toBalance + amountValue) // Прибавляем сумму и сохраняем как строку
+                
+                // Сохраняем изменения в SwiftData через контекст VM
+                try? accountVM.modelContext.save() // Пытаемся сохранить изменения модели аккаунтов
+                // Перечитываем список аккаунтов (на случай сторонних наблюдателей)
+                accountVM.fetchAll() // Обновляем локальный список аккаунтов в VM
             }
         }
         
-        // Сохраняем обе транзакции и сбрасываем форму
-        transactionVM.addTransaction(fromTransaction)
-        transactionVM.addTransaction(toTransaction)
-        amount = ""
-        note = ""
-        dismiss()
+        // Сохраняем транзакцию в хранилище (SwiftData) через TransactionVM
+        transactionVM.addTransaction(transferTx) // Вставляем и сохраняем транзакцию через VM
+        // Сбрасываем поля формы
+        amount = "" // Очищаем введенную сумму
+        note = "" // Очищаем заметку
+        // Закрываем экран
+        dismiss() // Закрываем представление после сохранения
     }
 }

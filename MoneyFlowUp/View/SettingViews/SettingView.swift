@@ -29,18 +29,3 @@ struct SettingView: View {
         }
     }
 }
-
-#Preview {
-
-    let schema = Schema([
-        Transaction.self,
-        Account.self
-    ])
-    let configuration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-    let container = try! ModelContainer(for: schema, configurations: [configuration])
-    let context = ModelContext(container)
-    
-    let txVM = TransactionVM(context: context)
-    
-    return SettingView(transactionVM: txVM)
-}

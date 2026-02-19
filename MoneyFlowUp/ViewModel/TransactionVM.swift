@@ -35,24 +35,45 @@ final class TransactionVM: Identifiable {
     
     // Удаление транзакции с откатом влияния на баланс соответствующего аккаунта
     func removeTransaction(_ transaction: Transaction, accountVM: AccountViewModel) {
-        // Находим аккаунт по accountId транзакции
-        if let index = accountVM.accounts.firstIndex(where: { $0.id == transaction.accountId }),
-           let oldBalance = Double(accountVM.accounts[index].balance) {
-            var newBalance = oldBalance
+        // Если это перевод, нужно откатить на обоих аккаунтах
+        if transaction.isTransfer {
+            let amount = transaction.amount
+            let fromId = transaction.accountId
+            let toId = transaction.toAccountId
             
-            // Корректируем баланс в зависимости от типа транзакции
-            switch transaction.category {
-            case .cost:
-                newBalance += transaction.amount // Возвращаем потраченное
-            case .income:
-                newBalance -= transaction.amount // Забираем полученное
-            case .transfer:
-                newBalance += transaction.amount // Простая логика для transfer
+            if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromId }),
+               let fromBalance = Double(accountVM.accounts[fromIndex].balance) {
+                // Возвращаем списанные деньги на исходный аккаунт
+                accountVM.accounts[fromIndex].balance = String(fromBalance + amount)
             }
-            
-            accountVM.accounts[index].balance = String(newBalance)
+            if let toId,
+               let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toId }),
+               let toBalance = Double(accountVM.accounts[toIndex].balance) {
+                // Списываем зачисленные деньги с целевого аккаунта
+                accountVM.accounts[toIndex].balance = String(toBalance - amount)
+            }
             try? accountVM.modelContext.save()
             accountVM.fetchAll()
+        } else {
+            // Находим аккаунт по accountId транзакции
+            if let index = accountVM.accounts.firstIndex(where: { $0.id == transaction.accountId }),
+               let oldBalance = Double(accountVM.accounts[index].balance) {
+                var newBalance = oldBalance
+                
+                // Корректируем баланс в зависимости от типа транзакции
+                switch transaction.category {
+                case .cost:
+                    newBalance += transaction.amount // Возвращаем потраченное
+                case .income:
+                    newBalance -= transaction.amount // Забираем полученное
+                case .transfer:
+                    break // обработано выше
+                }
+                
+                accountVM.accounts[index].balance = String(newBalance)
+                try? accountVM.modelContext.save()
+                accountVM.fetchAll()
+            }
         }
         
         // Удаляем транзакцию из хранилища
@@ -61,4 +82,3 @@ final class TransactionVM: Identifiable {
         fetchAll()
     }
 }
-

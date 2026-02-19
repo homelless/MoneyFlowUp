@@ -19,7 +19,7 @@ struct TransactionIncomeView: View {
     @Environment(\.dismiss) private var dismiss                       // Закрытие экрана
     @Environment(\.modelContext) private var modelContext             // Контекст SwiftData (если понадобится)
 
-    // ЧИТАЕМ стор доходов из окружения
+    // читаем стор доходов из окружения
     @Environment(CategoriesStore<IncomeCategory>.self) private var incomeCategoriesStore
     
     var body: some View {
