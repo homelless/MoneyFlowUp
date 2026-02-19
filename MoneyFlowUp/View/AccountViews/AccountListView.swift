@@ -53,7 +53,7 @@ struct AccountListView: View {
                 List {
                     ForEach(accountVM.accounts, id:\.id) { account in
                         Button {
-                            path.append(.detail(account.id))
+                           // path.append(.detail(account.id))
                         } label: {
                             AccountRow(account: account)
                                 .padding()
@@ -77,6 +77,11 @@ struct AccountListView: View {
                         .listRowSeparator(.hidden)
                         // Контекстное меню на долгом нажатии
                         .contextMenu {
+                            Button {
+                                path.append(.detail(account.id))
+                            } label: {
+                                Label("Редактрировать", systemImage: "pencil")
+                            }
                             Button(role: .destructive) {
                                 pendingDeleteAccountID = account.id
                                 showDeleteDialog = true
