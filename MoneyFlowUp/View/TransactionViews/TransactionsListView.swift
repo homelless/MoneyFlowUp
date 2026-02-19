@@ -286,18 +286,24 @@ struct TransactionsListView: View {
         // Навигация по маршрутам
         .navigationDestination(for: Route.self) { route in
             switch route {
-            case .addTransaction:
-                TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
+            case .addAccount:
+                AccountAddView(viewModel: accountVM)
             case .detail(let accountID):
                 if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
                     AccountDetailView(account: account, accountVM: accountVM)
                 } else {
                     Text("Кошелек не найден")
                 }
-            case .addAccount:
-                AccountAddView(viewModel: accountVM)
+            case .addTransaction:
+                TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
             case .calendar(let date):
                 TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM)
+            case .accountTransactions(let accountID):
+                if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
+                    AccountTransactionsView(transactionVM: transactionVM, accountVM: accountVM, path: $path, accountID: accountID)
+                } else {
+                    Text("Кошелек не найден")
+                }
             }
         }
         // Кнопка «добавить транзакцию» внизу (safe area inset)
