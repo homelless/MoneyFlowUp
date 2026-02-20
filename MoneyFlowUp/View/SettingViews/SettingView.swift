@@ -8,7 +8,7 @@ struct SettingView: View {
     
     var body: some View {
         ZStack {
-            Color("ColorSet")
+            Color("фон")
                 .ignoresSafeArea()
             
         
@@ -21,7 +21,7 @@ struct SettingView: View {
                         NavigationLink("Категории доходов", destination: SettingIncomeCategoriesView())
                         
                     }
-                    .listRowBackground(Color("addColor"))
+                    .listRowBackground(Color("карточки"))
                 }
                 .scrollContentBackground(.hidden)
                 .listRowBackground(Color.clear)

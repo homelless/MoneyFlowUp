@@ -19,7 +19,7 @@ struct TransactionTransferView: View {
     var body: some View {
         
             ZStack {
-                Color("ColorSet")
+                Color("фон")
                     .ignoresSafeArea()
                 
                 Form {
@@ -30,13 +30,15 @@ struct TransactionTransferView: View {
                                     Text(account.name)
                                     Spacer()
                                     Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(Color("текст"))
                                 }
                                 .tag(account as Account?)
                             }
                         }
                         .pickerStyle(.navigationLink)
                     }
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
                     
                     Section("В кошелек") {
                         Picker("", selection: $toAccount) {
@@ -45,36 +47,43 @@ struct TransactionTransferView: View {
                                     Text(account.name)
                                     Spacer()
                                     Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(Color("текст"))
                                 }
                                 .tag(account as Account?)
                             }
                         }
                         .pickerStyle(.navigationLink)
                     }
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
                     
                     
                     Section("Сумма") {
                         TextField("0", text: $amount)
                             .keyboardType(.decimalPad)
                     }
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
                     
                     Section("") {
                         DatePicker("Дата",
                                    selection: $transactionDate,
                                    displayedComponents: [.date, .hourAndMinute])
-                        .datePickerStyle(.compact)
+                        .tint(Color("текст"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .environment(\.locale, Locale(identifier: "ru_RU"))
                         
                     }
+                    .listRowBackground(Color("ячейка"))
+                    .foregroundStyle(Color("текст"))
                    
                     
                     Section("Описание") {
                         TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
                             .lineLimit(2...4)
                     }
-                    
+                    .listRowBackground(Color("ячейка"))
+                    .foregroundStyle(Color("текст"))
                     
                     Section {
                         Button(action: saveTransaction) {
@@ -86,8 +95,8 @@ struct TransactionTransferView: View {
                             }
                         }
                         .disabled(!isFormValid)
-                        .listRowBackground(isFormValid ? Color.blue : Color.gray.opacity(0.3))
-                        .foregroundColor(isFormValid ? .white : .gray)
+                        .listRowBackground(isFormValid ? Color("ячейка") : Color.gray.opacity(0.3))
+                        .foregroundColor(isFormValid ? Color("текст") : .gray)
                     }
                 }
                 .scrollContentBackground(.hidden)

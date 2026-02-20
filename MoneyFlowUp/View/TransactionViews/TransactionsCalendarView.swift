@@ -65,7 +65,7 @@ struct TransactionsCalendarView: View {
     var body: some View {
         ZStack {
             // Фоновый цвет из ассетов
-            Color("ColorSet")
+            Color("фон")
                 .ignoresSafeArea() // Растягиваем фон на всю область
             
             VStack {
@@ -135,7 +135,7 @@ struct TransactionsCalendarView: View {
                             .onDelete(perform: deleteTransaction)
                         }
                         .listStyle(.plain) // Плоский стиль списка
-                        .background(Color("ColorSet")) // Подкладываем фон под List
+                        .background(Color("фон")) // Подкладываем фон под List
                     }
                     Spacer() // Заполняем оставшееся пространство
                 }

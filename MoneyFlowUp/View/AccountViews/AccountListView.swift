@@ -16,7 +16,7 @@ struct AccountListView: View {
     var body: some View {
         ZStack {
             // Фоновый цвет из Assets
-            Color("ColorSet")
+            Color("фон")
                 .ignoresSafeArea()
             
             VStack {
@@ -27,7 +27,7 @@ struct AccountListView: View {
                     } label: {
                         Text(.now, format: .dateTime.day().month(.wide))
                             .font(.title)
-                        
+                            .foregroundStyle(.текст2)
                             .frame(maxWidth: 260, alignment: .center)
                             .environment(\.locale, Locale(identifier: "ru_RU"))
                     }
@@ -40,13 +40,13 @@ struct AccountListView: View {
                         Image(systemName: "plus")
                     }
                     .font(.largeTitle)
-                    .tint(.black)
+                    .tint(.текст2)
                     .padding(.leading, 10)
                 }
                 
                 // Разделительная линия
                 Rectangle()
-                    .fill(Color.black)
+                    .fill(.текст2)
                     .frame(height: 0.5)
                 
                 // Список аккаунтов
@@ -60,12 +60,12 @@ struct AccountListView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color("ColorSet").opacity(0.9))
+                                        .fill(Color("ячейка").opacity(0.9))
                                         .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                                 )
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.black, lineWidth: 1)
+                                        .stroke(Color("текст2"), lineWidth: 1)
                                 )
                         }
                         .buttonStyle(.plain)
@@ -128,17 +128,17 @@ struct AccountListView: View {
                         path.append(.addTransaction)
                     }) {
                         Text("добавить транзакцию")
-                            .foregroundColor(.black)
+                            .foregroundColor(Color("текст"))
                             .lineLimit(1)
                             .minimumScaleFactor(0.9)
                             .frame(width: proxy.size.width * 0.85, height: 50)
                             .background(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color("addColor")).opacity(0.9)
+                                    .fill(Color("текст2")).opacity(0.9)
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color.black, lineWidth: 1)
+                                    .stroke(Color(""), lineWidth: 1)
                             )
                     }
                     .contentShape(RoundedRectangle(cornerRadius: 20))

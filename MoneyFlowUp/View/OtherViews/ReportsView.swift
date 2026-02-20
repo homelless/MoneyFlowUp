@@ -14,7 +14,7 @@ struct ReportsView: View {
     
     var body: some View {
         ZStack {
-            Color("ColorSet").ignoresSafeArea() // Фон из вашего набора цветов на весь экран
+            Color("фон").ignoresSafeArea() // Фон из вашего набора цветов на весь экран
             
             ScrollView { // Прокручиваемый контейнер для контента
                 VStack(spacing: 16) { // Вертикальная колонка элементов с отступом между блоками

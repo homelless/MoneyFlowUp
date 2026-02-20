@@ -149,7 +149,7 @@ import SwiftData
         var body: some View {
             ZStack {
                 // Фоновый цвет из ассетов
-                Color("ColorSet")
+                Color("фон")
                     .ignoresSafeArea()
                 
                 VStack {
@@ -289,7 +289,7 @@ import SwiftData
                             .onDelete(perform: deleteTransactions)
                         }
                         .listStyle(.plain)
-                        .background(Color("ColorSet"))
+                        .background(Color("фон"))
                     }
                 }
             }
@@ -333,7 +333,7 @@ import SwiftData
                                 .frame(width: proxy.size.width * 0.85, height: 50)
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(Color("addColor")).opacity(0.9)
+                                        .fill(Color("кнопка")).opacity(0.9)
                                 )
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 20)

@@ -42,7 +42,7 @@ struct AccountAddView: View {
                     dismiss()
                 }
                 .frame(maxWidth: .infinity)
-                .tint(.colorSet)
+                .tint(.кнопка)
                 // Блокируем кнопку, если имя пустое/из пробелов
                 .disabled(account.name.trimmingCharacters(in: .whitespaces).isEmpty)
                 .disabled(account.balance.trimmingCharacters(in: .whitespaces).isEmpty)

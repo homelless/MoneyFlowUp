@@ -29,7 +29,7 @@ struct TransactionCostView: View {
         
             ZStack {
                 // Фоновый цвет
-                Color("ColorSet")
+                Color("фон")
                     .ignoresSafeArea()
                 
                 // Основная форма ввода данных транзакции
@@ -42,22 +42,25 @@ struct TransactionCostView: View {
                                     Text(account.name)
                                     Spacer()
                                     Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(Color("текст"))
                                 }
                                 .tag(account as Account?) // связываем элемент с выбранным Account?
                             }
                         }
                         .pickerStyle(.navigationLink)
                     }
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
+        
                     // Отображение и выбор категории расхода
                     Section("Категория") {
                         if let selectedCategory {
                             HStack {
                                 Image(systemName: selectedCategory.icon)
                                     .frame(width: 30)
-                                
+                                    .foregroundColor(Color("текст"))
                                 Text(selectedCategory.name)
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(Color("текст"))
                                 
                                 Spacer()
                                 
@@ -65,7 +68,8 @@ struct TransactionCostView: View {
                                     showCategoryPicker.toggle()
                                 }) {
                                     Image(systemName: "chevron.right")
-                                        .foregroundColor(.gray)
+                                        .foregroundColor(Color("текст"))
+                                        .foregroundStyle(Color("текст"))
                                 }
                             }
                         } else {
@@ -73,36 +77,42 @@ struct TransactionCostView: View {
                             HStack {
                                 Image(systemName: "questionmark.circle")
                                     .frame(width: 30)
+                                    .foregroundColor(Color("текст"))
                                 Text("Нет доступных категорий")
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color("текст"))
                                 Spacer()
                             }
                         }
                     }
-                    
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
                     // Ввод суммы
                     Section("Сумма") {
                         TextField("0", text: $amount)
                             .keyboardType(.decimalPad)
                     }
-                    
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
                     // Выбор даты и времени
                     Section("") {
                         DatePicker("Дата",
                                    selection: $transactionDate,
                                    displayedComponents: [.date, .hourAndMinute])
-                        .datePickerStyle(.compact)
+                        .tint(Color("текст"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .environment(\.locale, Locale(identifier: "ru_RU"))
                         
                     }
-                   
+                    .listRowBackground(Color("ячейка"))
+                    .foregroundStyle(Color("текст"))
+                    
                     // Ввод заметки (опционально)
                     Section("Описание") {
                         TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
                             .lineLimit(2...4)
                     }
-                    
+                    .listRowBackground(Color("ячейка"))
+                    .foregroundStyle(Color("текст"))
                     // Кнопка сохранения (активна при валидной форме)
                     Section {
                         Button(action: saveTransaction) {
@@ -114,22 +124,13 @@ struct TransactionCostView: View {
                             }
                         }
                         .disabled(!isFormValid)
-                        .listRowBackground(isFormValid ? Color.blue : Color.gray.opacity(0.3))
-                        .foregroundColor(isFormValid ? .white : .gray)
+                        .listRowBackground(isFormValid ? Color("ячейка") : Color.gray.opacity(0.3))
+                        .foregroundColor(isFormValid ? Color("текст") : .gray)
                     }
                 }
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Новые траты")
-                .navigationBarTitleDisplayMode(.inline)
                 
-                // Кнопка отмены в тулбаре
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Отмена") {
-                            dismiss()
-                        }
-                    }
-                }
+
                 // Шит выбора категории расходов
                 .sheet(isPresented: $showCategoryPicker) {
                     if let binding = Binding($selectedCategory) {

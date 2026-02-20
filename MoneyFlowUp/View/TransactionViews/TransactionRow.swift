@@ -43,7 +43,7 @@ struct TransactionRow: View {
                 }
                 Text(accountName)
                     .font(.caption2)
-                    .foregroundStyle(.colorMoney)
+                    .foregroundStyle(.текст)
                     .lineLimit(1)
             }
         }

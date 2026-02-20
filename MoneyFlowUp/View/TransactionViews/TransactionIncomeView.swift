@@ -25,7 +25,7 @@ struct TransactionIncomeView: View {
     var body: some View {
             ZStack {
                 // Фоновый цвет экрана
-                Color("ColorSet")
+                Color("фон")
                     .ignoresSafeArea()
                 
                 Form {
@@ -38,13 +38,15 @@ struct TransactionIncomeView: View {
                                     Spacer()
                                     // Отображаем баланс и валюту выбранного кошелька
                                     Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(Color("текст"))
                                 }
                                 .tag(account as Account?)
                             }
                         }
                         .pickerStyle(.navigationLink)
                     }
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
                     
                     // Отображение и выбор категории расхода
                     Section("Категория") {
@@ -52,17 +54,17 @@ struct TransactionIncomeView: View {
                             HStack {
                                 Image(systemName: selectedCategory.icon)
                                     .frame(width: 30)
-                                
+                                    .foregroundColor(Color("текст"))
                                 Text(selectedCategory.name)
-                                    .foregroundColor(.primary)
-                                
+                                    .foregroundColor(Color("текст"))
                                 Spacer()
                                 
                                 Button(action: {
                                     showCategoryPicker.toggle()
                                 }) {
                                     Image(systemName: "chevron.right")
-                                        .foregroundColor(.gray)
+                                        .foregroundColor(Color("текст"))
+                                        .foregroundStyle(Color("текст"))
                                 }
                             }
                         } else {
@@ -70,37 +72,43 @@ struct TransactionIncomeView: View {
                             HStack {
                                 Image(systemName: "questionmark.circle")
                                     .frame(width: 30)
+                                    .foregroundColor(Color("текст"))
                                 Text("Нет доступных категорий")
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(Color("текст"))
                                 Spacer()
                             }
                         }
                     }
-                    
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
                     // Блок ввода суммы
                     Section("Сумма") {
-                        HStack {
                             TextField("0", text: $amount)
                                 .keyboardType(.decimalPad) // Числовая клавиатура
-                        }
                     }
+                    .listRowBackground(Color("ячейка"))
+                     .foregroundStyle(Color("текст"))
                     
                     // Блок выбора даты и времени
                     Section("") {
                         DatePicker("Дата",
                                    selection: $transactionDate,
                                    displayedComponents: [.date, .hourAndMinute])
-                        .datePickerStyle(.compact)
+                        .tint(Color("текст"))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .environment(\.locale, Locale(identifier: "ru_RU"))
                         
                     }
+                    .listRowBackground(Color("ячейка"))
+                    .foregroundStyle(Color("текст"))
                     
                     // Блок ввода описания (необязательно)
                     Section("Описание") {
                         TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
                             .lineLimit(2...4)
                     }
+                    .listRowBackground(Color("ячейка"))
+                    .foregroundStyle(Color("текст"))
                     
                     // Кнопка сохранения
                     Section {
@@ -112,16 +120,14 @@ struct TransactionIncomeView: View {
                                 Spacer()
                             }
                         }
-                        // Деактивируем кнопку, если форма невалидна
                         .disabled(!isFormValid)
-                        // Цвет строки зависит от валидности
-                        .listRowBackground(isFormValid ? Color.green : Color.gray.opacity(0.3))
-                        .foregroundColor(isFormValid ? .white : .gray)
+                        .listRowBackground(isFormValid ? Color("ячейка") : Color.gray.opacity(0.3))
+                        .foregroundColor(isFormValid ? Color("текст") : .gray)
                     }
                 }
                 .scrollContentBackground(.hidden)
-                .navigationTitle("Новый заработок")
-                .navigationBarTitleDisplayMode(.inline)
+                
+                
                 .toolbar {
                     // Кнопка отмены в навигации
                     ToolbarItem(placement: .navigationBarLeading) {

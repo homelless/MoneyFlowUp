@@ -11,17 +11,17 @@ struct AccountRow: View {
             Image(systemName: "wallet.bifold")
                 .resizable()
                 .frame(width: 30, height: 30)
-                .foregroundStyle(Color.init("ColorMoney"))
+                .foregroundStyle(Color.init("текст"))
                 
             VStack(alignment: .leading) {
                 Text(account.name)
                     .font(.headline)
-                    .foregroundStyle(Color.init("ColorMoney"))
+                    .foregroundStyle(Color.init("текст"))
                     .lineLimit(1)
                 HStack{
                     Text("\(account.balance.description)\(account.currency.rawValue)")
                         .font(.subheadline)
-                        .foregroundStyle(Color.init("ColorMoney"))
+                        .foregroundStyle(Color.init("текст"))
                         .lineLimit(1)
                 }
             }

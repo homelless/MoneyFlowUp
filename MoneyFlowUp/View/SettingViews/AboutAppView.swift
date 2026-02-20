@@ -3,7 +3,7 @@ import SwiftUI
 struct AboutAppView: View {
     var body: some View {
         ZStack {
-            Color("ColorSet").ignoresSafeArea()
+            Color("фон").ignoresSafeArea()
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Об этом приложении")

@@ -137,7 +137,7 @@ struct TransactionsListView: View {
     var body: some View {
         ZStack {
             // Фоновый цвет из ассетов
-            Color("ColorSet")
+            Color("фон")
                 .ignoresSafeArea()
             
             VStack {
@@ -277,7 +277,7 @@ struct TransactionsListView: View {
                         .onDelete(perform: deleteTransactions)
                     }
                     .listStyle(.plain)
-                    .background(Color("ColorSet"))
+                    .background(Color("фон"))
                 }
             }
         }
@@ -321,7 +321,7 @@ struct TransactionsListView: View {
                             .frame(width: proxy.size.width * 0.85, height: 50)
                             .background(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color("addColor")).opacity(0.9)
+                                    .fill(Color("фон")).opacity(0.9)
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
