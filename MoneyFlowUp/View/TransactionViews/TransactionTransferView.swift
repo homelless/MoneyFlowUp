@@ -65,17 +65,13 @@ struct TransactionTransferView: View {
                     .listRowBackground(Color("ячейка"))
                      .foregroundStyle(Color("текст"))
                     
-                    Section("") {
-                        DatePicker("Дата",
-                                   selection: $transactionDate,
-                                   displayedComponents: [.date, .hourAndMinute])
-                        .tint(Color("текст"))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .environment(\.locale, Locale(identifier: "ru_RU"))
-                        
+                    // Выбор даты и времени
+                    Section("Выберите дату") {
+                        CompactDatePicker(title: nil, selection: $transactionDate)
                     }
                     .listRowBackground(Color("ячейка"))
                     .foregroundStyle(Color("текст"))
+                    
                    
                     
                     Section("Описание") {

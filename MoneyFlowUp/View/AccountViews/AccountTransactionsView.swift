@@ -160,9 +160,15 @@ import SwiftData
                             case .custom:
                                 // Для кастомного периода показываем два DatePicker'а: начало и конец
                                 VStack(spacing: 8) {
-                                    DatePicker("Начало", selection: $customStartDate, displayedComponents: .date)
+                                    CompactDatePicker(title: "Начало", selection: $customStartDate)
+                                        .foregroundStyle(Color(.текст))
                                         .datePickerStyle(.compact)
-                                    DatePicker("Конец", selection: $customEndDate, displayedComponents: .date)
+                                    Rectangle()
+                                        .fill(.текст2)
+                                        .frame(height: 0.5)
+                                    
+                                    CompactDatePicker(title: "Конец", selection: $customEndDate)
+                                        .foregroundStyle(Color(.текст))
                                         .datePickerStyle(.compact)
                                 }
                                 .padding(.horizontal)
@@ -174,17 +180,17 @@ import SwiftData
                                         shiftPeriod(by: -1)
                                     } label: {
                                         Image(systemName: "chevron.left")
+                                            .foregroundStyle(.текст)
+
                                     }
                                     Spacer()
-                                    DatePicker("Дата", selection: $selectedDate, displayedComponents: .date)
-                                        .labelsHidden()
-                                        .datePickerStyle(.compact)
-                                        .environment(\.locale, Locale(identifier: "ru_RU"))
+                                    CompactDatePicker(title: nil, selection: $selectedDate)
                                     Spacer()
                                     Button {
                                         shiftPeriod(by: 1)
                                     } label: {
                                         Image(systemName: "chevron.right")
+                                            .foregroundStyle(.текст)
                                     }
                                 }
                                 .padding(.horizontal)
@@ -192,16 +198,22 @@ import SwiftData
                         }
                         
                         // Переключатель периода (День/Неделя/Месяц/Год/Период)
-                        Picker("Период", selection: $selectedPeriod) {
+                        HStack(spacing: 8) {
                             ForEach(Period.allCases) { period in
-                                Text(period.rawValue).tag(period)
+                                Button(action: { selectedPeriod = period }) {
+                                    Text(period.rawValue)
+                                        .font(.system(size: 14, weight: .medium))
+                                        .padding(.vertical, 8)
+                                        .padding(.horizontal, 16)
+                                        .background(selectedPeriod == period ? Color("текст2") : Color("ячейка"))
+                                        .foregroundColor(selectedPeriod == period ? .white : .primary)
+                                        .cornerRadius(12)
+                                }
                             }
                         }
-                        .pickerStyle(.segmented)
                         .padding(.horizontal)
                         
                         // Горизонтальная полоса чипов фильтра по группе транзакций
-                        ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
                                 ForEach(TransactionGroup.allCases, id: \.self) { group in
                                     Button(action: { selectedFilter = group }) {
@@ -215,13 +227,12 @@ import SwiftData
                                 }
                             }
                             .padding(.horizontal)
-                        }
                         
                         // Панель "Итого" с суммой и цветовой индикацией по типу
                         HStack {
                             Text("Итого:")
                                 .font(.headline)
-                            
+                                .foregroundColor(.текст)
                             Spacer()
                             
                             Text("\(totalAmount, specifier: "%.2f")$")
@@ -234,7 +245,7 @@ import SwiftData
                         }
                         .padding(.horizontal)
                         .padding(.vertical, 8)
-                        .background(Color(.systemGray6))
+                        .background(Color("ячейка"))
                         .cornerRadius(10)
                         .padding(.horizontal)
                     }
@@ -246,15 +257,15 @@ import SwiftData
                         VStack(spacing: 16) {
                             Image(systemName: "list.bullet.rectangle")
                                 .font(.system(size: 60))
-                                .foregroundColor(.gray)
-                            
+                                .foregroundColor(.текст)
+
                             Text("Нет транзакций")
                                 .font(.title3)
-                                .foregroundColor(.secondary)
-                            
+                                .foregroundColor(.текст)
+
                             Text("Здесь появятся транзакции за выбранный период")
                                 .font(.callout)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.текст)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 40)
                         }
@@ -333,11 +344,11 @@ import SwiftData
                                 .frame(width: proxy.size.width * 0.85, height: 50)
                                 .background(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(Color("кнопка")).opacity(0.9)
+                                        .fill(Color("текст2")).opacity(0.9)
                                 )
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 20)
-                                        .stroke(Color.black, lineWidth: 1)
+                                        .stroke(Color("текст"), lineWidth: 1)
                                 )
                         }
                         .contentShape(RoundedRectangle(cornerRadius: 20))

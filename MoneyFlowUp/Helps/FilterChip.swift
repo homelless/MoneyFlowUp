@@ -23,18 +23,18 @@ struct FilterChip: View {
             }
             
             Text(title)
-                .font(.subheadline)
+                .font(.system(size: 14, weight: .medium))
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
         // Фон и цвет текста зависят от isSelected
-        .background(isSelected ? color.opacity(0.2) : Color(.systemGray6))
-        .foregroundColor(isSelected ? color : .primary)
+        .background(Color.ячейка)
+        .foregroundColor(Color.текст)
         .cornerRadius(20)
         // Обводка появляется только в выбранном состоянии
         .overlay(
             RoundedRectangle(cornerRadius: 20)
-                .stroke(isSelected ? color : Color.clear, lineWidth: 1)
+                .stroke(isSelected ? color : Color.clear, lineWidth: 2)
         )
     }
 }

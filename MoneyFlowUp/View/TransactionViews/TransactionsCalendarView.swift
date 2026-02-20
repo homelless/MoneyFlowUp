@@ -80,14 +80,10 @@ struct TransactionsCalendarView: View {
                         .fill(Color.black)
                         .frame(height: 0.5)
                     
-                    // Горизонтальная прокрутка с чипами фильтров по группам транзакций
-                    ScrollView(.horizontal, showsIndicators: false) {
+                    // Горизонтальная полоса чипов фильтра по группе транзакций
                         HStack(spacing: 8) {
-                            // Перебираем все группы (например, доход, расход, перевод)
                             ForEach(TransactionGroup.allCases, id: \.self) { group in
-                                // Кнопка выбора фильтра
                                 Button(action: { selectedFilter = group }) {
-                                    // Кастомный чип с иконкой, цветом и состоянием выбранности
                                     FilterChip(
                                         title: group.rawValue,
                                         icon: group.icon,
@@ -97,8 +93,7 @@ struct TransactionsCalendarView: View {
                                 }
                             }
                         }
-                        .padding(.horizontal, 25) // Отступы слева/справа для содержимого скролла
-                    }
+                        .padding(.horizontal)
                     
                     // Если после фильтрации транзакций нет — показываем пустое состояние
                     if filteredTransactions.isEmpty {

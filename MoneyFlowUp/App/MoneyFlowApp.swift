@@ -61,6 +61,7 @@ struct RootView: View {
                                 SettingView(transactionVM: transactionVM)
                             }
                         }
+                        .tint(Color("текст"))
                         .safeAreaInset(edge: .bottom) {
                             Color.clear.frame(height: 100)
                         }

@@ -94,14 +94,8 @@ struct TransactionCostView: View {
                     .listRowBackground(Color("ячейка"))
                      .foregroundStyle(Color("текст"))
                     // Выбор даты и времени
-                    Section("") {
-                        DatePicker("Дата",
-                                   selection: $transactionDate,
-                                   displayedComponents: [.date, .hourAndMinute])
-                        .tint(Color("текст"))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .environment(\.locale, Locale(identifier: "ru_RU"))
-                        
+                    Section("Выберите дату") {
+                        CompactDatePicker(title: nil, selection: $transactionDate)
                     }
                     .listRowBackground(Color("ячейка"))
                     .foregroundStyle(Color("текст"))

@@ -30,6 +30,7 @@ struct TransactionView: View {
                     TransactionsListView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
                 }
             }
+            .tint(Color("текст"))
             // Дополнительный отступ под таббар/кнопки снизу, чтобы контент не перекрывался
             .safeAreaInset(edge: .bottom) {
                 Color.clear.frame(height: 100)

@@ -128,7 +128,7 @@ struct AccountListView: View {
                         path.append(.addTransaction)
                     }) {
                         Text("добавить транзакцию")
-                            .foregroundColor(Color("текст"))
+                            .foregroundColor(.black)
                             .lineLimit(1)
                             .minimumScaleFactor(0.9)
                             .frame(width: proxy.size.width * 0.85, height: 50)
@@ -138,7 +138,7 @@ struct AccountListView: View {
                             )
                             .overlay(
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color(""), lineWidth: 1)
+                                    .stroke(Color("текст"), lineWidth: 1)
                             )
                     }
                     .contentShape(RoundedRectangle(cornerRadius: 20))
