@@ -70,16 +70,18 @@ struct TransactionsCalendarView: View {
             
             VStack {
                 // Графический календарь для выбора даты
-                DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                    .datePickerStyle(.graphical)
-                    .environment(\.locale, Locale(identifier: "ru_RU")) // Русская локаль (названия месяцев/дней)
-                
                 VStack {
+                    DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                        .environment(\.locale, Locale(identifier: "ru_RU"))
+                        .tint(Color.текст)
                     // Тонкая разделительная линия
                     Rectangle()
-                        .fill(Color.black)
+                        .fill(Color.текст)
                         .frame(height: 0.5)
-                    
+                }
+                .background(.ячейка)
+                VStack {
                     // Горизонтальная полоса чипов фильтра по группе транзакций
                     HStack(spacing: 8) {
                         Button(action: { selectedFilter = nil }) {

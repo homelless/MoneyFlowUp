@@ -57,6 +57,7 @@ struct ReportsView: View {
                 HStack {
                     Text("Период")
                         .font(.headline)
+                        .foregroundStyle(.текст)
                           Spacer()
              
                     DatePicker("С", selection: Binding(get: { vm.fromDate }, set: { vm.fromDate = $0 }), displayedComponents: .date)
@@ -76,6 +77,7 @@ struct ReportsView: View {
             HStack {
                 Text("Категория")     // Подпись
                     .font(.headline)
+                    .foregroundStyle(.текст)
                 Spacer()
                 Picker("", selection: $vm.flowFilter) { // Сегментированный фильтр: Доход/Расход/Оба
                     ForEach(ReportsViewModel.FlowFilter.allCases) { f in
@@ -103,20 +105,20 @@ struct ReportsView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title)
                 .font(.subheadline)
-                .foregroundColor(.secondary)
+                .foregroundColor(.текст)
             Text(value, format: .currency(code: "$"))
                 .font(.title3.bold())
                 .foregroundColor(color)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
+        .background(Color("ячейка"))
         .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground).opacity(0.8))
+            RoundedRectangle(cornerRadius: 12),
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                .stroke(Color.текст, lineWidth: 1)
         )
     }
     
@@ -127,6 +129,8 @@ struct ReportsView: View {
             Text(titleForDonut) // Заголовок блока
                 .font(.headline)
                 .frame(maxWidth: .infinity, alignment: .center)
+                .foregroundStyle(.текст)
+
             
             if vm.donutSlices.isEmpty { // Если нет сегментов — пустое состояние
                 emptyState
@@ -135,7 +139,7 @@ struct ReportsView: View {
                     ForEach(vm.donutSlices) { slice in // Для каждого сегмента
                         SectorMark(
                             angle: .value("Сумма", slice.amount),
-                            innerRadius: .ratio(0.45),
+                            innerRadius: .ratio(0.55),
                             outerRadius: .ratio(1.0)
                         )
                         .foregroundStyle(slice.color)
@@ -154,13 +158,13 @@ struct ReportsView: View {
                 }
                 .padding(.vertical, 12)
                 .frame(height: 320)
+                .background(Color("ячейка"))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(.systemBackground).opacity(0.8))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    .stroke(Color.текст, lineWidth: 1)
                 )
                 
                 // Легенда под диаграммой
@@ -175,20 +179,20 @@ struct ReportsView: View {
                             Text(slice.amount, format: currency)
                                 .font(.callout.monospacedDigit())
                             Text("(\(Int(round(slice.percent * 100)))%)")
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.текст)
                                 .font(.caption)
                         }
                         .padding(.horizontal, 8)
                     }
                 }
                 .padding(.vertical, 10)
+                .background(Color("ячейка"))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(.systemBackground).opacity(0.8))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    .stroke(Color.текст, lineWidth: 1)
                 )
             }
         }
@@ -207,15 +211,15 @@ struct ReportsView: View {
         VStack(spacing: 8) {
             Image(systemName: "chart.pie")
                 .font(.system(size: 48))
-                .foregroundColor(.secondary)
+                .foregroundColor(.текст)
             Text("Нет данных за выбранный период")
-                .foregroundColor(.secondary)
+                .foregroundColor(.текст)
         }
         .frame(maxWidth: .infinity)
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemBackground).opacity(0.8))
+                .fill(Color(.ячейка).opacity(0.8))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
