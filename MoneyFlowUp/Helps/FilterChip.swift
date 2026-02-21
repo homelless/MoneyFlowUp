@@ -23,7 +23,7 @@ struct FilterChip: View {
             }
             
             Text(title)
-                .font(.system(size: 14, weight: .medium))
+                .font(.system(size: 11, weight: .medium))
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 8)

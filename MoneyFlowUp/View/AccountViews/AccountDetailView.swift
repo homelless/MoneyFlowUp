@@ -25,48 +25,68 @@ struct AccountDetailView: View {
     }
     
     var body: some View {
-        Form {
-            // Имя кошелька
-            Section("Name wallet") {
-                TextField("name", text: $name)
-            }
-            // Баланс
-            Section("Balance") {
-                TextField("0", text: $balance)
-            }
-            // Валюта
-            Section("Currency") {
-                Picker("Currency", selection: $currencyRaw) {
-                    ForEach(Currency.allCases){ currency in
-                        Text(currency.rawValue).tag(currency)
+        ZStack {
+            // Фоновый цвет
+            Color("фон").ignoresSafeArea()
+            
+            Form {
+                // Имя кошелька
+                Section("Имя кошелька") {
+                    TextField("", text: $name)
+                }
+                .listRowBackground(Color("ячейка"))
+                .foregroundStyle(Color("текст"))
+                // Баланс
+                Section("Баланс") {
+                    TextField("", text: $balance)
+                }
+                .listRowBackground(Color("ячейка"))
+                .foregroundStyle(Color("текст"))
+                // Валюта
+                Section("Валюта") {
+                    Picker("", selection: $currencyRaw) {
+                        ForEach(Currency.allCases){ currency in
+                            Text(currency.rawValue).tag(currency)
+                                .foregroundColor(.текст)
+                        }
                     }
+
+                }
+                .listRowBackground(Color("ячейка"))
+                .foregroundStyle(Color("текст"))
+                .foregroundColor(.текст)
+                .tint(.текст)
+
+                // Описание
+                Section("Описание") {
+                    TextEditor(text: $descriptionAccount)
+                        .frame(height: 200)
+                }
+                .listRowBackground(Color("ячейка"))
+                .foregroundStyle(Color("текст"))
+                // Кнопка сохранения изменений
+                Section {
+                    Button(action: {
+                        accountVM.updateAccount(id: account.id,
+                                                name: name,
+                                                balance: balance,
+                                                currencyRaw: currencyRaw,
+                                                descriptionAccount: descriptionAccount)
+                        dismiss()
+                    }) {
+                        HStack {
+                            Spacer()
+                            Text("Сохранить")
+                            Spacer()
+                        }
+                    }
+                    .listRowBackground(Color("ячейка"))
+                    .foregroundStyle(Color("текст"))
+                    .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
-            // Описание
-            Section("Description") {
-                TextEditor(text: $descriptionAccount)
-                    .frame(height: 200)
-            }
-            // Кнопка сохранения изменений
-            Section {
-                Button(action: {
-                    accountVM.updateAccount(id: account.id,
-                                            name: name,
-                                            balance: balance,
-                                            currencyRaw: currencyRaw,
-                                            descriptionAccount: descriptionAccount)
-                    dismiss()
-                }) {
-                    HStack {
-                        Spacer()
-                        Text("Сохранить")
-                        Spacer()
-                    }
-                }
-                .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            }
+            .navigationTitle("Редактировать кошелек")
+            .scrollContentBackground(.hidden)
         }
-        .navigationTitle("Редактировать кошелек")
     }
 }
-

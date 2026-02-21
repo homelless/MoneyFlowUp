@@ -18,9 +18,11 @@ enum TransactionGroup: String, CaseIterable {
             return "dollarsign.ring.dashed"
         case .transfer:
             return "arrow.triangle.2.circlepath"
+            
         }
     }
     
+    static var allCases: [TransactionGroup] = [.cost, .income, .transfer]
     // Цвет группы (используется в UI при выделении)
     var color: Color {
         switch self {

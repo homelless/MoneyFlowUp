@@ -21,8 +21,8 @@ struct TransactionsListView: View {
     // Начало и конец кастомного диапазона (для "Период")
     @State private var customStartDate = Calendar.current.startOfDay(for: Date())
     @State private var customEndDate = Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: Date())) ?? Date()
-    // Текущий фильтр группы транзакций (по умолчанию — траты)
-    @State private var selectedFilter: TransactionGroup = .cost
+    // Текущий фильтр группы транзакций: nil = все группы
+    @State private var selectedFilter: TransactionGroup? = .cost
     // Текущий выбранный период
     @State private var selectedPeriod: Period = .day
     
@@ -114,15 +114,18 @@ struct TransactionsListView: View {
         }
         
         // Дополнительная фильтрация по группе:
+        // - nil => все группы (не фильтруем),
         // - для .transfer — по флагу isTransfer,
         // - для остальных — по группе доменной категории.
-        if selectedFilter == .transfer {
-            filtered = filtered.filter { tx in
-                tx.isTransfer
-            }
-        } else {
-            filtered = filtered.filter { tx in
-                tx.category.group == selectedFilter
+        if let selectedFilter {
+            if selectedFilter == .transfer {
+                filtered = filtered.filter { tx in
+                    tx.isTransfer
+                }
+            } else {
+                filtered = filtered.filter { tx in
+                    tx.category.group == selectedFilter
+                }
             }
         }
         // Сортировка по дате убыванию
@@ -202,21 +205,31 @@ struct TransactionsListView: View {
                     .padding(.horizontal)
                     
                     // Горизонтальная полоса чипов фильтра по группе транзакций
-                        HStack(spacing: 8) {
-                            ForEach(TransactionGroup.allCases, id: \.self) { group in
-                                Button(action: { selectedFilter = group }) {
-                                    FilterChip(
-                                        title: group.rawValue,
-                                        icon: group.icon,
-                                        color: group.color,
-                                        isSelected: selectedFilter == group
-                                    )
-                                }
+                    HStack(spacing: 8) {
+                        Button(action: { selectedFilter = nil }) {
+                            FilterChip(
+                                title: "Все",
+                                icon: "tray.full",
+                                color: .gray,
+                                isSelected: selectedFilter == nil
+                            )
+                        }
+                        ForEach(TransactionGroup.allCases, id: \.self) { group in
+                            Button(action: { selectedFilter = group }) {
+                                FilterChip(
+                                    title: group.rawValue,
+                                    icon: group.icon,
+                                    color: group.color,
+                                    isSelected: selectedFilter == group
+                                )
                             }
                         }
+                    }
                         .padding(.horizontal)
                     
                     // Панель "Итого" с суммой и цветовой индикацией по типу
+                    if selectedFilter != nil {
+                        
                     HStack {
                         Text("Итого:")
                             .font(.headline)
@@ -227,15 +240,23 @@ struct TransactionsListView: View {
                             .font(.title2)
                             .bold()
                             .foregroundColor(
-                                selectedFilter == .cost ? .red :
-                                (selectedFilter == .income ? .green : .blue)
+                                {
+                                    switch selectedFilter {
+                                    case .some(.cost): return .red
+                                    case .some(.income): return .green
+                                    case .some(.transfer): return .blue
+                                    case .none: return .primary
+                                    }
+                                }()
                             )
                     }
+                
                     .padding(.horizontal)
                     .padding(.vertical, 8)
                     .background(Color("ячейка"))
                     .cornerRadius(10)
                     .padding(.horizontal)
+                }
                 }
                 .padding(.vertical)
                 

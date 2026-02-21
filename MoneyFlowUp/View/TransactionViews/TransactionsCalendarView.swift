@@ -81,18 +81,26 @@ struct TransactionsCalendarView: View {
                         .frame(height: 0.5)
                     
                     // Горизонтальная полоса чипов фильтра по группе транзакций
-                        HStack(spacing: 8) {
-                            ForEach(TransactionGroup.allCases, id: \.self) { group in
-                                Button(action: { selectedFilter = group }) {
-                                    FilterChip(
-                                        title: group.rawValue,
-                                        icon: group.icon,
-                                        color: group.color,
-                                        isSelected: selectedFilter == group
-                                    )
-                                }
+                    HStack(spacing: 8) {
+                        Button(action: { selectedFilter = nil }) {
+                            FilterChip(
+                                title: "Все",
+                                icon: "tray.full",
+                                color: .gray,
+                                isSelected: selectedFilter == nil
+                            )
+                        }
+                        ForEach(TransactionGroup.allCases, id: \.self) { group in
+                            Button(action: { selectedFilter = group }) {
+                                FilterChip(
+                                    title: group.rawValue,
+                                    icon: group.icon,
+                                    color: group.color,
+                                    isSelected: selectedFilter == group
+                                )
                             }
                         }
+                    }
                         .padding(.horizontal)
                     
                     // Если после фильтрации транзакций нет — показываем пустое состояние
@@ -100,16 +108,16 @@ struct TransactionsCalendarView: View {
                         VStack(spacing: 16) {
                             Image(systemName: "list.bullet.rectangle")
                                 .font(.system(size: 60))
-                                .foregroundColor(.gray)
+                                .foregroundColor(.текст)
                                 .padding(.top, 40)
                             
                             Text("Нет транзакций")
                                 .font(.title3)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.текст)
                             
                             Text("Здесь появятся транзакции на выбранную дату")
                                 .font(.callout)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.текст)
                                 .multilineTextAlignment(.center)
                                 .padding(.horizontal, 40)
                         }

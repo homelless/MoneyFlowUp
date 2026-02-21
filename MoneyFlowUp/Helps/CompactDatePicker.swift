@@ -27,7 +27,7 @@ struct CompactDatePicker: View {
                         .font(.headline)
                         .foregroundStyle(Color(.текст))
                     Image(systemName: "calendar")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.текст)
                 }
                 .padding(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
