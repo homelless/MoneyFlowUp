@@ -112,9 +112,9 @@ struct ReportsView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color("ячейка"))
         .background(
-            RoundedRectangle(cornerRadius: 12),
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color("ячейка"))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
@@ -158,15 +158,14 @@ struct ReportsView: View {
                 }
                 .padding(.vertical, 12)
                 .frame(height: 320)
-                .background(Color("ячейка"))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
+                        .fill(Color("ячейка"))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.текст, lineWidth: 1)
+                        .stroke(Color.текст, lineWidth: 1)
                 )
-                
                 // Легенда под диаграммой
                 VStack(spacing: 6) {
                     ForEach(vm.donutSlices) { slice in
@@ -186,13 +185,13 @@ struct ReportsView: View {
                     }
                 }
                 .padding(.vertical, 10)
-                .background(Color("ячейка"))
                 .background(
                     RoundedRectangle(cornerRadius: 12)
+                        .fill(Color("ячейка"))
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.текст, lineWidth: 1)
+                        .stroke(Color.текст, lineWidth: 1)
                 )
             }
         }

@@ -29,64 +29,87 @@ struct SettingIncomeCategoriesView: View {
     ]
     
     var body: some View {
-        List {
-            Section("") {
-                ForEach(store.categories) { category in
-                    HStack(spacing: 12) {
-                        Image(systemName: category.icon)
-                            .foregroundStyle(category.color)
-                        Text(category.name)
-                        Spacer()
+        ZStack {
+            Color("фон")
+                .ignoresSafeArea()
+            
+            
+            List {
+                Section("") {
+                    ForEach(store.categories) { category in
+                        HStack(spacing: 12) {
+                            Image(systemName: category.icon)
+                                .foregroundStyle(category.color)
+                            Text(category.name)
+                            Spacer()
+                        }
+                    }
+                    // Удаляем только кастомные категории, пресеты пропускаем
+                    .onDelete(perform: handleDelete)
+                }
+                .listRowBackground(Color("ячейка"))
+                .foregroundStyle(Color("текст"))
+            }
+            .scrollContentBackground(.hidden)
+            .navigationTitle("Категории доходов")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isPresentingAdd = true
+                        newName = ""
+                        newIcon = ""
+                    } label: {
+                        Image(systemName: "plus")
                     }
                 }
-                // Удаляем только кастомные категории, пресеты пропускаем
-                .onDelete(perform: handleDelete)
             }
-        }
-        .navigationTitle("Категории доходов")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isPresentingAdd = true
-                    newName = ""
-                    newIcon = ""
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
-        }
-        .sheet(isPresented: $isPresentingAdd) {
-            NavigationStack {
-                Form {
-                    Section("Новая категория дохода") {
-                        TextField("Название", text: $newName)
-                        Picker("Иконка", selection: $newIcon) {
-                            ForEach(incomeCategoryIcons, id: \.self) { icon in
-                                VStack {
-                                    Image(systemName: icon)
+            .sheet(isPresented: $isPresentingAdd) {
+                NavigationStack {
+                    ZStack {
+                        Color("фон")
+                        Form {
+                            Section("Новая категория дохода") {
+                                TextField("Название", text: $newName)
+                                Picker("Иконка", selection: $newIcon) {
+                                    ForEach(incomeCategoryIcons, id: \.self) { icon in
+                                        VStack {
+                                            Image(systemName: icon)
+                                                .tint(.black)
+                                        }
+                                        .tag(icon)
+                                    }
                                 }
-                                .tag(icon)
                             }
+                            .listRowBackground(Color("ячейка"))
+                        }
+                        .scrollContentBackground(.hidden)
+                    }
+                    // Применяем стиль к контенту, не к навбара
+                    .foregroundStyle(Color("текст"))
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Отмена") { isPresentingAdd = false }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Сохранить") {
+                                store.add(name: newName, icon: newIcon)
+                                isPresentingAdd = false
+                            }
+                            .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         }
                     }
+                    // Цвет кнопок тулбара
+                    .tint(Color("текст"))
+                    // Фон навбара = ваш цвет, и сделать его видимым
+                    .toolbarBackground(Color("фон"), for: .navigationBar)
+                    .toolbarBackground(.visible, for: .navigationBar)
                 }
-                .navigationTitle("Добавить")
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Отмена") { isPresentingAdd = false }
-                    }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Сохранить") {
-                            store.add(name: newName, icon: newIcon)
-                            isPresentingAdd = false
-                        }
-                        .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                    }
-                }
+                // Убираем внешнее .background — оно не нужно и может мешать
+                .presentationDetents([.medium])
             }
-            .presentationDetents([.medium])
         }
     }
+    
     
     private func handleDelete(_ offsets: IndexSet) {
         let items = store.categories

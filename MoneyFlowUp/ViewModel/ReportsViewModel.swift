@@ -118,7 +118,7 @@ final class ReportsViewModel {
                         id: "both_income",
                         name: "Доход",
                         icon: "arrow.up.circle.fill",
-                        color: Color.green.opacity(0.85),
+                        color: Color.green.opacity(0.55),
                         amount: incomeAmount,
                         percent: incomeAmount / totalForPercent
                     )
@@ -130,7 +130,7 @@ final class ReportsViewModel {
                         id: "both_expense",
                         name: "Расход",
                         icon: "arrow.down.circle.fill",
-                        color: Color.red.opacity(0.85),
+                        color: Color.red.opacity(0.55),
                         amount: expenseAmount,
                         percent: expenseAmount / totalForPercent
                     )
@@ -202,7 +202,7 @@ final class ReportsViewModel {
     private func colorForStableID(_ id: String) -> Color {
         let hash = abs(id.hashValue)
         let hue = Double((hash % 256)) / 255.0
-        let sat = 0.85
+        let sat = 0.75
         let bri = 0.65
         return Color(hue: hue, saturation: sat, brightness: bri)
     }

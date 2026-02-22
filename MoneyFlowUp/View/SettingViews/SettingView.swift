@@ -15,13 +15,14 @@ struct SettingView: View {
             VStack {
                 List {
             
-                    Section("Настройки"){
+                    Section(""){
                         NavigationLink("О программе", destination: AboutAppView())
                         NavigationLink("Категории трат", destination: SettingCostCategoriesView())
                         NavigationLink("Категории доходов", destination: SettingIncomeCategoriesView())
                         
                     }
-                    .listRowBackground(Color("карточки"))
+                    .foregroundStyle(Color("текст"))
+                    .listRowBackground(Color("ячейка"))
                 }
                 .scrollContentBackground(.hidden)
                 .listRowBackground(Color.clear)

@@ -41,62 +41,82 @@ struct SettingCostCategoriesView: View {
     ]
     
     var body: some View {
-        List {
-            Section("") {
-                ForEach(store.categories) { category in
-                    HStack(spacing: 12) {
-                        Image(systemName: category.icon)
-                            .foregroundStyle(category.color)
-                        Text(category.name)
-                        Spacer()
+        
+        ZStack {
+            Color("фон")
+                .ignoresSafeArea()
+            
+            List {
+                Section("") {
+                    ForEach(store.categories) { category in
+                        HStack(spacing: 12) {
+                            Image(systemName: category.icon)
+                                .foregroundStyle(category.color)
+                            Text(category.name)
+                            Spacer()
+                        }
+                    }
+                    // Удаляем только кастомные категории трат
+                    .onDelete(perform: handleDelete)
+                }
+                .listRowBackground(Color("ячейка"))
+                .foregroundStyle(Color("текст"))
+            }
+            .scrollContentBackground(.hidden)
+            .navigationTitle("Категории трат")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isPresentingAdd = true
+                        newName = ""
+                        newIcon = ""
+                    } label: {
+                        Image(systemName: "plus")
                     }
                 }
-                // Удаляем только кастомные категории трат
-                .onDelete(perform: handleDelete)
             }
-        }
-        .navigationTitle("Категории трат")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    isPresentingAdd = true
-                    newName = ""
-                    newIcon = ""
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
-        }
-        .sheet(isPresented: $isPresentingAdd) {
-            NavigationStack {
-                Form {
-                    Section("Новая категория траты") {
-                        TextField("Название", text: $newName)
-                        Picker("Иконка", selection: $newIcon) {
-                            ForEach(costCategoryIcons, id: \.self) { icon in
-                                VStack {
-                                    Image(systemName: icon)
+            .sheet(isPresented: $isPresentingAdd) {
+                NavigationStack {
+                    ZStack {
+                        Color("фон")
+                    Form {
+                        Section("Новая категория траты") {
+                            TextField("Название", text: $newName)
+                            Picker("Иконка", selection: $newIcon) {
+                                ForEach(costCategoryIcons, id: \.self) { icon in
+                                    VStack {
+                                        Image(systemName: icon)
+                                            .tint(.black)
+                                    }
+                                    .tag(icon)
                                 }
-                                .tag(icon)
                             }
                         }
-                    }
-                }
-                .navigationTitle("Добавить")
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("Отмена") { isPresentingAdd = false }
-                    }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("Сохранить") {
-                            store.add(name: newName, icon: newIcon)
-                            isPresentingAdd = false
+                            .listRowBackground(Color("ячейка"))
                         }
-                        .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        .scrollContentBackground(.hidden)
                     }
+                    .foregroundStyle(Color("текст"))
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Отмена") { isPresentingAdd = false }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Сохранить") {
+                                store.add(name: newName, icon: newIcon)
+                                isPresentingAdd = false
+                            }
+                            .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        }
+                    }
+                    // Цвет кнопок тулбара
+                    .tint(Color("текст"))
+                    // Фон навбара = ваш цвет, и сделать его видимым
+                    .toolbarBackground(Color("фон"), for: .navigationBar)
+                    .toolbarBackground(.visible, for: .navigationBar)
                 }
+                .presentationDetents([.medium])
             }
-            .presentationDetents([.medium])
         }
     }
     
