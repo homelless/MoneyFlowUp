@@ -153,11 +153,10 @@
 		D05DEBDA2F052C2500D6AEED /* MoneyFlowUp */ = {
 			isa = PBXGroup;
 			children = (
+				D05DEC002F052C8100D6AEED /* App */,
 				D07104432F3264DE0071ABC0 /* Задачи.md */,
-				D0A72F882F38A97D0042B987 /* тестовые файлы */,
 				D028FA212F1D7127006A9D1A /* Helps */,
 				D06CD7352F101C50002D4A05 /* Protocols and enums */,
-				D05DEC002F052C8100D6AEED /* App */,
 				D05DEBF52F052C7800D6AEED /* View */,
 				D05DEBE92F052C7100D6AEED /* ViewModel */,
 				D05DEBDF2F052C6400D6AEED /* Model */,
@@ -252,14 +251,6 @@
 				D06CD7382F101DE4002D4A05 /* TransactionGroup.swift */,
 			);
 			path = "Protocols and enums";
-			sourceTree = "<group>";
-		};
-		D0A72F882F38A97D0042B987 /* тестовые файлы */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "тестовые файлы";
-			path = "тестовые файлы";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
