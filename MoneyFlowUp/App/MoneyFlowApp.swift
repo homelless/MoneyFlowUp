@@ -79,12 +79,18 @@ struct RootView: View {
                         case .addTransaction:
                             TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
                         case .calendar(let date):
-                            TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM)
+                            TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM,path: $path)
                         case .accountTransactions(let accountID):
                             if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
                                 AccountTransactionsView(transactionVM: transactionVM, accountVM: accountVM, path: $path, accountID: accountID)
                             } else {
                                 Text("Кошелек не найден")
+                            }
+                        case .transactionsDetail(let txID):
+                            if let tx = transactionVM.transactions.first(where: { $0.id == txID }) {
+                                TransactionDetailView(accountVM: accountVM, transactionVM: transactionVM, editingTransaction: tx)
+                            } else {
+                                Text("Транзакция не найдена")
                             }
                         }
                     }

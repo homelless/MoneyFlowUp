@@ -50,7 +50,7 @@ struct TransactionCostView: View {
                         .pickerStyle(.navigationLink)
                     }
                     .listRowBackground(Color("ячейка"))
-                     .foregroundStyle(Color("текст"))
+                    .foregroundStyle(Color("текст"))
         
                     // Отображение и выбор категории расхода
                     Section("Категория") {

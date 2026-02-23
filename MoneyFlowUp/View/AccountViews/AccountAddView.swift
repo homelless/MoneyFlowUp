@@ -11,6 +11,15 @@ struct AccountAddView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
+    // Локальный десятичный разделитель (из текущей локали)
+    private var localDecimalSeparator: String {
+        Locale.current.decimalSeparator ?? ","
+    }
+    // Альтернативный разделитель (если локальный ",", то альтернативный ".")
+    private var alternateDecimalSeparator: String {
+        localDecimalSeparator == "," ? "." : ","
+    }
+    
     var body: some View {
         
         ZStack {
@@ -28,6 +37,9 @@ struct AccountAddView: View {
                     Section("Баланс") {
                         TextField("0", text: $account.balance)
                             .keyboardType(.decimalPad)
+                            .onChange(of: account.balance) { _, newValue in
+                                account.balance = normalizeDecimalInput(newValue)
+                            }
                     }
                     .listRowBackground(Color("ячейка"))
                     .foregroundStyle(Color("текст"))
@@ -81,4 +93,50 @@ struct AccountAddView: View {
             }
         }
     }
+    
+    // Фильтрация и нормализация десятичного ввода:
+    private func normalizeDecimalInput(_ input: String) -> String {
+        // Заменим все альтернативные разделители на локальный для унификации
+        var value = input.replacingOccurrences(of: alternateDecimalSeparator, with: localDecimalSeparator)
+        
+        // Разрешенные символы: цифры и локальный разделитель
+        let allowed = Set("0123456789" + localDecimalSeparator)
+        value = value.filter { allowed.contains($0) }
+        
+        // Разрешаем только один разделитель
+        if let firstSepRange = value.range(of: localDecimalSeparator) {
+            let afterFirst = value[firstSepRange.upperBound...]
+            let cleanedAfter = afterFirst.replacingOccurrences(of: localDecimalSeparator, with: "")
+            value = value[..<firstSepRange.upperBound] + cleanedAfter
+        }
+        
+        // Если начинается с разделителя — добавим ведущий 0
+        if value.hasPrefix(localDecimalSeparator) {
+            value = "0" + value
+        }
+        
+        // Удалим ведущие нули перед целой частью, но оставим один ноль, если строка пустеет
+        // Пример: "00012,3" -> "12,3"; "000" -> "0"; "000,5" -> "0,5"
+        value = trimLeadingZerosPreservingDecimal(value, separator: localDecimalSeparator)
+        
+        return value
+    }
+    
+    private func trimLeadingZerosPreservingDecimal(_ s: String, separator: String) -> String {
+        var str = s
+        // Если есть разделитель, работаем с целой частью отдельно
+        if let sepRange = str.range(of: separator) {
+            var intPart = String(str[..<sepRange.lowerBound])
+            let fracPart = String(str[sepRange.lowerBound...]) // включая разделитель
+            // Удаляем лидирующие нули в целой части
+            intPart = String(intPart.drop(while: { $0 == "0" }))
+            if intPart.isEmpty { intPart = "0" }
+            return intPart + fracPart
+        } else {
+            // Без дробной части — оставляем один ноль, если все нули
+            let trimmed = String(str.drop(while: { $0 == "0" }))
+            return trimmed.isEmpty ? "0" : trimmed
+        }
+    }
 }
+

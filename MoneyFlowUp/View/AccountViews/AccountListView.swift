@@ -1,4 +1,5 @@
 import SwiftUI
+import Foundation
 
 // Экран списка кошельков с возможностью перейти к деталям, добавить кошелек,
 // перейти в календарь и быстро перейти к добавлению транзакции.
@@ -12,6 +13,10 @@ struct AccountListView: View {
     // Состояния для диалога подтверждения удаления
     @State private var pendingDeleteAccountID: UUID?
     @State private var showDeleteDialog = false
+    // Сумма балансов как вычисляемое свойство (не использовать self в инициализаторе)
+//    private var sumBlance: Double {
+//        summAmount(accountVM)
+//    }
 
     var body: some View {
         ZStack {
@@ -48,6 +53,24 @@ struct AccountListView: View {
                 Rectangle()
                     .fill(.текст2)
                     .frame(height: 0.5)
+                // Итоговая сумма всех кошельков 
+                HStack {
+                    Spacer()
+                    Text("Итого:")
+                        .font(.callout)
+                        .foregroundStyle(.текст2)
+                    Text(accountVM.totalBalance, format: .number.precision(.fractionLength(0...2)))
+                        .font(.callout)
+                        .foregroundStyle(.текст2)
+                    Text("$")
+                        .font(.callout)
+                        .foregroundStyle(.текст2)
+                        .padding(.trailing, 30)
+                }
+                // Разделительная линия
+                Rectangle()
+                    .fill(.текст2)
+                    .frame(height: 1)
                 
                 // Список аккаунтов
                 List {
@@ -164,14 +187,22 @@ struct AccountListView: View {
             case .addTransaction:
                 TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
             case .calendar(let date):
-                TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM)
+                TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM, path: $path)
             case .accountTransactions(let accountID):
                 if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
                     AccountTransactionsView(transactionVM: transactionVM, accountVM: accountVM, path: $path, accountID: accountID)
                 } else {
                     Text("Кошелек не найден")
                 }
+            case .transactionsDetail(let txID):
+                if let tx = transactionVM.transactions.first(where: { $0.id == txID }) {
+                    TransactionDetailView(accountVM: accountVM, transactionVM: transactionVM, editingTransaction: tx)
+                } else {
+                    Text("Транзакция не найдена")
+                }
             }
         }
     }
 }
+
+

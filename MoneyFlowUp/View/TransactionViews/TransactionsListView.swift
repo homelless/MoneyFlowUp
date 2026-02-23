@@ -28,7 +28,7 @@ struct TransactionsListView: View {
     
     // Контекст SwiftData из окружения (если понадобится для операций)
     @Environment(\.modelContext) private var modelContext
-
+    
     // Пример запроса SwiftData (здесь не используется напрямую, так как работаем через transactionVM)
     @Query(sort:\Transaction.date, order: .reverse) var transactions: [Transaction]
     
@@ -131,12 +131,12 @@ struct TransactionsListView: View {
         // Сортировка по дате убыванию
         return filtered.sorted { $0.date > $1.date }
     }
-
+    
     // Сумма по отфильтрованным транзакциям (знак суммы зависит от сохраненных значений amount)
     var totalAmount: Double {
         filteredTransactions.reduce(0) { $0 + $1.amount }
     }
-
+    
     var body: some View {
         ZStack {
             // Фоновый цвет из ассетов
@@ -225,38 +225,38 @@ struct TransactionsListView: View {
                             }
                         }
                     }
-                        .padding(.horizontal)
+                    .padding(.horizontal)
                     
                     // Панель "Итого" с суммой и цветовой индикацией по типу
                     if selectedFilter != nil {
                         
-                    HStack {
-                        Text("Итого:")
-                            .font(.headline)
-                            .foregroundColor(.текст)
-                        Spacer()
+                        HStack {
+                            Text("Итого:")
+                                .font(.headline)
+                                .foregroundColor(.текст)
+                            Spacer()
+                            
+                            Text("\(totalAmount, specifier: "%.2f")$")
+                                .font(.title2)
+                                .bold()
+                                .foregroundColor(
+                                    {
+                                        switch selectedFilter {
+                                        case .some(.cost): return .red
+                                        case .some(.income): return .green
+                                        case .some(.transfer): return .blue
+                                        case .none: return .primary
+                                        }
+                                    }()
+                                )
+                        }
                         
-                        Text("\(totalAmount, specifier: "%.2f")$")
-                            .font(.title2)
-                            .bold()
-                            .foregroundColor(
-                                {
-                                    switch selectedFilter {
-                                    case .some(.cost): return .red
-                                    case .some(.income): return .green
-                                    case .some(.transfer): return .blue
-                                    case .none: return .primary
-                                    }
-                                }()
-                            )
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                        .background(Color("ячейка"))
+                        .cornerRadius(10)
+                        .padding(.horizontal)
                     }
-                
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
-                    .background(Color("ячейка"))
-                    .cornerRadius(10)
-                    .padding(.horizontal)
-                }
                 }
                 .padding(.vertical)
                 
@@ -267,11 +267,11 @@ struct TransactionsListView: View {
                         Image(systemName: "list.bullet.rectangle")
                             .font(.system(size: 60))
                             .foregroundColor(.текст)
-
+                        
                         Text("Нет транзакций")
                             .font(.title3)
                             .foregroundColor(.текст)
-
+                        
                         Text("Здесь появятся транзакции за выбранный период")
                             .font(.callout)
                             .foregroundColor(.текст)
@@ -283,92 +283,107 @@ struct TransactionsListView: View {
                     // Список транзакций
                     List {
                         ForEach(filteredTransactions) { transaction in
-                            if selectedFilter == .transfer {
-                                // Для перевода пробуем отрисовать специализированную строку с обоими аккаунтами
-                                if
-                                    let from = accountVM.accounts.first(where: { $0.id == transaction.accountId }),
-                                    let toId = transaction.toAccountId,
-                                    let to = accountVM.accounts.first(where: { $0.id == toId })
-                                {
-                                    TransferRow(from: from, to: to, transaction: transaction)
-                                        .listRowBackground(Color.clear)
+                            Button {
+                                path.append(.transactionsDetail(transaction.id))
+                            } label: {
+                                if selectedFilter == .transfer {
+                                    // Для перевода пробуем отрисовать специализированную строку с обоими аккаунтами
+                                    if
+                                        let from = accountVM.accounts.first(where: { $0.id == transaction.accountId }),
+                                        let toId = transaction.toAccountId,
+                                        let to = accountVM.accounts.first(where: { $0.id == toId })
+                                    {
+                                        TransferRow(from: from, to: to, transaction: transaction)
+                                            .listRowBackground(Color.clear)
+                                    } else {
+                                        // Если не удалось найти оба аккаунта — fallback к обычной строке
+                                        let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
+                                        TransactionRow(transaction: transaction, accountName: accountName)
+                                            .listRowBackground(Color.clear)
+                                    }
                                 } else {
-                                    // Если не удалось найти оба аккаунта — fallback к обычной строке
+                                    // Для трат/доходов — обычная строка транзакции
                                     let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
                                     TransactionRow(transaction: transaction, accountName: accountName)
                                         .listRowBackground(Color.clear)
                                 }
-                            } else {
-                                // Для трат/доходов — обычная строка транзакции
-                                let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
-                                TransactionRow(transaction: transaction, accountName: accountName)
-                                    .listRowBackground(Color.clear)
                             }
                         }
-                        // Удаление свайпом
-                        .onDelete(perform: deleteTransactions)
+                        .buttonStyle(.plain)
+                        .tint(.clear)
+                        .frame(height: 65)
+                        .contentShape(Rectangle())
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(.none)
+                        .listRowSeparator(.hidden)
                     }
+                    .scrollContentBackground(.hidden)
+                    .background(Color.clear)
                     .listStyle(.plain)
-                    .background(Color("фон"))
                 }
             }
-        }
-        // Навигация по маршрутам
-        .navigationDestination(for: Route.self) { route in
-            switch route {
-            case .addAccount:
-                AccountAddView(viewModel: accountVM)
-            case .detail(let accountID):
-                if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
-                    AccountDetailView(account: account, accountVM: accountVM)
-                } else {
-                    Text("Кошелек не найден")
-                }
-            case .addTransaction:
-                TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
-            case .calendar(let date):
-                TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM)
-            case .accountTransactions(let accountID):
-                if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
-                    AccountTransactionsView(transactionVM: transactionVM, accountVM: accountVM, path: $path, accountID: accountID)
-                } else {
-                    Text("Кошелек не найден")
-                }
-            }
-        }
-        // Кнопка «добавить транзакцию» внизу (safe area inset)
-        .safeAreaInset(edge: .bottom) {
-            GeometryReader { proxy in
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        path.append(.addTransaction)
-                    }) {
-                        Text("добавить транзакцию")
-                            .foregroundColor(.black)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.9)
-                            .frame(width: proxy.size.width * 0.85, height: 50)
-                            .background(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color("текст2")).opacity(0.9)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .stroke(Color("текст"), lineWidth: 1)
-                            )
+            // Навигация по маршрутам
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .addAccount:
+                    AccountAddView(viewModel: accountVM)
+                case .detail(let accountID):
+                    if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
+                        AccountDetailView(account: account, accountVM: accountVM)
+                    } else {
+                        Text("Кошелек не найден")
                     }
-                    .contentShape(RoundedRectangle(cornerRadius: 20))
-                    Spacer()
+                case .addTransaction:
+                    TransactionView(transactionVM: transactionVM, accountVM: accountVM, path: $path)
+                case .calendar(let date):
+                    TransactionsCalendarView(selectedDate: date, transactionVM: transactionVM, accountVM: accountVM, path: $path)
+                case .accountTransactions(let accountID):
+                    if let account = accountVM.accounts.first(where: { $0.id == accountID }) {
+                        AccountTransactionsView(transactionVM: transactionVM, accountVM: accountVM, path: $path, accountID: accountID)
+                    } else {
+                        Text("Кошелек не найден")
+                    }
+                case .transactionsDetail(let txID):
+                    if let tx = transactionVM.transactions.first(where: { $0.id == txID }) {
+                        TransactionDetailView(accountVM: accountVM, transactionVM: transactionVM, editingTransaction: tx)
+                    } else {
+                        Text("Транзакция не найдена")
+                    }
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.top, 8)
-                .padding(.bottom, 16)
             }
-            .frame(height: 50 + 8 + 16)
+            // Кнопка «добавить транзакцию» внизу (safe area inset)
+            .safeAreaInset(edge: .bottom) {
+                GeometryReader { proxy in
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            path.append(.addTransaction)
+                        }) {
+                            Text("добавить транзакцию")
+                                .foregroundColor(.black)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.9)
+                                .frame(width: proxy.size.width * 0.85, height: 50)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .fill(Color("текст2")).opacity(0.9)
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(Color("текст"), lineWidth: 1)
+                                )
+                        }
+                        .contentShape(RoundedRectangle(cornerRadius: 20))
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 8)
+                    .padding(.bottom, 16)
+                }
+                .frame(height: 50 + 8 + 16)
+            }
         }
     }
-
     // Удаление выбранных транзакций из списка (проксирует в VM, которая корректирует балансы)
     private func deleteTransactions(at offsets: IndexSet) {
         let items = filteredTransactions
@@ -377,4 +392,5 @@ struct TransactionsListView: View {
             transactionVM.removeTransaction(tx, accountVM: accountVM)
         }
     }
+    
 }

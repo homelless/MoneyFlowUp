@@ -95,5 +95,13 @@ final class AccountViewModel: Identifiable {
         accounts[index].descriptionAccount = descriptionAccount
         try? modelContext.save()
     }
+    
+    // Общая сумма балансов (числом)
+    var totalBalance: Double {
+        accounts.reduce(0) { sum, account in
+            sum + (Double(account.balance.replacingOccurrences(of: ",", with: ".")) ?? 0)
+        }
+    }
+    
 }
 

@@ -8,6 +8,7 @@ enum Route: Hashable {
     case detail(Account.ID)   // Детали аккаунта по его ID
     case addTransaction       // Экран добавления транзакции
     case calendar(Date)       // Экран календаря для конкретной даты
-    case accountTransactions(Account.ID) // Экран всех транзакций аккаунта 
+    case accountTransactions(Account.ID) // Экран всех транзакций аккаунта
+    case transactionsDetail(Transaction.ID)
 }
 
