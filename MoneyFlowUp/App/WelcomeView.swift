@@ -47,7 +47,7 @@ struct WelcomeView: View {
                 }
                 
                 // Переход на следующий экран строго после завершения анимации текста
-                DispatchQueue.main.asyncAfter(deadline: .now() + textAnimationDuration) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + textAnimationDuration + 0.5) {
                     onFinish()
                 }
             }

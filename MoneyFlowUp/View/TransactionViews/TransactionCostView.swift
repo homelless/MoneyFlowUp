@@ -42,7 +42,7 @@ struct TransactionCostView: View {
                                     Text(account.name)
                                     Spacer()
                                     Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(Color("текст"))
+                                    
                                 }
                                 .tag(account as Account?) // связываем элемент с выбранным Account?
                             }

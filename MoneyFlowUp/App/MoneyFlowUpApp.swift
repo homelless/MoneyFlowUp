@@ -8,7 +8,7 @@
  "MoneyFlowUp - это простое и наглядное приложение для учета личных финансов. Добавляйте доходы и расходы, переводите средства между кошельками, анализируйте структуру трат по категориям и следите за динамикой."
  
  
- 
+ Технологии: SwiftUI / SwiftData / MVVM / Observation / GCD
  
  
  
@@ -16,13 +16,11 @@
 import SwiftUI
 import SwiftData
 
-// Точка входа приложения.
-// Инициализирует SwiftData ModelContainer со схемой (Transaction, Account) и
-// поднимает RootView с внедренным контейнером.
+
 
 @main
 struct MoneyFlowUpApp: App {
-    // Общий контейнер моделей SwiftData
+    // Общий контейнер моделей 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Transaction.self,
@@ -45,7 +43,6 @@ struct MoneyFlowUpApp: App {
         WindowGroup {
             Group {
                 if showWelcome {
-                    // Приветственный экран с автопереходом через 1 сек
                     WelcomeView {
                         withAnimation(.easeInOut(duration: 0.25)) {
                             showWelcome = false

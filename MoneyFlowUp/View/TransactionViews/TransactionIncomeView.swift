@@ -38,7 +38,7 @@ struct TransactionIncomeView: View {
                                     Spacer()
                                     // Отображаем баланс и валюту выбранного кошелька
                                     Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(Color("текст"))
+
                                 }
                                 .tag(account as Account?)
                             }

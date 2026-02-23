@@ -309,6 +309,8 @@ struct TransactionsListView: View {
                                 }
                             }
                         }
+                        // Удаление свайпом
+                        .onDelete(perform: deleteTransactions)
                         .buttonStyle(.plain)
                         .tint(.clear)
                         .frame(height: 65)
