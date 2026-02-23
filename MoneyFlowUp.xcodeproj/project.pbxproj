@@ -13,7 +13,7 @@
 		D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA222F1D715A006A9D1A /* FilterChip.swift */; };
 		D028FA252F1D722D006A9D1A /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA242F1D722D006A9D1A /* TransactionRow.swift */; };
 		D03A00D12F4CE37200F0A2F0 /* MoneyFlowUpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03A00D02F4CE37200F0A2F0 /* MoneyFlowUpApp.swift */; };
-		D03A00D32F4CE3DC00F0A2F0 /* WelcomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03A00D22F4CE3DC00F0A2F0 /* WelcomView.swift */; };
+		D03A00D32F4CE3DC00F0A2F0 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03A00D22F4CE3DC00F0A2F0 /* WelcomeView.swift */; };
 		D05DEBE42F052C6900D6AEED /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE32F052C6900D6AEED /* Currency.swift */; };
 		D05DEBE52F052C6900D6AEED /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE12F052C6900D6AEED /* Account.swift */; };
 		D05DEBE62F052C6900D6AEED /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE02F052C6900D6AEED /* Transaction.swift */; };
@@ -59,7 +59,7 @@
 		D028FA222F1D715A006A9D1A /* FilterChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterChip.swift; sourceTree = "<group>"; };
 		D028FA242F1D722D006A9D1A /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
 		D03A00D02F4CE37200F0A2F0 /* MoneyFlowUpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFlowUpApp.swift; sourceTree = "<group>"; };
-		D03A00D22F4CE3DC00F0A2F0 /* WelcomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomView.swift; sourceTree = "<group>"; };
+		D03A00D22F4CE3DC00F0A2F0 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		D05DEBC62F052BFC00D6AEED /* MoneyFlowUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyFlowUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05DEBE02F052C6900D6AEED /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		D05DEBE12F052C6900D6AEED /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -230,7 +230,7 @@
 			children = (
 				D05DEC032F052CAC00D6AEED /* Assets .xcassets */,
 				D03A00D02F4CE37200F0A2F0 /* MoneyFlowUpApp.swift */,
-				D03A00D22F4CE3DC00F0A2F0 /* WelcomView.swift */,
+				D03A00D22F4CE3DC00F0A2F0 /* WelcomeView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -335,7 +335,7 @@
 				D090D5BF2F47B71E005CEFB6 /* AccountTransactionsView.swift in Sources */,
 				D0D922BD2F3FA53700461C14 /* SettingCostCategoriesView.swift in Sources */,
 				D06CD73B2F1022B3002D4A05 /* CostCategory.swift in Sources */,
-				D03A00D32F4CE3DC00F0A2F0 /* WelcomView.swift in Sources */,
+				D03A00D32F4CE3DC00F0A2F0 /* WelcomeView.swift in Sources */,
 				D06CD7412F103E0A002D4A05 /* TransactionCategory.swift in Sources */,
 				D05DEBE42F052C6900D6AEED /* Currency.swift in Sources */,
 				D05DEBE52F052C6900D6AEED /* Account.swift in Sources */,

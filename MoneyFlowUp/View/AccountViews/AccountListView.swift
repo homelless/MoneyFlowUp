@@ -83,7 +83,7 @@ struct AccountListView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(
                                     RoundedRectangle(cornerRadius: 12)
-                                        .fill(Color("ячейка").opacity(0.9))
+                                        .fill(Color("ячейка")) // без прозрачности, чтобы не просвечивала подсветка
                                         .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
                                 )
                                 .overlay(
@@ -91,11 +91,11 @@ struct AccountListView: View {
                                         .stroke(Color("текст2"), lineWidth: 1)
                                 )
                         }
-                        .buttonStyle(.plain)
+                        .buttonStyle(.borderless) // подавляет системное выделение строки
                         .tint(.clear)
                         .frame(height: 65)
                         .contentShape(Rectangle())
-                        .listRowBackground(Color.clear)
+                        .listRowBackground(Color("фон")) // непрозрачный фон строки, совпадает с общим фоном
                         .listRowInsets(.none)
                         .listRowSeparator(.hidden)
                         // Контекстное меню на долгом нажатии
@@ -204,5 +204,3 @@ struct AccountListView: View {
         }
     }
 }
-
-
