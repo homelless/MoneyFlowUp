@@ -35,6 +35,9 @@ struct TransactionDetailView: View {
     // Группа текущей транзакции (фиксирована при редактировании; при создании — по умолчанию .cost)
     @State private var fixedGroup: TransactionGroup = .cost
     
+    // Флаги предупреждений
+    @State private var transferAccountsWarning: String?
+    
     init(accountVM: AccountViewModel, transactionVM: TransactionVM, editingTransaction: Transaction? = nil) {
         self._accountVM = Bindable(wrappedValue: accountVM)
         self._transactionVM = Bindable(wrappedValue: transactionVM)
@@ -62,39 +65,57 @@ struct TransactionDetailView: View {
                 
                 // Аккаунты
                 if fixedGroup == .transfer {
-                    Section("Со счета") {
-                        Picker("", selection: $selectedAccount) {
-                            ForEach(accountVM.accounts) { account in
-                                HStack {
-                                    Text(account.name)
-                                    Spacer()
-                                    Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(Color("текст"))
-                                }
-                                .tag(account as Account?)
-                            }
+                    if accountVM.accounts.count < 2 {
+                        Section("Счета для перевода") {
+                            Text("Для перевода требуется как минимум два кошелька.")
+                                .foregroundStyle(Color("текст"))
                         }
-                        .pickerStyle(.navigationLink)
+                        .listRowBackground(Color("ячейка"))
+                        .foregroundStyle(Color("текст"))
+                    } else {
+                        Section("Со счета") {
+                            Picker("", selection: $selectedAccount) {
+                                ForEach(accountVM.accounts) { account in
+                                    HStack {
+                                        Text(account.name)
+                                        Spacer()
+                                        Text("\(account.balance) \(account.currencyRaw)")
+                                            .foregroundColor(Color("текст"))
+                                    }
+                                    .tag(account as Account?)
+                                }
+                            }
+                            .pickerStyle(.navigationLink)
+                        }
+                        .listRowBackground(Color("ячейка"))
+                        .foregroundStyle(Color("текст"))
+                        
+                        Section("На счет") {
+                            Picker("", selection: $selectedToAccount) {
+                                ForEach(accountVM.accounts) { account in
+                                    HStack {
+                                        Text(account.name)
+                                        Spacer()
+                                        Text("\(account.balance) \(account.currencyRaw)")
+                                            .foregroundColor(Color("текст"))
+                                    }
+                                    .tag(account as Account?)
+                                }
+                            }
+                            .pickerStyle(.navigationLink)
+                        }
+                        .listRowBackground(Color("ячейка"))
+                        .foregroundStyle(Color("текст"))
                     }
-                    .listRowBackground(Color("ячейка"))
-                    .foregroundStyle(Color("текст"))
                     
-                    Section("На счет") {
-                        Picker("", selection: $selectedToAccount) {
-                            ForEach(accountVM.accounts) { account in
-                                HStack {
-                                    Text(account.name)
-                                    Spacer()
-                                    Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(Color("текст"))
-                                }
-                                .tag(account as Account?)
-                            }
+                    if let warning = transferAccountsWarning {
+                        Section {
+                            Text(warning)
+                                .font(.footnote)
+                                .foregroundStyle(.orange)
                         }
-                        .pickerStyle(.navigationLink)
+                        .listRowBackground(Color("ячейка"))
                     }
-                    .listRowBackground(Color("ячейка"))
-                    .foregroundStyle(Color("текст"))
                 } else {
                     Section("Кошелек") {
                         Picker("", selection: $selectedAccount) {
@@ -225,13 +246,25 @@ struct TransactionDetailView: View {
                 amount = String(tx.amount)
                 transactionDate = tx.date
                 note = tx.note ?? ""
-                if let from = accountVM.accounts.first(where: { $0.id == tx.accountId }) {
-                    selectedAccount = from
+                
+                // FROM
+                let from = accountVM.accounts.first(where: { $0.id == tx.accountId })
+                // TO
+                let to: Account? = {
+                    if fixedGroup == .transfer, let toId = tx.toAccountId {
+                        return accountVM.accounts.first(where: { $0.id == toId })
+                    }
+                    return nil
+                }()
+                
+                if let from { selectedAccount = from }
+                if let to { selectedToAccount = to }
+                
+                // Если перевод и какая-то сторона не найдена — безопасно подставляем валидные аккаунты и покажем предупреждение
+                if fixedGroup == .transfer {
+                    ensureValidTransferSelection(showWarnings: true)
                 }
-                if fixedGroup == .transfer, let toId = tx.toAccountId,
-                   let to = accountVM.accounts.first(where: { $0.id == toId }) {
-                    selectedToAccount = to
-                }
+                
                 switch tx.category {
                 case .cost(let c): selectedCostCategory = c
                 case .income(let c): selectedIncomeCategory = c
@@ -242,12 +275,25 @@ struct TransactionDetailView: View {
                 fixedGroup = .cost
                 ensureValidCategoryForGroup()
             }
+            
+            // Для не‑transfer тоже убедимся, что selection валиден
+            if fixedGroup != .transfer {
+                ensureAccountSelectionValid()
+            }
         }
         .onChange(of: costCategoriesStore.categories) { _ in
             if fixedGroup == .cost { ensureValidCategoryForGroup() }
         }
         .onChange(of: incomeCategoriesStore.categories) { _ in
             if fixedGroup == .income { ensureValidCategoryForGroup() }
+        }
+        // Если список аккаунтов меняется — держим selection валидным
+        .onChange(of: accountVM.accounts) { _ in
+            if fixedGroup == .transfer {
+                ensureValidTransferSelection(showWarnings: false)
+            } else {
+                ensureAccountSelectionValid()
+            }
         }
     }
     
@@ -261,6 +307,8 @@ struct TransactionDetailView: View {
         case .income:
             return selectedAccount != nil && selectedIncomeCategory != nil
         case .transfer:
+            // Должно быть минимум 2 кошелька и валидная пара from/to
+            guard accountVM.accounts.count >= 2 else { return false }
             if let from = selectedAccount, let to = selectedToAccount {
                 return from.id != to.id
             }
@@ -284,6 +332,55 @@ struct TransactionDetailView: View {
             selectedIncomeCategory = available.first
         case .transfer:
             break
+        }
+    }
+    
+    // MARK: - Selection guards
+    
+    private func ensureAccountSelectionValid() {
+        // Для cost/income: если выбранный кошелек отсутствует в списке — подставить первый доступный
+        guard fixedGroup != .transfer else { return }
+        if let sel = selectedAccount, accountVM.accounts.contains(where: { $0.id == sel.id }) {
+            return
+        }
+        selectedAccount = accountVM.accounts.first
+    }
+    
+    private func ensureValidTransferSelection(showWarnings: Bool) {
+        transferAccountsWarning = nil
+        
+        // Если счетов меньше двух — сбрасываем selection и предупреждаем
+        guard accountVM.accounts.count >= 2 else {
+            selectedAccount = accountVM.accounts.first
+            selectedToAccount = accountVM.accounts.dropFirst().first
+            transferAccountsWarning = "Для перевода требуется как минимум два кошелька."
+            return
+        }
+        
+        // FROM: если отсутствует в списке — подставить первый
+        if let from = selectedAccount, accountVM.accounts.contains(where: { $0.id == from.id }) == false {
+            selectedAccount = accountVM.accounts.first
+            if showWarnings {
+                transferAccountsWarning = "Исходный кошелек перевода был удален. Выбран первый доступный."
+            }
+        } else if selectedAccount == nil {
+            selectedAccount = accountVM.accounts.first
+        }
+        
+        // TO: если отсутствует в списке — подставить первый, отличный от FROM
+        let currentFromId = selectedAccount?.id
+        if let to = selectedToAccount, accountVM.accounts.contains(where: { $0.id == to.id }) == false {
+            selectedToAccount = accountVM.accounts.first(where: { $0.id != currentFromId }) ?? accountVM.accounts.dropFirst().first
+            if showWarnings {
+                transferAccountsWarning = "Целевой кошелек перевода был удален. Выбран другой доступный."
+            }
+        } else if selectedToAccount == nil {
+            selectedToAccount = accountVM.accounts.first(where: { $0.id != currentFromId }) ?? accountVM.accounts.dropFirst().first
+        }
+        
+        // Не допускаем одинаковые FROM и TO
+        if let from = selectedAccount, let to = selectedToAccount, from.id == to.id {
+            selectedToAccount = accountVM.accounts.first(where: { $0.id != from.id }) ?? accountVM.accounts.dropFirst().first
         }
     }
     
@@ -447,4 +544,3 @@ struct TransactionDetailView: View {
         }
     }
 }
-

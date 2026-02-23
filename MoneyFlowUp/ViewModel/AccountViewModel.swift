@@ -32,17 +32,27 @@ final class AccountViewModel: Identifiable {
         fetchAll()
     }
     
-    // Удаление одного аккаунта по его идентификатору (включая связанные транзакции)
+    // Удаление одного аккаунта по его идентификатору (включая все связанные транзакции:
+    // где аккаунт — источник (accountId) ИЛИ получатель (toAccountId))
     func removeAccount(id: UUID) {
         // Находим аккаунт в текущем массиве
         guard let account = accounts.first(where: { $0.id == id }) else { return }
         
-        // Удаляем все транзакции, связанные с этим аккаунтом
-        let txDescriptor = FetchDescriptor<Transaction>(
+        // Удаляем все транзакции, где этот аккаунт фигурирует как источник
+        let txFromDescriptor = FetchDescriptor<Transaction>(
             predicate: #Predicate<Transaction> { $0.accountId == id }
         )
-        let transactions = (try? modelContext.fetch(txDescriptor)) ?? []
-        for tx in transactions {
+        let fromTransactions = (try? modelContext.fetch(txFromDescriptor)) ?? []
+        for tx in fromTransactions {
+            modelContext.delete(tx)
+        }
+        
+        // Удаляем все транзакции, где этот аккаунт фигурирует как получатель (переводы)
+        let txToDescriptor = FetchDescriptor<Transaction>(
+            predicate: #Predicate<Transaction> { $0.toAccountId == id }
+        )
+        let toTransactions = (try? modelContext.fetch(txToDescriptor)) ?? []
+        for tx in toTransactions {
             modelContext.delete(tx)
         }
         
@@ -54,22 +64,39 @@ final class AccountViewModel: Identifiable {
         fetchAll()
     }
     
-    // Массовое удаление аккаунтов по индексам (включая их транзакции)
+    // Массовое удаление аккаунтов по индексам (включая их транзакции как источник и как получатель)
     func removeAccounts(at offsets: IndexSet) {
-        for index in offsets {
-            let account = accounts[index]
+        // Собираем удаляемые аккаунты заранее (чтобы индексы не смещались)
+        let accountsToDelete = offsets.compactMap { index in
+            accounts.indices.contains(index) ? accounts[index] : nil
+        }
+        
+        // Для каждого аккаунта каскадно удаляем связанные транзакции и сам аккаунт
+        for account in accountsToDelete {
             let accountUUID = account.id
             
-            // Удаляем все транзакции, связанные с этим аккаунтом
-            let txDescriptor = FetchDescriptor<Transaction>(
+            // Транзакции, где аккаунт — источник
+            let txFromDescriptor = FetchDescriptor<Transaction>(
                 predicate: #Predicate<Transaction> { $0.accountId == accountUUID }
             )
-            let transactions = (try? modelContext.fetch(txDescriptor)) ?? []
-            for tx in transactions {
+            let fromTransactions = (try? modelContext.fetch(txFromDescriptor)) ?? []
+            for tx in fromTransactions {
                 modelContext.delete(tx)
             }
+            
+            // Транзакции, где аккаунт — получатель
+            let txToDescriptor = FetchDescriptor<Transaction>(
+                predicate: #Predicate<Transaction> { $0.toAccountId == accountUUID }
+            )
+            let toTransactions = (try? modelContext.fetch(txToDescriptor)) ?? []
+            for tx in toTransactions {
+                modelContext.delete(tx)
+            }
+            
+            // Сам аккаунт
             modelContext.delete(account)
         }
+        
         try? modelContext.save()
         fetchAll()
     }
@@ -104,4 +131,3 @@ final class AccountViewModel: Identifiable {
     }
     
 }
-
