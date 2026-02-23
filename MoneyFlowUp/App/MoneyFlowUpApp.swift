@@ -1,15 +1,4 @@
 /*
- I need an icon for an iOS app
- Promt:
- - the background is light
- - the main element is a wallet
- - The wallet should have "MF" written in the center
- - colors:
- 283618 - background color (main)
- 606C38 - element color
- DDA15E - text color
- BC6C25 - element stroke color
- FEFAE0 - secondary
 
 */
 import SwiftUI
@@ -38,9 +27,24 @@ struct MoneyFlowUpApp: App {
         }
     }()
 
+    @State private var showWelcome = true
+
     var body: some Scene {
-        WindowGroup { RootView() }
-            .modelContainer(sharedModelContainer)
+        WindowGroup {
+            Group {
+                if showWelcome {
+                    // Приветственный экран с автопереходом через 1 сек
+                    WelcomeView {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            showWelcome = false
+                        }
+                    }
+                } else {
+                    RootView()
+                }
+            }
+        }
+        .modelContainer(sharedModelContainer)
     }
 }
 
@@ -144,4 +148,3 @@ struct RootView: View {
 }
 
 #Preview { RootView() }
-

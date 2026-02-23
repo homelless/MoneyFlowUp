@@ -12,6 +12,8 @@
 		D028FA202F1D6D94006A9D1A /* CategoryPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */; };
 		D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA222F1D715A006A9D1A /* FilterChip.swift */; };
 		D028FA252F1D722D006A9D1A /* TransactionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D028FA242F1D722D006A9D1A /* TransactionRow.swift */; };
+		D03A00D12F4CE37200F0A2F0 /* MoneyFlowUpApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03A00D02F4CE37200F0A2F0 /* MoneyFlowUpApp.swift */; };
+		D03A00D32F4CE3DC00F0A2F0 /* WelcomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03A00D22F4CE3DC00F0A2F0 /* WelcomView.swift */; };
 		D05DEBE42F052C6900D6AEED /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE32F052C6900D6AEED /* Currency.swift */; };
 		D05DEBE52F052C6900D6AEED /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE12F052C6900D6AEED /* Account.swift */; };
 		D05DEBE62F052C6900D6AEED /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBE02F052C6900D6AEED /* Transaction.swift */; };
@@ -25,7 +27,6 @@
 		D05DEBFC2F052C7800D6AEED /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBEB2F052C7800D6AEED /* TransactionView.swift */; };
 		D05DEBFD2F052C7800D6AEED /* TransactionTransferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBEE2F052C7800D6AEED /* TransactionTransferView.swift */; };
 		D05DEC012F052C8100D6AEED /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBFF2F052C8100D6AEED /* Route.swift */; };
-		D05DEC022F052C8100D6AEED /* MoneyFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */; };
 		D05DEC042F052CAC00D6AEED /* Assets .xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D05DEC032F052CAC00D6AEED /* Assets .xcassets */; };
 		D05DEC082F05570B00D6AEED /* TransactionVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05DEC072F05570B00D6AEED /* TransactionVM.swift */; };
 		D06CD7342F101944002D4A05 /* TransactionsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD7332F101944002D4A05 /* TransactionsListView.swift */; };
@@ -57,6 +58,8 @@
 		D028FA1F2F1D6D94006A9D1A /* CategoryPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryPickerView.swift; sourceTree = "<group>"; };
 		D028FA222F1D715A006A9D1A /* FilterChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterChip.swift; sourceTree = "<group>"; };
 		D028FA242F1D722D006A9D1A /* TransactionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionRow.swift; sourceTree = "<group>"; };
+		D03A00D02F4CE37200F0A2F0 /* MoneyFlowUpApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFlowUpApp.swift; sourceTree = "<group>"; };
+		D03A00D22F4CE3DC00F0A2F0 /* WelcomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomView.swift; sourceTree = "<group>"; };
 		D05DEBC62F052BFC00D6AEED /* MoneyFlowUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoneyFlowUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D05DEBE02F052C6900D6AEED /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		D05DEBE12F052C6900D6AEED /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
@@ -70,7 +73,6 @@
 		D05DEBF12F052C7800D6AEED /* AccountListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountListView.swift; sourceTree = "<group>"; };
 		D05DEBF22F052C7800D6AEED /* AccountDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailView.swift; sourceTree = "<group>"; };
 		D05DEBF32F052C7800D6AEED /* AccountAddView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAddView.swift; sourceTree = "<group>"; };
-		D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFlowApp.swift; sourceTree = "<group>"; };
 		D05DEBFF2F052C8100D6AEED /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		D05DEC032F052CAC00D6AEED /* Assets .xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets .xcassets"; sourceTree = "<group>"; };
 		D05DEC072F05570B00D6AEED /* TransactionVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionVM.swift; sourceTree = "<group>"; };
@@ -160,7 +162,6 @@
 				D05DEBF52F052C7800D6AEED /* View */,
 				D05DEBE92F052C7100D6AEED /* ViewModel */,
 				D05DEBDF2F052C6400D6AEED /* Model */,
-				D05DEC032F052CAC00D6AEED /* Assets .xcassets */,
 			);
 			path = MoneyFlowUp;
 			sourceTree = "<group>";
@@ -227,7 +228,9 @@
 		D05DEC002F052C8100D6AEED /* App */ = {
 			isa = PBXGroup;
 			children = (
-				D05DEBFE2F052C8100D6AEED /* MoneyFlowApp.swift */,
+				D05DEC032F052CAC00D6AEED /* Assets .xcassets */,
+				D03A00D02F4CE37200F0A2F0 /* MoneyFlowUpApp.swift */,
+				D03A00D22F4CE3DC00F0A2F0 /* WelcomView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				D090D5BF2F47B71E005CEFB6 /* AccountTransactionsView.swift in Sources */,
 				D0D922BD2F3FA53700461C14 /* SettingCostCategoriesView.swift in Sources */,
 				D06CD73B2F1022B3002D4A05 /* CostCategory.swift in Sources */,
+				D03A00D32F4CE3DC00F0A2F0 /* WelcomView.swift in Sources */,
 				D06CD7412F103E0A002D4A05 /* TransactionCategory.swift in Sources */,
 				D05DEBE42F052C6900D6AEED /* Currency.swift in Sources */,
 				D05DEBE52F052C6900D6AEED /* Account.swift in Sources */,
@@ -361,11 +365,11 @@
 				D05DEBFC2F052C7800D6AEED /* TransactionView.swift in Sources */,
 				D05DEC012F052C8100D6AEED /* Route.swift in Sources */,
 				D06F34D12F4CC00500D2BC34 /* TransactionDetailView.swift in Sources */,
-				D05DEC022F052C8100D6AEED /* MoneyFlowApp.swift in Sources */,
 				D00EF20E2F3CF32500C94583 /* AboutAppView.swift in Sources */,
 				D06CD7342F101944002D4A05 /* TransactionsListView.swift in Sources */,
 				D00EF20B2F3CEA5800C94583 /* SettingView.swift in Sources */,
 				D05DEBFD2F052C7800D6AEED /* TransactionTransferView.swift in Sources */,
+				D03A00D12F4CE37200F0A2F0 /* MoneyFlowUpApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
