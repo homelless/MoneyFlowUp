@@ -9,6 +9,7 @@ struct TransactionIncomeView: View {
     // ViewModel для операций с транзакциями (добавление и т.п.)
     @Bindable var transactionVM: TransactionVM
     
+    @State private var showAccountPicker = false
     // Локальное состояние формы
     @State private var amount: String = ""                           // Сумма дохода (строкой для ввода)
     @State private var selectedCategory: IncomeCategory?    // Выбранная категория дохода
@@ -29,24 +30,27 @@ struct TransactionIncomeView: View {
                     .ignoresSafeArea()
                 
                 Form {
-                    // Блок выбора кошелька
+                    // Выбор кошелька
                     Section("Кошелек") {
-                        Picker("", selection: $selectedAccount) {
-                            ForEach(accountVM.accounts) { account in
+                            Button(action: { showAccountPicker = true }) {
                                 HStack {
-                                    Text(account.name)
-                                    Spacer()
-                                    // Отображаем баланс и валюту выбранного кошелька
-                                    Text("\(account.balance) \(account.currencyRaw)")
-
+                                    if let selectedAccount {
+                                        Text(selectedAccount.name)
+                                            .foregroundColor(Color("текст"))
+                                        Spacer()
+                                        Text("\(selectedAccount.balance) \(selectedAccount.currencyRaw)")
+                                            .foregroundColor(Color("текст"))
+                                    } else {
+                                        Text("Выберите кошелек")
+                                            .foregroundColor(.gray)
+                                    }
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(Color("текст"))
                                 }
-                                .tag(account as Account?)
                             }
                         }
-                        .pickerStyle(.navigationLink)
-                    }
-                    .listRowBackground(Color("ячейка"))
-                     .foregroundStyle(Color("текст"))
+                        .listRowBackground(Color("ячейка"))
+                        .foregroundStyle(Color("текст"))
                     
                     // Отображение и выбор категории расхода
                     Section("Категория") {
@@ -122,6 +126,18 @@ struct TransactionIncomeView: View {
                 }
                 .scrollContentBackground(.hidden)
                 
+                .sheet(isPresented: $showAccountPicker) {
+                    if let binding = Binding($selectedAccount) {
+                        AccountPickerView(
+                            selectedAccount: $selectedAccount,
+                            accounts: accountVM.accounts,
+                            title: "Выберите кошелек"
+                        )
+                    } else {
+                        Text("Нет доступных кошельков")
+                            .padding()
+                    }
+                }
                 
                 .toolbar {
                     // Кнопка отмены в навигации

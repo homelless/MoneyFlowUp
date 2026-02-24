@@ -2,10 +2,10 @@ import SwiftUI
 import SwiftData
 
 struct TransactionTransferView: View {
-    
+
     @Bindable var accountVM: AccountViewModel
     @Bindable var transactionVM: TransactionVM
-    
+
     @State private var amount: String = ""
     @State private var selectedCategory: TransferType = .accountTransfer
     @State private var transactionDate: Date = Date()
@@ -15,72 +15,116 @@ struct TransactionTransferView: View {
     @State private var showCategoryPicker = false
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
-    
+
+    // Sheet flags for custom pickers
+    @State private var showFromAccountSheet = false
+    @State private var showToAccountSheet = false
+
     var body: some View {
-        
+
             ZStack {
                 Color("фон")
                     .ignoresSafeArea()
-                
+
                 Form {
                     Section("С кошелька") {
-                        Picker("", selection: $fromAccount) {
-                            ForEach(accountVM.accounts) { account in
+                        Button {
+                            showFromAccountSheet = true
+                        } label: {
+                            HStack {
                                 HStack {
-                                    Text(account.name)
+                                    Text(fromAccount?.name ?? "Выберите кошелек")
+                                        .foregroundStyle(Color("текст"))
                                     Spacer()
-                                    Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(Color("текст"))
+                                    if let acc = fromAccount {
+                                        Text("\(acc.balance) \(acc.currencyRaw)")
+                                            .foregroundStyle(Color("текст"))
+                                    }
                                 }
-                                .tag(account as Account?)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(Color("текст"))
                             }
                         }
-                        .pickerStyle(.navigationLink)
+                        .sheet(isPresented: $showFromAccountSheet) {
+                            AccountSelectionSheet(
+                                title: "Выберите кошелек-источник",
+                                accounts: accountVM.accounts,
+                                selected: fromAccount,
+                                onSelect: { acc in
+                                    fromAccount = acc
+                                    // Если выбрали тот же, что и получатель — сдвинем получателя
+                                    if toAccount?.id == acc.id {
+                                        toAccount = accountVM.accounts.first(where: { $0.id != acc.id }) ?? toAccount
+                                    }
+                                }
+                            )
+                        }
                     }
                     .listRowBackground(Color("ячейка"))
-                     .foregroundStyle(Color("текст"))
-                    
+                    .foregroundStyle(Color("текст"))
+
                     Section("В кошелек") {
-                        Picker("", selection: $toAccount) {
-                            ForEach(accountVM.accounts) { account in
+                        Button {
+                            showToAccountSheet = true
+                        } label: {
+                            HStack {
                                 HStack {
-                                    Text(account.name)
+                                    Text(toAccount?.name ?? "Выберите откуда перевести")
+                                        .foregroundStyle(Color("текст"))
                                     Spacer()
-                                    Text("\(account.balance) \(account.currencyRaw)")
-                                        .foregroundColor(Color("текст"))
+                                    if let acc = toAccount {
+                                        Text("\(acc.balance) \(acc.currencyRaw)")
+                                            .foregroundStyle(Color("текст"))
+                                    }
                                 }
-                                .tag(account as Account?)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundStyle(Color("текст"))
                             }
                         }
-                        .pickerStyle(.navigationLink)
+                        .sheet(isPresented: $showToAccountSheet) {
+                            AccountSelectionSheet(
+                                title: "Выберите куда перевести",
+                                accounts: accountVM.accounts,
+                                selected: toAccount,
+                                onSelect: { acc in
+                                    toAccount = acc
+                                    // Если выбрали тот же, что и источник — сдвинем источник
+                                    if fromAccount?.id == acc.id {
+                                        fromAccount = accountVM.accounts.first(where: { $0.id != acc.id }) ?? fromAccount
+                                    }
+                                }
+                            )
+                        }
                     }
                     .listRowBackground(Color("ячейка"))
-                     .foregroundStyle(Color("текст"))
-                    
-                    
+                    .foregroundStyle(Color("текст"))
+
+
                     Section("Сумма") {
                         TextField("0", text: $amount)
                             .keyboardType(.decimalPad)
                     }
                     .listRowBackground(Color("ячейка"))
                      .foregroundStyle(Color("текст"))
-                    
+
                     // Выбор даты и времени
                     Section("Выберите дату") {
                         CompactDatePicker(title: nil, selection: $transactionDate)
                     }
                     .listRowBackground(Color("ячейка"))
                     .foregroundStyle(Color("текст"))
-                    
-                   
-                    
+
+
+
                     Section("Описание") {
                         TextField("Добавьте описание(опционально)", text: $note, axis: .vertical)
                             .lineLimit(2...4)
                     }
                     .listRowBackground(Color("ячейка"))
                     .foregroundStyle(Color("текст"))
-                    
+
                     Section {
                         Button(action: saveTransaction) {
                             HStack {
@@ -115,7 +159,7 @@ struct TransactionTransferView: View {
                 }
             }
         }
-    
+
     private var isFormValid: Bool {
         guard !amount.isEmpty,
               Double(amount) != nil,
@@ -127,13 +171,13 @@ struct TransactionTransferView: View {
         }
         return true
     }
-    
+
     private func saveTransaction() { // Функция сохранения перевода
         // Безопасно извлекаем сумму и выбранные кошельки
         guard let amountValue = Double(amount), // Преобразуем строку суммы в Double
               let fromAcc = fromAccount, // Достаём исходный кошелек
               let toAcc = toAccount else { return } // Достаём целевой кошелек; если что-то не так — выходим
-        
+
         // Создаем одну транзакцию перевода:
         // accountId = исходный кошелек, toAccountId = целевой кошелек.
         // Категория — .transfer с выбранным типом (сейчас .accountTransfer).
@@ -146,28 +190,28 @@ struct TransactionTransferView: View {
             accountId: fromAcc.id, // Идентификатор исходного кошелька (откуда списываем)
             toAccountId: toAcc.id // Идентификатор целевого кошелька (куда зачисляем)
         )
-        
+
         // Обновляем балансы обоих аккаунтов:
         // Ищем индексы исходного и целевого кошельков в массиве VM
         if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromAcc.id }), // Находим индекс исходного кошелька
            let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toAcc.id }) { // Находим индекс целевого кошелька
-            
+
             // Балансы в модели Account хранятся строкой, поэтому переводим в Double
             if let fromBalance = Double(accountVM.accounts[fromIndex].balance), // Преобразуем баланс исходного в Double
                let toBalance = Double(accountVM.accounts[toIndex].balance) { // Преобразуем баланс целевого в Double
-                
+
                 // Списание с исходного
                 accountVM.accounts[fromIndex].balance = String(fromBalance - amountValue) // Вычитаем сумму и сохраняем как строку
                 // Зачисление на целевой
                 accountVM.accounts[toIndex].balance = String(toBalance + amountValue) // Прибавляем сумму и сохраняем как строку
-                
+
                 // Сохраняем изменения в SwiftData через контекст VM
                 try? accountVM.modelContext.save() // Пытаемся сохранить изменения модели аккаунтов
                 // Перечитываем список аккаунтов (на случай сторонних наблюдателей)
                 accountVM.fetchAll() // Обновляем локальный список аккаунтов в VM
             }
         }
-        
+
         // Сохраняем транзакцию в хранилище (SwiftData) через TransactionVM
         transactionVM.addTransaction(transferTx) // Вставляем и сохраняем транзакцию через VM
         // Сбрасываем поля формы
@@ -177,3 +221,6 @@ struct TransactionTransferView: View {
         dismiss() // Закрываем представление после сохранения
     }
 }
+
+
+

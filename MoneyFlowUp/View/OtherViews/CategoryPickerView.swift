@@ -15,36 +15,45 @@ struct CategoryPickerView<CategoryType: TransactionTypeProtocol>: View {
     
     var body: some View {
         NavigationStack {
-            List(categories) { category in
-                Button(action: {
-                    // Устанавливаем выбранную категорию и закрываем экран
-                    selectedCategory = category
-                    dismiss()
-                }) {
-                    HStack {
-                        Image(systemName: category.icon)
-                            .frame(width: 30)
-                        
-                        Text(category.name)
-                            .foregroundColor(.primary)
-                        
-                        Spacer()
-                        
-                        // Галочка у выбранной категории
-                        if category.id == selectedCategory.id {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(.blue)
+            ZStack {
+                Color("фон")
+                    .ignoresSafeArea()
+                
+                List(categories) { category in
+                    Button(action: {
+                        // Устанавливаем выбранную категорию и закрываем экран
+                        selectedCategory = category
+                        dismiss()
+                    }) {
+                        HStack {
+                            
+                            Image(systemName: category.icon)
+                                .frame(width: 30)
+                            
+                            Text(category.name)
+                                .foregroundColor(.текст)
+                            
+                            Spacer()
+                            
+                            // Галочка у выбранной категории
+                            if category.id == selectedCategory.id {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.blue)
+                            }
                         }
                     }
+                    .listRowBackground(Color("ячейка"))
                 }
-            }
-            .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                // Альтернативная кнопка закрытия
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Готово") {
-                        dismiss()
+                
+                .scrollContentBackground(.hidden)
+                .navigationTitle(title)
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    // Альтернативная кнопка закрытия
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Готово") {
+                            dismiss()
+                        }
                     }
                 }
             }

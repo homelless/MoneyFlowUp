@@ -13,6 +13,7 @@ struct TransactionCostView: View {
     @Bindable var transactionVM: TransactionVM
     
     // Поля формы
+    @State private var showAccountPicker = false
     @State private var amount: String = ""                  // сумма расхода (строка для TextField)
     @State private var transactionDate: Date = Date()       // дата и время транзакции
     @State private var selectedCategory: CostCategory?      // выбранная категория расхода
@@ -36,21 +37,25 @@ struct TransactionCostView: View {
                 Form {
                     // Выбор кошелька
                     Section("Кошелек") {
-                        Picker("", selection: $selectedAccount) {
-                            ForEach(accountVM.accounts) { account in
+                            Button(action: { showAccountPicker = true }) {
                                 HStack {
-                                    Text(account.name)
-                                    Spacer()
-                                    Text("\(account.balance) \(account.currencyRaw)")
-                                    
+                                    if let selectedAccount {
+                                        Text(selectedAccount.name)
+                                            .foregroundColor(Color("текст"))
+                                        Spacer()
+                                        Text("\(selectedAccount.balance) \(selectedAccount.currencyRaw)")
+                                            .foregroundColor(Color("текст"))
+                                    } else {
+                                        Text("Выберите кошелек")
+                                            .foregroundColor(.gray)
+                                    }
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(Color("текст"))
                                 }
-                                .tag(account as Account?) // связываем элемент с выбранным Account?
                             }
                         }
-                        .pickerStyle(.navigationLink)
-                    }
-                    .listRowBackground(Color("ячейка"))
-                    .foregroundStyle(Color("текст"))
+                        .listRowBackground(Color("ячейка"))
+                        .foregroundStyle(Color("текст"))
         
                     // Отображение и выбор категории расхода
                     Section("Категория") {
@@ -123,8 +128,21 @@ struct TransactionCostView: View {
                     }
                 }
                 .scrollContentBackground(.hidden)
+                .background(Color("фон"))
                 
-
+                .sheet(isPresented: $showAccountPicker) {
+                    if let binding = Binding($selectedAccount) {
+                        AccountPickerView(
+                            selectedAccount: $selectedAccount,
+                            accounts: accountVM.accounts,
+                            title: "Выберите кошелек"
+                        )
+                    } else {
+                        Text("Нет доступных кошельков")
+                            .padding()
+                    }
+                }
+                
                 // Шит выбора категории расходов
                 .sheet(isPresented: $showCategoryPicker) {
                     if let binding = Binding($selectedCategory) {
@@ -139,6 +157,7 @@ struct TransactionCostView: View {
                             .padding()
                     }
                 }
+                
             }
             // При появлении экрана — автоподстановка первого кошелька, если ничего не выбрано
             .onAppear {

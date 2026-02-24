@@ -50,6 +50,8 @@
 		D0D922C32F3FB07000461C14 /* CustomCostCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922C22F3FB07000461C14 /* CustomCostCategory.swift */; };
 		D0D922C52F3FB08E00461C14 /* CustomIncomeCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922C42F3FB08E00461C14 /* CustomIncomeCategory.swift */; };
 		D0D922C72F3FB43200461C14 /* HiddenCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922C62F3FB43200461C14 /* HiddenCategory.swift */; };
+		D0DF9D382F4DF32700A10B08 /* AccountPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DF9D372F4DF32700A10B08 /* AccountPickerView.swift */; };
+		D0DF9D3A2F4E02A800A10B08 /* AccountSelectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DF9D392F4E02A800A10B08 /* AccountSelectionSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,6 +99,8 @@
 		D0D922C22F3FB07000461C14 /* CustomCostCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCostCategory.swift; sourceTree = "<group>"; };
 		D0D922C42F3FB08E00461C14 /* CustomIncomeCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomIncomeCategory.swift; sourceTree = "<group>"; };
 		D0D922C62F3FB43200461C14 /* HiddenCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HiddenCategory.swift; sourceTree = "<group>"; };
+		D0DF9D372F4DF32700A10B08 /* AccountPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountPickerView.swift; sourceTree = "<group>"; };
+		D0DF9D392F4E02A800A10B08 /* AccountSelectionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSelectionSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +202,7 @@
 				D028FA242F1D722D006A9D1A /* TransactionRow.swift */,
 				D094D4692F34E9A900BB072D /* TransactionsCalendarView.swift */,
 				D090D5BC2F47781D005CEFB6 /* TransferRow.swift */,
+				D0DF9D372F4DF32700A10B08 /* AccountPickerView.swift */,
 			);
 			path = TransactionViews;
 			sourceTree = "<group>";
@@ -210,6 +215,7 @@
 				D05DEBF22F052C7800D6AEED /* AccountDetailView.swift */,
 				D05DEBF32F052C7800D6AEED /* AccountAddView.swift */,
 				D090D5BE2F47B71E005CEFB6 /* AccountTransactionsView.swift */,
+				D0DF9D392F4E02A800A10B08 /* AccountSelectionSheet.swift */,
 			);
 			path = AccountViews;
 			sourceTree = "<group>";
@@ -361,6 +367,7 @@
 				D0D922C72F3FB43200461C14 /* HiddenCategory.swift in Sources */,
 				D06CD73D2F103C85002D4A05 /* IncomeCategory.swift in Sources */,
 				D05DEBFA2F052C7800D6AEED /* AccountAddView.swift in Sources */,
+				D0DF9D382F4DF32700A10B08 /* AccountPickerView.swift in Sources */,
 				D05DEBFB2F052C7800D6AEED /* TransactionCostView.swift in Sources */,
 				D05DEBFC2F052C7800D6AEED /* TransactionView.swift in Sources */,
 				D05DEC012F052C8100D6AEED /* Route.swift in Sources */,
@@ -368,6 +375,7 @@
 				D00EF20E2F3CF32500C94583 /* AboutAppView.swift in Sources */,
 				D06CD7342F101944002D4A05 /* TransactionsListView.swift in Sources */,
 				D00EF20B2F3CEA5800C94583 /* SettingView.swift in Sources */,
+				D0DF9D3A2F4E02A800A10B08 /* AccountSelectionSheet.swift in Sources */,
 				D05DEBFD2F052C7800D6AEED /* TransactionTransferView.swift in Sources */,
 				D03A00D12F4CE37200F0A2F0 /* MoneyFlowUpApp.swift in Sources */,
 			);
