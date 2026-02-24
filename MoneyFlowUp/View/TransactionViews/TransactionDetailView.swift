@@ -25,6 +25,11 @@ struct TransactionDetailView: View {
     @State private var selectedAccount: Account?            // счет (для cost/income или from для transfer)
     @State private var selectedToAccount: Account?          // целевой счет (для transfer)
     @State private var showCategoryPicker = false           // показ шита выбора категории
+    // Новые состояния для показа шитов выбора аккаунта в стиле TransactionCostView
+    @State private var showAccountPicker = false            // для cost/income
+    @State private var showFromAccountPicker = false        // для transfer (со счета)
+    @State private var showToAccountPicker = false          // для transfer (на счет)
+    
     @Environment(\.dismiss) private var dismiss             // закрытие экрана
     @Environment(\.modelContext) private var modelContext   // контекст SwiftData (если потребуется)
 
@@ -74,35 +79,45 @@ struct TransactionDetailView: View {
                         .foregroundStyle(Color("текст"))
                     } else {
                         Section("Со счета") {
-                            Picker("", selection: $selectedAccount) {
-                                ForEach(accountVM.accounts) { account in
-                                    HStack {
-                                        Text(account.name)
-                                        Spacer()
-                                        Text("\(account.balance) \(account.currencyRaw)")
+                            Button(action: { showFromAccountPicker = true }) {
+                                HStack {
+                                    if let selectedAccount {
+                                        let balanceText = "\(selectedAccount.balance) \(selectedAccount.currencyRaw)"
+                                        Text(selectedAccount.name)
                                             .foregroundColor(Color("текст"))
+                                        Spacer()
+                                        Text(balanceText)
+                                            .foregroundColor(Color("текст"))
+                                    } else {
+                                        Text("Выберите кошелек")
+                                            .foregroundColor(.gray)
                                     }
-                                    .tag(account as Account?)
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(Color("текст"))
                                 }
                             }
-                            .pickerStyle(.navigationLink)
                         }
                         .listRowBackground(Color("ячейка"))
                         .foregroundStyle(Color("текст"))
                         
                         Section("На счет") {
-                            Picker("", selection: $selectedToAccount) {
-                                ForEach(accountVM.accounts) { account in
-                                    HStack {
-                                        Text(account.name)
-                                        Spacer()
-                                        Text("\(account.balance) \(account.currencyRaw)")
+                            Button(action: { showToAccountPicker = true }) {
+                                HStack {
+                                    if let selectedToAccount {
+                                        let balanceText = "\(selectedToAccount.balance) \(selectedToAccount.currencyRaw)"
+                                        Text(selectedToAccount.name)
                                             .foregroundColor(Color("текст"))
+                                        Spacer()
+                                        Text(balanceText)
+                                            .foregroundColor(Color("текст"))
+                                    } else {
+                                        Text("Выберите кошелек")
+                                            .foregroundColor(.gray)
                                     }
-                                    .tag(account as Account?)
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(Color("текст"))
                                 }
                             }
-                            .pickerStyle(.navigationLink)
                         }
                         .listRowBackground(Color("ячейка"))
                         .foregroundStyle(Color("текст"))
@@ -118,18 +133,23 @@ struct TransactionDetailView: View {
                     }
                 } else {
                     Section("Кошелек") {
-                        Picker("", selection: $selectedAccount) {
-                            ForEach(accountVM.accounts) { account in
-                                HStack {
-                                    Text(account.name)
-                                    Spacer()
-                                    Text("\(account.balance) \(account.currencyRaw)")
+                        Button(action: { showAccountPicker = true }) {
+                            HStack {
+                                if let selectedAccount {
+                                    let balanceText = "\(selectedAccount.balance) \(selectedAccount.currencyRaw)"
+                                    Text(selectedAccount.name)
                                         .foregroundColor(Color("текст"))
+                                    Spacer()
+                                    Text(balanceText)
+                                        .foregroundColor(Color("текст"))
+                                } else {
+                                    Text("Выберите кошелек")
+                                        .foregroundColor(.gray)
                                 }
-                                .tag(account as Account?)
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(Color("текст"))
                             }
                         }
-                        .pickerStyle(.navigationLink)
                     }
                     .listRowBackground(Color("ячейка"))
                     .foregroundStyle(Color("текст"))
@@ -138,23 +158,13 @@ struct TransactionDetailView: View {
                 // Категория для cost/income
                 if fixedGroup == .cost || fixedGroup == .income {
                     Section("Категория") {
-                        let selectedNameIcon: (String, String) = {
-                            switch fixedGroup {
-                            case .cost:
-                                if let c = selectedCostCategory { return (c.name, c.icon) }
-                            case .income:
-                                if let c = selectedIncomeCategory { return (c.name, c.icon) }
-                            default:
-                                break
-                            }
-                            return ("Нет доступных категорий", "questionmark.circle")
-                        }()
+                        let pair = selectedCategoryNameIcon()
                         
                         HStack {
-                            Image(systemName: selectedNameIcon.1)
+                            Image(systemName: pair.icon)
                                 .frame(width: 30)
                                 .foregroundColor(Color("текст"))
-                            Text(selectedNameIcon.0)
+                            Text(pair.name)
                                 .foregroundColor(Color("текст"))
                             
                             Spacer()
@@ -208,26 +218,88 @@ struct TransactionDetailView: View {
                 }
             }
             .scrollContentBackground(.hidden)
+            // Шиты выбора аккаунтов
+            .sheet(isPresented: $showAccountPicker) {
+                AccountPickerView(
+                    selectedAccount: $selectedAccount,
+                    accounts: accountVM.accounts,
+                    title: "Выберите кошелек"
+                )
+            }
+            .sheet(isPresented: $showFromAccountPicker) {
+                AccountPickerView(
+                    selectedAccount: $selectedAccount,
+                    accounts: accountVM.accounts,
+                    title: "Со счета"
+                )
+            }
+            .sheet(isPresented: $showToAccountPicker) {
+                AccountPickerView(
+                    selectedAccount: $selectedToAccount,
+                    accounts: accountVM.accounts,
+                    title: "На счет"
+                )
+            }
+            // Шит выбора категории
             .sheet(isPresented: $showCategoryPicker) {
                 if fixedGroup == .cost {
-                    if let binding = Binding($selectedCostCategory) {
+                    if let selectedCostCategory {
                         CategoryPickerView(
-                            selectedCategory: binding,
+                            selectedCategory: Binding(
+                                get: { selectedCostCategory },
+                                set: { newValue in
+                                    self.selectedCostCategory = newValue
+                                }
+                            ),
                             categories: costCategoriesStore.categories,
                             title: "Выберите категорию расхода"
                         )
                     } else {
-                        Text("Нет доступных категорий").padding()
+                        // Если текущая nil — подставим первый доступный, чтобы удовлетворить @Binding non-optional
+                        let categories = costCategoriesStore.categories
+                        if let first = categories.first {
+                            CategoryPickerView(
+                                selectedCategory: Binding(
+                                    get: { first },
+                                    set: { newValue in
+                                        self.selectedCostCategory = newValue
+                                    }
+                                ),
+                                categories: categories,
+                                title: "Выберите категорию расхода"
+                            )
+                        } else {
+                            Text("Нет доступных категорий").padding()
+                        }
                     }
                 } else if fixedGroup == .income {
-                    if let binding = Binding($selectedIncomeCategory) {
+                    if let selectedIncomeCategory {
                         CategoryPickerView(
-                            selectedCategory: binding,
+                            selectedCategory: Binding(
+                                get: { selectedIncomeCategory },
+                                set: { newValue in
+                                    self.selectedIncomeCategory = newValue
+                                }
+                            ),
                             categories: incomeCategoriesStore.categories,
                             title: "Выберите категорию дохода"
                         )
                     } else {
-                        Text("Нет доступных категорий").padding()
+                        let categories = incomeCategoriesStore.categories
+                        if let first = categories.first {
+                            CategoryPickerView(
+                                selectedCategory: Binding(
+                                    get: { first },
+                                    set: { newValue in
+                                        self.selectedIncomeCategory = newValue
+                                    }
+                                ),
+                                categories: categories,
+                                title: "Выберите категорию дохода"
+                            )
+                        } else {
+                            Text("Нет доступных категорий").padding()
+                        }
                     }
                 }
             }
@@ -295,6 +367,20 @@ struct TransactionDetailView: View {
                 ensureAccountSelectionValid()
             }
         }
+    }
+    
+    // MARK: - Helpers
+    
+    private func selectedCategoryNameIcon() -> (name: String, icon: String) {
+        switch fixedGroup {
+        case .cost:
+            if let c = selectedCostCategory { return (c.name, c.icon) }
+        case .income:
+            if let c = selectedIncomeCategory { return (c.name, c.icon) }
+        case .transfer:
+            break
+        }
+        return ("Нет доступных категорий", "questionmark.circle")
     }
     
     // MARK: - Validation
@@ -544,3 +630,4 @@ struct TransactionDetailView: View {
         }
     }
 }
+
