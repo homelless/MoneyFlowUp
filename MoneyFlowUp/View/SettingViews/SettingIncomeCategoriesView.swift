@@ -82,6 +82,7 @@ struct SettingIncomeCategoriesView: View {
                             }
                             .listRowBackground(Color("ячейка"))
                         }
+                        .background(Color("фон"))
                         .scrollContentBackground(.hidden)
                     }
                     // Применяем стиль к контенту, не к навбара
@@ -98,11 +99,10 @@ struct SettingIncomeCategoriesView: View {
                             .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         }
                     }
-                    // Цвет кнопок тулбара
                     .tint(Color("текст"))
-                    // Фон навбара = ваш цвет, и сделать его видимым
                     .toolbarBackground(Color("фон"), for: .navigationBar)
                     .toolbarBackground(.visible, for: .navigationBar)
+                    .background(Color("фон").ignoresSafeArea())
                 }
                 // Убираем внешнее .background — оно не нужно и может мешать
                 .presentationDetents([.medium])

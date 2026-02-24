@@ -20,5 +20,21 @@
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "ECA89AD6-4B32-4D46-A7B2-221A742496AF"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "MoneyFlowUp/View/SettingViews/SettingCostCategoriesView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "5"
+            endingLineNumber = "5"
+            landmarkName = "SettingCostCategoriesView"
+            landmarkType = "14">
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

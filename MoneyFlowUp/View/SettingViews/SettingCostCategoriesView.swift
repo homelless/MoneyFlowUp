@@ -77,8 +77,7 @@ struct SettingCostCategoriesView: View {
             }
             .sheet(isPresented: $isPresentingAdd) {
                 NavigationStack {
-                    ZStack {
-                        Color("фон")
+                    ZStack(alignment: .top) {
                     Form {
                         Section("Новая категория траты") {
                             TextField("Название", text: $newName)
@@ -90,10 +89,12 @@ struct SettingCostCategoriesView: View {
                                     }
                                     .tag(icon)
                                 }
+                          
                             }
                         }
                             .listRowBackground(Color("ячейка"))
                         }
+                        .background(Color("фон"))
                         .scrollContentBackground(.hidden)
                     }
                     .foregroundStyle(Color("текст"))
@@ -111,9 +112,9 @@ struct SettingCostCategoriesView: View {
                     }
                     // Цвет кнопок тулбара
                     .tint(Color("текст"))
-                    // Фон навбара = ваш цвет, и сделать его видимым
                     .toolbarBackground(Color("фон"), for: .navigationBar)
                     .toolbarBackground(.visible, for: .navigationBar)
+                    .background(Color("фон").ignoresSafeArea())
                 }
                 .presentationDetents([.medium])
             }

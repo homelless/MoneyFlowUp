@@ -15,6 +15,7 @@
 */
 import SwiftUI
 import SwiftData
+import UIKit
 
 
 
@@ -38,6 +39,22 @@ struct MoneyFlowUpApp: App {
     }()
 
     @State private var showWelcome = true
+    
+
+    init() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor(named: "фон") // или ваш цвет в hex/RGB
+
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().tintColor = UIColor(named: "текст") // цвет кнопок
+
+        // Если хотите изменить цвет текста заголовка
+        appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "текст") ?? .black]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor(named: "текст") ?? .black]
+    }
 
     var body: some Scene {
         WindowGroup {
