@@ -302,10 +302,19 @@ struct TransactionsListView: View {
                                             .listRowBackground(Color.clear)
                                     }
                                 } else {
-                                    // Для трат/доходов — обычная строка транзакции
-                                    let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
-                                    TransactionRow(transaction: transaction, accountName: accountName)
-                                        .listRowBackground(Color.clear)
+                                    // Для "Все" и других фильтров: если это перевод — тоже показываем TransferRow
+                                    if transaction.isTransfer,
+                                       let from = accountVM.accounts.first(where: { $0.id == transaction.accountId }),
+                                       let toId = transaction.toAccountId,
+                                       let to = accountVM.accounts.first(where: { $0.id == toId }) {
+                                        TransferRow(from: from, to: to, transaction: transaction)
+                                            .listRowBackground(Color.clear)
+                                    } else {
+                                        // Для трат/доходов — обычная строка транзакции
+                                        let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
+                                        TransactionRow(transaction: transaction, accountName: accountName)
+                                            .listRowBackground(Color.clear)
+                                    }
                                 }
                             }
                         }
