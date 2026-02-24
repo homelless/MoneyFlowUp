@@ -197,7 +197,7 @@ struct TransactionsListView: View {
                                     .padding(.vertical, 8)
                                     .padding(.horizontal, 16)
                                     .background(selectedPeriod == period ? Color("текст2") : Color("ячейка"))
-                                    .foregroundColor(selectedPeriod == period ? .white : .primary)
+                                    .foregroundColor(.black)
                                     .cornerRadius(12)
                             }
                         }

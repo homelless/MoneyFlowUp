@@ -52,7 +52,7 @@ struct AccountListView: View {
                 // Разделительная линия
                 Rectangle()
                     .fill(.текст2)
-                    .frame(height: 0.5)
+                    .frame(height: 1)
                 // Итоговая сумма всех кошельков 
                 HStack {
                     Spacer()
@@ -82,12 +82,12 @@ struct AccountListView: View {
                                 .padding()
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 12)
+                                    RoundedRectangle(cornerRadius: 28)
                                         .fill(Color("ячейка")) // без прозрачности, чтобы не просвечивала подсветка
-                                        .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 2)
+                                        .shadow(color: .black.opacity(0.5), radius: 4, x: 0, y: 2)
                                 )
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
+                                    RoundedRectangle(cornerRadius: 28)
                                         .stroke(Color("текст2"), lineWidth: 1)
                                 )
                         }
