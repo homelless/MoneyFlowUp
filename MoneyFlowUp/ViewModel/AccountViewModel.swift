@@ -32,71 +32,23 @@ final class AccountViewModel: Identifiable {
         fetchAll()
     }
     
-    // Удаление одного аккаунта по его идентификатору (включая все связанные транзакции:
-    // где аккаунт — источник (accountId) ИЛИ получатель (toAccountId))
+    // Удаление одного аккаунта по его идентификатору.
+    // Связанные транзакции (как источник и как получатель) удаляются каскадно средствами SwiftData.
     func removeAccount(id: UUID) {
-        // Находим аккаунт в текущем массиве
         guard let account = accounts.first(where: { $0.id == id }) else { return }
-        
-        // Удаляем все транзакции, где этот аккаунт фигурирует как источник
-        let txFromDescriptor = FetchDescriptor<Transaction>(
-            predicate: #Predicate<Transaction> { $0.accountId == id }
-        )
-        let fromTransactions = (try? modelContext.fetch(txFromDescriptor)) ?? []
-        for tx in fromTransactions {
-            modelContext.delete(tx)
-        }
-        
-        // Удаляем все транзакции, где этот аккаунт фигурирует как получатель (переводы)
-        let txToDescriptor = FetchDescriptor<Transaction>(
-            predicate: #Predicate<Transaction> { $0.toAccountId == id }
-        )
-        let toTransactions = (try? modelContext.fetch(txToDescriptor)) ?? []
-        for tx in toTransactions {
-            modelContext.delete(tx)
-        }
-        
-        // Удаляем сам аккаунт
         modelContext.delete(account)
-        
-        // Сохраняем изменения и обновляем список
         try? modelContext.save()
         fetchAll()
     }
-    
-    // Массовое удаление аккаунтов по индексам (включая их транзакции как источник и как получатель)
+
+    // Массовое удаление аккаунтов по индексам (транзакции удаляются каскадно).
     func removeAccounts(at offsets: IndexSet) {
-        // Собираем удаляемые аккаунты заранее (чтобы индексы не смещались)
         let accountsToDelete = offsets.compactMap { index in
             accounts.indices.contains(index) ? accounts[index] : nil
         }
-        
-        // Для каждого аккаунта каскадно удаляем связанные транзакции и сам аккаунт
         for account in accountsToDelete {
-            let accountUUID = account.id
-            
-            // Транзакции, где аккаунт — источник
-            let txFromDescriptor = FetchDescriptor<Transaction>(
-                predicate: #Predicate<Transaction> { $0.accountId == accountUUID }
-            )
-            let fromTransactions = (try? modelContext.fetch(txFromDescriptor)) ?? []
-            for tx in fromTransactions {
-                modelContext.delete(tx)
-            }
-            
-            // Транзакции, где аккаунт — получатель
-            let txToDescriptor = FetchDescriptor<Transaction>(
-                predicate: #Predicate<Transaction> { $0.toAccountId == accountUUID }
-            )
-            let toTransactions = (try? modelContext.fetch(txToDescriptor)) ?? []
-            for tx in toTransactions {
-                modelContext.delete(tx)
-            }
-            
-            // Сам аккаунт
             modelContext.delete(account)
         }
-        
         try? modelContext.save()
         fetchAll()
     }
@@ -114,7 +66,7 @@ final class AccountViewModel: Identifiable {
     }
     
     // Обновление полей аккаунта по его идентификатору
-    func updateAccount(id: UUID, name: String, balance: String, currencyRaw: String, descriptionAccount: String) {
+    func updateAccount(id: UUID, name: String, balance: Decimal, currencyRaw: String, descriptionAccount: String) {
         guard let index = accounts.firstIndex(where: { $0.id == id }) else { return }
         accounts[index].name = name
         accounts[index].balance = balance
@@ -122,12 +74,52 @@ final class AccountViewModel: Identifiable {
         accounts[index].descriptionAccount = descriptionAccount
         try? modelContext.save()
     }
-    
-    // Общая сумма балансов (числом)
-    var totalBalance: Double {
-        accounts.reduce(0) { sum, account in
-            sum + (Double(account.balance.replacingOccurrences(of: ",", with: ".")) ?? 0)
-        }
+
+    // Общая сумма балансов
+    var totalBalance: Decimal {
+        accounts.reduce(0) { $0 + $1.balance }
     }
-    
+
+    // MARK: - Единый источник изменения баланса
+    // Вся арифметика баланса проходит только здесь, чтобы баланс не расходился с историей транзакций.
+
+    // Применить влияние транзакции на балансы кошельков.
+    func apply(_ transaction: Transaction) {
+        mutateBalances(for: transaction, reverting: false)
+    }
+
+    // Откатить влияние транзакции на балансы кошельков.
+    func revert(_ transaction: Transaction) {
+        mutateBalances(for: transaction, reverting: true)
+    }
+
+    // Общая реализация начисления/отката: при reverting знаки инвертируются.
+    private func mutateBalances(for transaction: Transaction, reverting: Bool) {
+        let amount = Decimal(money: transaction.amount)
+        let sign: Decimal = reverting ? -1 : 1
+
+        guard let fromId = transaction.account?.id else { return }
+
+        switch transaction.category {
+        case .cost:
+            adjust(accountId: fromId, by: -amount * sign)
+        case .income:
+            adjust(accountId: fromId, by: amount * sign)
+        case .transfer:
+            // Списываем с источника, зачисляем на получателя
+            adjust(accountId: fromId, by: -amount * sign)
+            if let toId = transaction.toAccount?.id {
+                adjust(accountId: toId, by: amount * sign)
+            }
+        }
+
+        try? modelContext.save()
+        fetchAll()
+    }
+
+    // Изменить баланс одного кошелька на delta (без сохранения — сохранение делает вызывающий).
+    private func adjust(accountId: UUID, by delta: Decimal) {
+        guard let index = accounts.firstIndex(where: { $0.id == accountId }) else { return }
+        accounts[index].balance += delta
+    }
 }

@@ -37,13 +37,15 @@
 		D06CD73F2F103D32002D4A05 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD73E2F103D32002D4A05 /* TransferType.swift */; };
 		D06CD7412F103E0A002D4A05 /* TransactionCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */; };
 		D06F34D12F4CC00500D2BC34 /* TransactionDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06F34D02F4CC00500D2BC34 /* TransactionDetailView.swift */; };
-		D07104442F3264DE0071ABC0 /* Задачи.md in Resources */ = {isa = PBXBuildFile; fileRef = D07104432F3264DE0071ABC0 /* Задачи.md */; };
 		D090D5BD2F47781D005CEFB6 /* TransferRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090D5BC2F47781D005CEFB6 /* TransferRow.swift */; };
 		D090D5BF2F47B71E005CEFB6 /* AccountTransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D090D5BE2F47B71E005CEFB6 /* AccountTransactionsView.swift */; };
 		D094D46A2F34E9A900BB072D /* TransactionsCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D094D4692F34E9A900BB072D /* TransactionsCalendarView.swift */; };
 		D09AC9DB2F48E0CC009FE800 /* CompactDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09AC9DA2F48E0CB009FE800 /* CompactDatePicker.swift */; };
 		D0A72F852F38A7180042B987 /* ReportsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A72F842F38A7180042B987 /* ReportsViewModel.swift */; };
 		D0A72F872F38A7230042B987 /* ReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A72F862F38A7230042B987 /* ReportsView.swift */; };
+		D0AA0001AAAA0001000000A1 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0AA0001AAAA0001000000A2 /* Money.swift */; };
+		DDEC750000000000000000B3 /* BalanceLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEC750000000000000000B2 /* BalanceLogicTests.swift */; };
+		DDEC750000000000000000B5 /* ReportsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEC750000000000000000B4 /* ReportsViewModelTests.swift */; };
 		D0D922BB2F3FA14B00461C14 /* CategoriesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922BA2F3FA14B00461C14 /* CategoriesStore.swift */; };
 		D0D922BD2F3FA53700461C14 /* SettingCostCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922BC2F3FA53600461C14 /* SettingCostCategoriesView.swift */; };
 		D0D922C12F3FA95100461C14 /* SettingIncomeCategoriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0D922C02F3FA95100461C14 /* SettingIncomeCategoriesView.swift */; };
@@ -86,13 +88,16 @@
 		D06CD73E2F103D32002D4A05 /* TransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferType.swift; sourceTree = "<group>"; };
 		D06CD7402F103E0A002D4A05 /* TransactionCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionCategory.swift; sourceTree = "<group>"; };
 		D06F34D02F4CC00500D2BC34 /* TransactionDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailView.swift; sourceTree = "<group>"; };
-		D07104432F3264DE0071ABC0 /* Задачи.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "Задачи.md"; sourceTree = "<group>"; };
 		D090D5BC2F47781D005CEFB6 /* TransferRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferRow.swift; sourceTree = "<group>"; };
 		D090D5BE2F47B71E005CEFB6 /* AccountTransactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTransactionsView.swift; sourceTree = "<group>"; };
 		D094D4692F34E9A900BB072D /* TransactionsCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsCalendarView.swift; sourceTree = "<group>"; };
 		D09AC9DA2F48E0CB009FE800 /* CompactDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactDatePicker.swift; sourceTree = "<group>"; };
 		D0A72F842F38A7180042B987 /* ReportsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewModel.swift; sourceTree = "<group>"; };
 		D0A72F862F38A7230042B987 /* ReportsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsView.swift; sourceTree = "<group>"; };
+		D0AA0001AAAA0001000000A2 /* Money.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
+		DDEC750000000000000000A2 /* MoneyFlowUpTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoneyFlowUpTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DDEC750000000000000000B2 /* BalanceLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalanceLogicTests.swift; sourceTree = "<group>"; };
+		DDEC750000000000000000B4 /* ReportsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewModelTests.swift; sourceTree = "<group>"; };
 		D0D922BA2F3FA14B00461C14 /* CategoriesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesStore.swift; sourceTree = "<group>"; };
 		D0D922BC2F3FA53600461C14 /* SettingCostCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingCostCategoriesView.swift; sourceTree = "<group>"; };
 		D0D922C02F3FA95100461C14 /* SettingIncomeCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingIncomeCategoriesView.swift; sourceTree = "<group>"; };
@@ -105,6 +110,13 @@
 
 /* Begin PBXFrameworksBuildPhase section */
 		D05DEBC32F052BFC00D6AEED /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDEC750000000000000000A7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -132,6 +144,7 @@
 				D06CD73E2F103D32002D4A05 /* TransferType.swift */,
 				D06CD73C2F103C85002D4A05 /* IncomeCategory.swift */,
 				D028FA222F1D715A006A9D1A /* FilterChip.swift */,
+				D0AA0001AAAA0001000000A2 /* Money.swift */,
 				D0D922C22F3FB07000461C14 /* CustomCostCategory.swift */,
 				D0D922C42F3FB08E00461C14 /* CustomIncomeCategory.swift */,
 				D09AC9DA2F48E0CB009FE800 /* CompactDatePicker.swift */,
@@ -144,6 +157,7 @@
 			isa = PBXGroup;
 			children = (
 				D05DEBDA2F052C2500D6AEED /* MoneyFlowUp */,
+				DDEC750000000000000000A9 /* MoneyFlowUpTests */,
 				D05DEBC72F052BFC00D6AEED /* Products */,
 			);
 			sourceTree = "<group>";
@@ -152,15 +166,24 @@
 			isa = PBXGroup;
 			children = (
 				D05DEBC62F052BFC00D6AEED /* MoneyFlowUp.app */,
+				DDEC750000000000000000A2 /* MoneyFlowUpTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		DDEC750000000000000000A9 /* MoneyFlowUpTests */ = {
+			isa = PBXGroup;
+			children = (
+				DDEC750000000000000000B2 /* BalanceLogicTests.swift */,
+				DDEC750000000000000000B4 /* ReportsViewModelTests.swift */,
+			);
+			path = MoneyFlowUpTests;
 			sourceTree = "<group>";
 		};
 		D05DEBDA2F052C2500D6AEED /* MoneyFlowUp */ = {
 			isa = PBXGroup;
 			children = (
 				D05DEC002F052C8100D6AEED /* App */,
-				D07104432F3264DE0071ABC0 /* Задачи.md */,
 				D028FA212F1D7127006A9D1A /* Helps */,
 				D06CD7352F101C50002D4A05 /* Protocols and enums */,
 				D05DEBF52F052C7800D6AEED /* View */,
@@ -284,7 +307,37 @@
 			productReference = D05DEBC62F052BFC00D6AEED /* MoneyFlowUp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		DDEC750000000000000000A1 /* MoneyFlowUpTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DDEC750000000000000000A3 /* Build configuration list for PBXNativeTarget "MoneyFlowUpTests" */;
+			buildPhases = (
+				DDEC750000000000000000A6 /* Sources */,
+				DDEC750000000000000000A7 /* Frameworks */,
+				DDEC750000000000000000A8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DDEC750000000000000000B0 /* PBXTargetDependency */,
+			);
+			name = MoneyFlowUpTests;
+			packageProductDependencies = (
+			);
+			productName = MoneyFlowUpTests;
+			productReference = DDEC750000000000000000A2 /* MoneyFlowUpTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
+
+/* Begin PBXContainerItemProxy section */
+		DDEC750000000000000000B1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D05DEBBE2F052BFC00D6AEED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D05DEBC52F052BFC00D6AEED;
+			remoteInfo = MoneyFlowUp;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXProject section */
 		D05DEBBE2F052BFC00D6AEED /* Project object */ = {
@@ -296,6 +349,10 @@
 				TargetAttributes = {
 					D05DEBC52F052BFC00D6AEED = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					DDEC750000000000000000A1 = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = D05DEBC52F052BFC00D6AEED;
 					};
 				};
 			};
@@ -314,17 +371,32 @@
 			projectRoot = "";
 			targets = (
 				D05DEBC52F052BFC00D6AEED /* MoneyFlowUp */,
+				DDEC750000000000000000A1 /* MoneyFlowUpTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXTargetDependency section */
+		DDEC750000000000000000B0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D05DEBC52F052BFC00D6AEED /* MoneyFlowUp */;
+			targetProxy = DDEC750000000000000000B1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D05DEBC42F052BFC00D6AEED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D07104442F3264DE0071ABC0 /* Задачи.md in Resources */,
 				D05DEC042F052CAC00D6AEED /* Assets .xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDEC750000000000000000A8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +429,7 @@
 				D05DEC082F05570B00D6AEED /* TransactionVM.swift in Sources */,
 				D028FA202F1D6D94006A9D1A /* CategoryPickerView.swift in Sources */,
 				D028FA232F1D715A006A9D1A /* FilterChip.swift in Sources */,
+				D0AA0001AAAA0001000000A1 /* Money.swift in Sources */,
 				D0D922C12F3FA95100461C14 /* SettingIncomeCategoriesView.swift in Sources */,
 				D090D5BD2F47781D005CEFB6 /* TransferRow.swift in Sources */,
 				D05DEBF82F052C7800D6AEED /* AccountDetailView.swift in Sources */,
@@ -378,6 +451,15 @@
 				D0DF9D3A2F4E02A800A10B08 /* AccountSelectionSheet.swift in Sources */,
 				D05DEBFD2F052C7800D6AEED /* TransactionTransferView.swift in Sources */,
 				D03A00D12F4CE37200F0A2F0 /* MoneyFlowUpApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DDEC750000000000000000A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDEC750000000000000000B3 /* BalanceLogicTests.swift in Sources */,
+				DDEC750000000000000000B5 /* ReportsViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +651,46 @@
 			};
 			name = Release;
 		};
+		DDEC750000000000000000A4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SMFNSK27YT;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = homelessTeam.MoneyFlowUpTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoneyFlowUp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MoneyFlowUp";
+			};
+			name = Debug;
+		};
+		DDEC750000000000000000A5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SMFNSK27YT;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = homelessTeam.MoneyFlowUpTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoneyFlowUp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MoneyFlowUp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -586,6 +708,15 @@
 			buildConfigurations = (
 				D05DEBD42F052BFE00D6AEED /* Debug */,
 				D05DEBD52F052BFE00D6AEED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DDEC750000000000000000A3 /* Build configuration list for PBXNativeTarget "MoneyFlowUpTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DDEC750000000000000000A4 /* Debug */,
+				DDEC750000000000000000A5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

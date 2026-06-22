@@ -34,7 +34,7 @@ import SwiftUI
                                     Text(account.name)
                                         .foregroundStyle(Color("текст"))
                                     Spacer()
-                                    Text("\(account.balance) \(account.currencyRaw)")
+                                    Text("\(account.balance.moneyString) \(account.currencyRaw)")
                                         .foregroundStyle(Color("текст"))
                                 }
                                 Spacer()

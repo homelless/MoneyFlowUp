@@ -21,7 +21,7 @@ struct AccountPickerView: View {
                             Text(account.name)
                                 .foregroundColor(Color("текст"))
                             Spacer()
-                            Text("\(account.balance) \(account.currencyRaw)")
+                            Text("\(account.balance.moneyString) \(account.currencyRaw)")
                                 .foregroundColor(Color("текст"))
                             if account.id == selectedAccount?.id {
                                 Image(systemName: "checkmark")

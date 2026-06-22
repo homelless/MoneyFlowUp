@@ -31,7 +31,7 @@ struct CompactDatePicker: View {
                 }
                 .padding(8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.ячейка))
+                .background(Color("ячейка"))
                 .cornerRadius(8)
             }
             .sheet(isPresented: $showPicker) {

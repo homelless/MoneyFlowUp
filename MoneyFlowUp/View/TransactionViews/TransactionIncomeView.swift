@@ -38,7 +38,7 @@ struct TransactionIncomeView: View {
                                         Text(selectedAccount.name)
                                             .foregroundColor(Color("текст"))
                                         Spacer()
-                                        Text("\(selectedAccount.balance) \(selectedAccount.currencyRaw)")
+                                        Text("\(selectedAccount.balance.moneyString) \(selectedAccount.currencyRaw)")
                                             .foregroundColor(Color("текст"))
                                     } else {
                                         Text("Выберите кошелек")
@@ -211,16 +211,12 @@ struct TransactionIncomeView: View {
             category: .income(selectedCategory),
             date: transactionDate,
             note: note.isEmpty ? nil : note,
-            accountId: account.id
+            account: account
         )
         
-        // Обновляем баланс аккаунта (+ сумма)
-        if let index = accountVM.accounts.firstIndex(where: { $0.id == account.id }) {
-            if let currentBalance = Double(account.balance) {
-                accountVM.accounts[index].balance = String(currentBalance + amountValue)
-            }
-        }
-        
+        // Обновляем баланс аккаунта — единый источник расчёта в AccountViewModel
+        accountVM.apply(transaction)
+
         // Сохраняем транзакцию через ViewModel и закрываем экран
         transactionVM.addTransaction(transaction)
         amount = ""

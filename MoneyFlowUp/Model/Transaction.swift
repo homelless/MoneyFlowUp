@@ -15,19 +15,20 @@ class Transaction: Identifiable {
     var date: Date
     // Опциональная заметка пользователя
     var note: String?
-    // Идентификатор аккаунта, к которому относится транзакция (для перевода — аккаунт-источник)
-    var accountId: UUID
-    // Для перевода: целевой аккаунт (если это перевод)
-    var toAccountId: UUID?
+    // Аккаунт, к которому относится транзакция (для перевода — аккаунт-источник).
+    // Инверсия объявлена на стороне Account (Account.outgoingTransactions, deleteRule: .cascade).
+    var account: Account?
+    // Для перевода: целевой аккаунт (инверсия — Account.incomingTransactions, deleteRule: .cascade).
+    var toAccount: Account?
 
-    init(id: UUID, amount: Double, category: TransactionCategory, date: Date, note: String? = nil, accountId: UUID, toAccountId: UUID? = nil) {
+    init(id: UUID, amount: Double, category: TransactionCategory, date: Date, note: String? = nil, account: Account, toAccount: Account? = nil) {
         self.id = id
         self.amount = amount
         self.categoryJSON = Self.encodeCategory(category)
         self.date = date
         self.note = note
-        self.accountId = accountId
-        self.toAccountId = toAccountId
+        self.account = account
+        self.toAccount = toAccount
     }
     
     // Доменное свойство: категория транзакции, оборачивает categoryJSON с кодированием/декодированием

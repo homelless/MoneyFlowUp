@@ -9,7 +9,7 @@ import SwiftUI
 class Account: Identifiable, Hashable {
     var id: UUID                 // Уникальный идентификатор
     var name: String             // Название кошелька
-    var balance: String          // Баланс (хранится строкой для простоты ввода/форматирования)
+    var balance: Decimal         // Баланс (Decimal — деньги считаем без погрешности Double)
     var currencyRaw: String      // Сырая строка валюты (для совместимости со SwiftData)
     // Удобное вычисляемое свойство для доступа к enum Currency
     var currency: Currency {
@@ -18,8 +18,15 @@ class Account: Identifiable, Hashable {
     }
     var descriptionAccount: String // Описание кошелька
     var sortOrder: Int             // Порядок сортировки в списке
-    
-    init(id: UUID, name: String, balance: String, currencyRaw: String, descriptionAccount: String, sortOrder: Int = 0) {
+
+    // Транзакции, где этот кошелёк — источник. Каскад: при удалении кошелька они удаляются автоматически.
+    @Relationship(deleteRule: .cascade, inverse: \Transaction.account)
+    var outgoingTransactions: [Transaction] = []
+    // Транзакции-переводы, где этот кошелёк — получатель. Тоже каскадно удаляются вместе с кошельком.
+    @Relationship(deleteRule: .cascade, inverse: \Transaction.toAccount)
+    var incomingTransactions: [Transaction] = []
+
+    init(id: UUID, name: String, balance: Decimal, currencyRaw: String, descriptionAccount: String, sortOrder: Int = 0) {
         self.id = id
         self.name = name
         self.balance = balance

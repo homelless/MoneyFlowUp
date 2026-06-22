@@ -18,7 +18,7 @@ struct AccountDetailView: View {
     init(account: Account, accountVM: AccountViewModel) {
         self.account = account
         self._name = State(initialValue: account.name)
-        self._balance = State(initialValue: account.balance)
+        self._balance = State(initialValue: account.balance.moneyString)
         self._currencyRaw = State(initialValue: account.currencyRaw)
         self._descriptionAccount = State(initialValue: account.descriptionAccount)
         self.accountVM = accountVM
@@ -69,7 +69,7 @@ struct AccountDetailView: View {
                     Button(action: {
                         accountVM.updateAccount(id: account.id,
                                                 name: name,
-                                                balance: balance,
+                                                balance: balance.moneyDecimal ?? account.balance,
                                                 currencyRaw: currencyRaw,
                                                 descriptionAccount: descriptionAccount)
                         dismiss()

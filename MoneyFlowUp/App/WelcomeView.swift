@@ -55,6 +55,3 @@ struct WelcomeView: View {
     }
 }
 
-#Preview {
-    WelcomeView(onFinish: {})
-}

@@ -121,9 +121,9 @@ import SwiftData
             filtered = filtered.filter { tx in
                 if tx.isTransfer {
                     // Для переводов учитываем обе стороны
-                    return tx.accountId == accountID || tx.toAccountId == accountID
+                    return tx.account?.id == accountID || tx.toAccount?.id == accountID
                 } else {
-                    return tx.accountId == accountID
+                    return tx.account?.id == accountID
                 }
             }
             
@@ -297,22 +297,18 @@ import SwiftData
                                 } label: {
                                 if selectedFilter == .transfer {
                                     // Для перевода пробуем отрисовать специализированную строку с обоими аккаунтами
-                                    if
-                                        let from = accountVM.accounts.first(where: { $0.id == transaction.accountId }),
-                                        let toId = transaction.toAccountId,
-                                        let to = accountVM.accounts.first(where: { $0.id == toId })
-                                    {
+                                    if let from = transaction.account, let to = transaction.toAccount {
                                         TransferRow(from: from, to: to, transaction: transaction)
                                             .listRowBackground(Color.clear)
                                     } else {
                                         // Если не удалось найти оба аккаунта — fallback к обычной строке
-                                        let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
+                                        let accountName = transaction.account?.name ?? "—"
                                         TransactionRow(transaction: transaction, accountName: accountName)
                                             .listRowBackground(Color.clear)
                                     }
                                 } else {
                                     // Для трат/доходов — обычная строка транзакции
-                                    let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
+                                    let accountName = transaction.account?.name ?? "—"
                                     TransactionRow(transaction: transaction, accountName: accountName)
                                         .listRowSeparator(.hidden)
                                     

@@ -218,7 +218,7 @@ struct ReportsView: View {
         .padding()
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.ячейка).opacity(0.8))
+                .fill(Color("ячейка").opacity(0.8))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 12)

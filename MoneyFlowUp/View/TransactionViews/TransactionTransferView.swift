@@ -37,7 +37,7 @@ struct TransactionTransferView: View {
                                         .foregroundStyle(Color("текст"))
                                     Spacer()
                                     if let acc = fromAccount {
-                                        Text("\(acc.balance) \(acc.currencyRaw)")
+                                        Text("\(acc.balance.moneyString) \(acc.currencyRaw)")
                                             .foregroundStyle(Color("текст"))
                                     }
                                 }
@@ -74,7 +74,7 @@ struct TransactionTransferView: View {
                                         .foregroundStyle(Color("текст"))
                                     Spacer()
                                     if let acc = toAccount {
-                                        Text("\(acc.balance) \(acc.currencyRaw)")
+                                        Text("\(acc.balance.moneyString) \(acc.currencyRaw)")
                                             .foregroundStyle(Color("текст"))
                                     }
                                 }
@@ -179,7 +179,7 @@ struct TransactionTransferView: View {
               let toAcc = toAccount else { return } // Достаём целевой кошелек; если что-то не так — выходим
 
         // Создаем одну транзакцию перевода:
-        // accountId = исходный кошелек, toAccountId = целевой кошелек.
+        // account = исходный кошелек, toAccount = целевой кошелек.
         // Категория — .transfer с выбранным типом (сейчас .accountTransfer).
         let transferTx = Transaction( // Инициализируем модель транзакции
             id: UUID(), // Генерируем уникальный идентификатор транзакции
@@ -187,30 +187,12 @@ struct TransactionTransferView: View {
             category: .transfer(selectedCategory), // Указываем категорию — перевод с указанным типом
             date: transactionDate, // Дата и время перевода
             note: note.isEmpty ? nil : note, // Если заметка пустая — пишем nil, иначе значение
-            accountId: fromAcc.id, // Идентификатор исходного кошелька (откуда списываем)
-            toAccountId: toAcc.id // Идентификатор целевого кошелька (куда зачисляем)
+            account: fromAcc, // Исходный кошелёк (откуда списываем)
+            toAccount: toAcc // Целевой кошелёк (куда зачисляем)
         )
 
-        // Обновляем балансы обоих аккаунтов:
-        // Ищем индексы исходного и целевого кошельков в массиве VM
-        if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromAcc.id }), // Находим индекс исходного кошелька
-           let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toAcc.id }) { // Находим индекс целевого кошелька
-
-            // Балансы в модели Account хранятся строкой, поэтому переводим в Double
-            if let fromBalance = Double(accountVM.accounts[fromIndex].balance), // Преобразуем баланс исходного в Double
-               let toBalance = Double(accountVM.accounts[toIndex].balance) { // Преобразуем баланс целевого в Double
-
-                // Списание с исходного
-                accountVM.accounts[fromIndex].balance = String(fromBalance - amountValue) // Вычитаем сумму и сохраняем как строку
-                // Зачисление на целевой
-                accountVM.accounts[toIndex].balance = String(toBalance + amountValue) // Прибавляем сумму и сохраняем как строку
-
-                // Сохраняем изменения в SwiftData через контекст VM
-                try? accountVM.modelContext.save() // Пытаемся сохранить изменения модели аккаунтов
-                // Перечитываем список аккаунтов (на случай сторонних наблюдателей)
-                accountVM.fetchAll() // Обновляем локальный список аккаунтов в VM
-            }
-        }
+        // Обновляем балансы обоих аккаунтов — единый источник расчёта в AccountViewModel
+        accountVM.apply(transferTx) // Списание с источника и зачисление на получателя
 
         // Сохраняем транзакцию в хранилище (SwiftData) через TransactionVM
         transactionVM.addTransaction(transferTx) // Вставляем и сохраняем транзакцию через VM

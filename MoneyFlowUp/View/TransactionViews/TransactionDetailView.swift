@@ -82,7 +82,7 @@ struct TransactionDetailView: View {
                             Button(action: { showFromAccountPicker = true }) {
                                 HStack {
                                     if let selectedAccount {
-                                        let balanceText = "\(selectedAccount.balance) \(selectedAccount.currencyRaw)"
+                                        let balanceText = "\(selectedAccount.balance.moneyString) \(selectedAccount.currencyRaw)"
                                         Text(selectedAccount.name)
                                             .foregroundColor(Color("текст"))
                                         Spacer()
@@ -104,7 +104,7 @@ struct TransactionDetailView: View {
                             Button(action: { showToAccountPicker = true }) {
                                 HStack {
                                     if let selectedToAccount {
-                                        let balanceText = "\(selectedToAccount.balance) \(selectedToAccount.currencyRaw)"
+                                        let balanceText = "\(selectedToAccount.balance.moneyString) \(selectedToAccount.currencyRaw)"
                                         Text(selectedToAccount.name)
                                             .foregroundColor(Color("текст"))
                                         Spacer()
@@ -320,14 +320,9 @@ struct TransactionDetailView: View {
                 note = tx.note ?? ""
                 
                 // FROM
-                let from = accountVM.accounts.first(where: { $0.id == tx.accountId })
+                let from = tx.account
                 // TO
-                let to: Account? = {
-                    if fixedGroup == .transfer, let toId = tx.toAccountId {
-                        return accountVM.accounts.first(where: { $0.id == toId })
-                    }
-                    return nil
-                }()
+                let to: Account? = (fixedGroup == .transfer) ? tx.toAccount : nil
                 
                 if let from { selectedAccount = from }
                 if let to { selectedToAccount = to }
@@ -369,7 +364,7 @@ struct TransactionDetailView: View {
         }
     }
     
-    // MARK: - Helpers
+
     
     private func selectedCategoryNameIcon() -> (name: String, icon: String) {
         switch fixedGroup {
@@ -383,7 +378,7 @@ struct TransactionDetailView: View {
         return ("Нет доступных категорий", "questionmark.circle")
     }
     
-    // MARK: - Validation
+
     
     private var isFormValid: Bool {
         guard let amt = Double(amount.replacingOccurrences(of: ",", with: ".")), amt > 0 else { return false }
@@ -421,7 +416,7 @@ struct TransactionDetailView: View {
         }
     }
     
-    // MARK: - Selection guards
+
     
     private func ensureAccountSelectionValid() {
         // Для cost/income: если выбранный кошелек отсутствует в списке — подставить первый доступный
@@ -470,7 +465,7 @@ struct TransactionDetailView: View {
         }
     }
     
-    // MARK: - Save
+
     
     private func saveTransaction() {
         guard let amt = Double(amount.replacingOccurrences(of: ",", with: ".")) else { return }
@@ -487,20 +482,20 @@ struct TransactionDetailView: View {
             switch fixedGroup {
             case .cost:
                 guard let account = selectedAccount, let cat = selectedCostCategory else { return }
-                tx.accountId = account.id
-                tx.toAccountId = nil
+                tx.account = account
+                tx.toAccount = nil
                 tx.category = .cost(cat)
                 applyBalances(for: tx)
             case .income:
                 guard let account = selectedAccount, let cat = selectedIncomeCategory else { return }
-                tx.accountId = account.id
-                tx.toAccountId = nil
+                tx.account = account
+                tx.toAccount = nil
                 tx.category = .income(cat)
                 applyBalances(for: tx)
             case .transfer:
                 guard let from = selectedAccount, let to = selectedToAccount else { return }
-                tx.accountId = from.id
-                tx.toAccountId = to.id
+                tx.account = from
+                tx.toAccount = to
                 // тип перевода оставляем прежний
                 applyBalances(for: tx)
             }
@@ -521,7 +516,7 @@ struct TransactionDetailView: View {
                 category: .cost(cat),
                 date: transactionDate,
                 note: note.isEmpty ? nil : note,
-                accountId: account.id
+                account: account
             )
             applyBalances(for: newTx)
             transactionVM.addTransaction(newTx)
@@ -533,7 +528,7 @@ struct TransactionDetailView: View {
                 category: .income(cat),
                 date: transactionDate,
                 note: note.isEmpty ? nil : note,
-                accountId: account.id
+                account: account
             )
             applyBalances(for: newTx)
             transactionVM.addTransaction(newTx)
@@ -546,8 +541,8 @@ struct TransactionDetailView: View {
                 category: .transfer(.accountTransfer),
                 date: transactionDate,
                 note: note.isEmpty ? nil : note,
-                accountId: from.id,
-                toAccountId: to.id
+                account: from,
+                toAccount: to
             )
             applyBalances(for: newTx)
             transactionVM.addTransaction(newTx)
@@ -556,78 +551,16 @@ struct TransactionDetailView: View {
         dismiss()
     }
     
-    // MARK: - Balance helpers
+
     
     private func rollbackBalances(for tx: Transaction) {
-        if tx.isTransfer {
-            let amount = tx.amount
-            let fromId = tx.accountId
-            let toId = tx.toAccountId
-            
-            if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromId }),
-               let fromBalance = Double(accountVM.accounts[fromIndex].balance) {
-                accountVM.accounts[fromIndex].balance = String(fromBalance + amount)
-            }
-            if let toId,
-               let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toId }),
-               let toBalance = Double(accountVM.accounts[toIndex].balance) {
-                accountVM.accounts[toIndex].balance = String(toBalance - amount)
-            }
-            try? accountVM.modelContext.save()
-            accountVM.fetchAll()
-        } else {
-            if let index = accountVM.accounts.firstIndex(where: { $0.id == tx.accountId }),
-               let oldBalance = Double(accountVM.accounts[index].balance) {
-                var newBalance = oldBalance
-                switch tx.category {
-                case .cost:
-                    newBalance += tx.amount
-                case .income:
-                    newBalance -= tx.amount
-                case .transfer:
-                    break
-                }
-                accountVM.accounts[index].balance = String(newBalance)
-                try? accountVM.modelContext.save()
-                accountVM.fetchAll()
-            }
-        }
+        // Откат влияния транзакции — единый источник расчёта в AccountViewModel
+        accountVM.revert(tx)
     }
-    
+
     private func applyBalances(for tx: Transaction) {
-        if tx.isTransfer {
-            let amount = tx.amount
-            let fromId = tx.accountId
-            let toId = tx.toAccountId
-            
-            if let fromIndex = accountVM.accounts.firstIndex(where: { $0.id == fromId }),
-               let fromBalance = Double(accountVM.accounts[fromIndex].balance) {
-                accountVM.accounts[fromIndex].balance = String(fromBalance - amount)
-            }
-            if let toId,
-               let toIndex = accountVM.accounts.firstIndex(where: { $0.id == toId }),
-               let toBalance = Double(accountVM.accounts[toIndex].balance) {
-                accountVM.accounts[toIndex].balance = String(toBalance + amount)
-            }
-            try? accountVM.modelContext.save()
-            accountVM.fetchAll()
-        } else {
-            if let index = accountVM.accounts.firstIndex(where: { $0.id == tx.accountId }),
-               let oldBalance = Double(accountVM.accounts[index].balance) {
-                var newBalance = oldBalance
-                switch tx.category {
-                case .cost:
-                    newBalance -= tx.amount
-                case .income:
-                    newBalance += tx.amount
-                case .transfer:
-                    break
-                }
-                accountVM.accounts[index].balance = String(newBalance)
-                try? accountVM.modelContext.save()
-                accountVM.fetchAll()
-            }
-        }
+        // Начисление влияния транзакции — единый источник расчёта в AccountViewModel
+        accountVM.apply(tx)
     }
 }
 

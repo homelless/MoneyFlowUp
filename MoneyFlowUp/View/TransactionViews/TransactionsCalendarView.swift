@@ -85,7 +85,7 @@ struct TransactionsCalendarView: View {
                         .fill(Color.текст)
                         .frame(height: 0.5)
                 }
-                .background(.ячейка)
+                .background(Color("ячейка"))
                 VStack {
                     // Горизонтальная полоса чипов фильтра по группе транзакций
                     HStack(spacing: 8) {
@@ -138,7 +138,7 @@ struct TransactionsCalendarView: View {
                                     path.append(.transactionsDetail(transaction.id))
                                 } label: {
                                     // Находим имя аккаунта по идентификатору транзакции
-                                    let accountName = accountVM.accounts.first(where: { $0.id == transaction.accountId })?.name ?? "—"
+                                    let accountName = transaction.account?.name ?? "—"
                                     // Отображаем строку транзакции
                                     TransactionRow(transaction: transaction, accountName: accountName)
                                         .listRowSeparator(.hidden) // Прячем разделители

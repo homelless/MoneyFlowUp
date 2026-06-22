@@ -19,7 +19,7 @@ struct AccountRow: View {
                     .foregroundStyle(.black)
                     .lineLimit(1)
                 HStack{
-                    Text("\(account.balance.description)\(account.currency.rawValue)")
+                    Text("\(account.balance.moneyString)\(account.currency.rawValue)")
                         .font(.subheadline)
                         .foregroundStyle(Color("текст"))
 
@@ -31,6 +31,6 @@ struct AccountRow: View {
 }
 
 #Preview {
-    AccountRow(account: Account(id: .init(), name: "test", balance: "1000", currencyRaw: "$", descriptionAccount: ""))
+    AccountRow(account: Account(id: .init(), name: "test", balance: 1000, currencyRaw: "$", descriptionAccount: ""))
 }
 

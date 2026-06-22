@@ -7,7 +7,9 @@ struct AccountAddView: View {
     // ViewModel для работы с кошельками
     @Bindable var viewModel: AccountViewModel
     // Локальное состояние создаваемого аккаунта
-    @State var account = Account(id: .init(), name: "", balance: "", currencyRaw: "", descriptionAccount: "")
+    @State var account = Account(id: .init(), name: "", balance: 0, currencyRaw: "", descriptionAccount: "")
+    // Текстовый ввод баланса (мост String <-> Decimal)
+    @State private var balanceText: String = ""
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     
@@ -35,10 +37,10 @@ struct AccountAddView: View {
                     .foregroundStyle(Color("текст"))
                     // Начальный баланс
                     Section("Баланс") {
-                        TextField("0", text: $account.balance)
+                        TextField("0", text: $balanceText)
                             .keyboardType(.decimalPad)
-                            .onChange(of: account.balance) { _, newValue in
-                                account.balance = normalizeDecimalInput(newValue)
+                            .onChange(of: balanceText) { _, newValue in
+                                balanceText = normalizeDecimalInput(newValue)
                             }
                     }
                     .listRowBackground(Color("ячейка"))
@@ -78,6 +80,7 @@ struct AccountAddView: View {
                     // Кнопка сохранения
                     Section() {
                         Button("Добавить кошелек") {
+                            account.balance = balanceText.moneyDecimal ?? 0
                             viewModel.addAccount(account)
                             dismiss()
                         }
@@ -85,7 +88,7 @@ struct AccountAddView: View {
                         .listRowBackground(Color("ячейка"))
                         .foregroundStyle(Color("текст"))
                         // Блокируем кнопку, если имя/баланс пустые/из пробелов
-                        .disabled(account.name.trimmingCharacters(in: .whitespaces).isEmpty || account.balance.trimmingCharacters(in: .whitespaces).isEmpty)
+                        .disabled(account.name.trimmingCharacters(in: .whitespaces).isEmpty || balanceText.trimmingCharacters(in: .whitespaces).isEmpty)
                     }
                 }
                 .scrollContentBackground(.hidden)

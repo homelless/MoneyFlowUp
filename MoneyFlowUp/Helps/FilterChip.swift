@@ -28,8 +28,8 @@ struct FilterChip: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 8)
         // Фон и цвет текста зависят от isSelected
-        .background(Color.ячейка)
-        .foregroundColor(Color.текст)
+        .background(Color("ячейка"))
+        .foregroundColor(Color("текст"))
         .cornerRadius(20)
         // Обводка появляется только в выбранном состоянии
         .overlay(
